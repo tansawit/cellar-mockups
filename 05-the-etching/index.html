@@ -103,7 +103,7 @@
 
   /* ---------- introductory frontispiece ---------- */
   .frontispiece{padding:var(--space-8) 0 var(--space-6)}
-  .frontispiece-panel{display:grid;grid-template-columns:minmax(0,.94fr) minmax(360px,1.06fr);column-gap:clamp(var(--space-6),5vw,var(--space-9));align-items:center}
+  .frontispiece-panel{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,.68fr);column-gap:clamp(var(--space-7),6vw,var(--space-9));align-items:center}
   .frontispiece-copy{padding:clamp(var(--space-5),3vw,var(--space-7)) 0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;position:relative;z-index:1}
   .frontispiece-kicker{font-size:var(--t-xs);letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--wine)}
   .frontispiece-title{max-width:10.5ch;margin-top:var(--space-3);font-size:clamp(42px,5.4vw,68px);font-weight:500;line-height:.98;letter-spacing:-.015em}
@@ -117,9 +117,9 @@
   .frontispiece-primary:active{transform:scale(.97)}
   .frontispiece-primary:focus-visible{outline:1px dotted var(--wine);outline-offset:4px}
   .frontispiece-secondary{font-size:var(--t-s);letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--ink-soft);white-space:nowrap}
-  .frontispiece-art{display:block;min-width:0;margin:0;position:relative}
+  .frontispiece-art{display:block;width:min(100%,460px);min-width:0;margin:0;position:relative;justify-self:end}
   .frontispiece-art > svg{display:none}
-  .frontispiece-photo{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center;border-radius:48% 48% 10px 10px / 18% 18% 10px 10px;filter:contrast(1.02) saturate(.9)}
+  .frontispiece-photo{display:block;width:100%;height:clamp(300px,31vw,420px);object-fit:cover;object-position:center;border-radius:48% 48% 8px 8px / 22% 22% 8px 8px;filter:contrast(1.02) saturate(.86)}
   .frontispiece-art figcaption{max-width:40ch;margin:var(--space-3) 0 0 var(--space-4);text-align:left;color:var(--ink-soft);font-size:var(--t-s);font-style:italic}
   .frontispiece-facts{grid-column:1 / -1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(var(--space-5),4vw,var(--space-8));margin-top:var(--space-6);padding-top:var(--space-5);border-top:1px solid var(--rule)}
   .frontispiece-fact{display:grid;grid-template-columns:28px minmax(0,1fr);gap:var(--space-3);padding:0}
@@ -405,7 +405,7 @@
     .mast-row{gap:var(--space-4)}
     .masthead h1.wordmark{margin:0}
     .connect{padding:var(--space-2) var(--space-4);min-height:40px}
-    .frontispiece-panel{grid-template-columns:minmax(0,1fr) minmax(320px,.9fr);column-gap:var(--space-6)}
+    .frontispiece-panel{grid-template-columns:minmax(0,1fr) minmax(280px,.68fr);column-gap:var(--space-6)}
     .frontispiece-copy{padding:var(--space-7) 0}
     .frontispiece-title{font-size:clamp(38px,6vw,56px)}
     .frontispiece-lede{font-size:var(--t-m)}
@@ -422,8 +422,8 @@
   }
   @media (max-width:760px){
     .frontispiece-panel{grid-template-columns:1fr}
-    .frontispiece-art{margin-top:var(--space-2)}
-    .frontispiece-photo{aspect-ratio:4/3;border-radius:44% 44% 8px 8px / 16% 16% 8px 8px}
+    .frontispiece-art{width:min(100%,520px);margin-top:var(--space-4);justify-self:start}
+    .frontispiece-photo{height:auto;aspect-ratio:3/2;border-radius:44% 44% 8px 8px / 18% 18% 8px 8px}
     .frontispiece-facts{grid-template-columns:1fr}
   }
   @media (max-width:640px){
@@ -612,7 +612,7 @@
       </div>
 
       <figure class="frontispiece-art">
-        <img class="frontispiece-photo" src="assets/wine-crate.jpg" alt="An open wooden wine crate holding a bottle" width="1200" height="800">
+        <img class="frontispiece-photo" src="assets/hero-vineyard.png" alt="Vineyard rows leading toward a stone wine estate in soft morning mist" width="1536" height="1024">
         <svg viewBox="0 0 420 330" role="img" aria-labelledby="frontispiece-art-title frontispiece-art-desc">
           <title id="frontispiece-art-title">A numbered wine bottle held in a bonded cellar</title>
           <desc id="frontispiece-art-desc">Catalogue engraving of an authenticated bottle beneath a stone cellar arch, with a custody seal and storage record.</desc>
@@ -659,7 +659,7 @@
             <path d="M0 8 H79 M0 17 H63 M0 26 H72" stroke="currentColor" stroke-width=".45" stroke-dasharray="1 2"/>
           </g>
         </svg>
-        <figcaption>A bottle in its presentation crate · authenticated on intake · continuous custody</figcaption>
+        <figcaption>From vineyard to bonded cellar · authenticated on intake · continuous custody</figcaption>
       </figure>
 
       <div class="frontispiece-facts" aria-label="How Cellar works">
