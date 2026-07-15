@@ -33,7 +33,6 @@
     --t-l:21px;
     --t-xl:clamp(24px,3vw,30px);
     --t-2xl:clamp(30px,4.5vw,44px);
-    --frame-orn:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='19' height='19'%3E%3Cg fill='none' stroke='%23191309' stroke-width='.9'%3E%3Ccircle cx='9.5' cy='9.5' r='2.5'/%3E%3Cpath d='M9.5 .5V5.4M9.5 13.6v4.9M.5 9.5H5.4M13.6 9.5h4.9'/%3E%3C/g%3E%3Ccircle cx='9.5' cy='9.5' r='1' fill='%23191309'/%3E%3C/svg%3E");
   }
   *{margin:0;padding:0;box-sizing:border-box}
   [hidden]{display:none!important}
@@ -64,20 +63,14 @@
   a:hover,a:focus-visible{background-size:100% 1px;color:var(--wine)}
   a:focus-visible{outline:1px dotted var(--wine);outline-offset:4px}
 
-  /* ---------- frames: quiet catalogue rules; ornament reserved for the hero ---------- */
+  /* ---------- frames: quiet catalogue rules ---------- */
   .frame{
     position:relative;
     border:1px solid var(--rule);
     transition:border-color .2s ease;
   }
   .frame::before{content:none}
-  .hero-frame{
-    border-color:rgba(25,19,9,.58);
-    background-image:var(--frame-orn),var(--frame-orn),var(--frame-orn),var(--frame-orn);
-    background-repeat:no-repeat;
-    background-position:top -1px left -1px,top -1px right -1px,bottom -1px left -1px,bottom -1px right -1px;
-    background-origin:border-box;
-  }
+  .hero-frame{border-color:rgba(25,19,9,.58)}
 
   /* ---------- ornamented rule ---------- */
   .orn-rule{display:flex;align-items:center;gap:var(--space-4);margin:0 auto;max-width:420px;color:var(--ink)}
@@ -145,6 +138,10 @@
   .hero-grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:clamp(var(--space-6),4vw,var(--space-8));align-items:center}
   .crate-heading{display:flex;align-items:baseline;justify-content:flex-start;flex-wrap:wrap;gap:var(--space-2) var(--space-4)}
   .hero h2.crate-title{font-size:var(--t-2xl);font-weight:500;line-height:1.15;letter-spacing:.01em}
+  .region-meta{display:inline-flex;align-items:center;gap:var(--space-2);white-space:nowrap}
+  .region-flag{display:block;flex:none;width:24px;height:16px;border:1px solid var(--rule);box-shadow:0 0 0 1px var(--paper)}
+  .region-flag [data-flag]{display:none}
+  .region-flag[data-code="fr"] [data-flag="fr"],.region-flag[data-code="us"] [data-flag="us"],.region-flag[data-code="it"] [data-flag="it"],.region-flag[data-code="multi"] [data-flag="multi"]{display:block}
   .region-origin{font-family:var(--script);font-size:var(--t-xl);line-height:1;color:var(--wine);white-space:nowrap}
   .rarity-profile{margin:var(--space-4) 0 0;padding:var(--space-3) 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
   .rarity-head{display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-2)}
@@ -211,9 +208,9 @@
   figure.fig{margin:0;text-align:center}
   figure.fig svg{width:100%;height:auto}
   figure.fig figcaption{margin-top:var(--space-3);font-style:italic;font-size:var(--t-s);color:var(--ink-soft)}
-  .hero .fig{position:relative;max-width:330px;margin:0 auto}
+  .hero .fig{position:relative;max-width:360px;margin:0 auto}
   .hero .fig > svg[role="img"]{display:none}
-  .hero-photo{display:block;width:100%;height:auto;aspect-ratio:3 / 2;object-fit:cover;border:1px solid var(--rule)}
+  .hero-photo{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;object-position:center;border:1px solid var(--rule)}
   .region-medallion{position:absolute;z-index:2;right:2%;top:3%;width:72px;height:72px;color:var(--wine)}
   .region-medallion svg{width:100%;height:100%}
   .region-medallion [data-emblem]{display:none}
@@ -488,7 +485,26 @@
         <div class="hero-copy">
           <div class="crate-heading">
             <h2 class="crate-title" id="crate-title">Bordeaux Crate</h2>
-            <p class="region-origin" id="region-origin">France</p>
+            <span class="region-meta">
+              <svg class="region-flag" id="region-flag" data-code="fr" viewBox="0 0 24 16" role="img" aria-label="Flag of France">
+                <g data-flag="fr">
+                  <rect width="8" height="16" fill="#002654"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#CE1126"/>
+                </g>
+                <g data-flag="it">
+                  <rect width="8" height="16" fill="#009246"/><rect x="8" width="8" height="16" fill="#fff"/><rect x="16" width="8" height="16" fill="#CE2B37"/>
+                </g>
+                <g data-flag="us">
+                  <rect width="24" height="16" fill="#fff"/>
+                  <path d="M0 0h24v1.23H0zm0 2.46h24v1.23H0zm0 4.92h24v1.23H0zm0 7.38h24v1.23H0zm0 9.84h24v1.23H0zm0 12.3h24v1.23H0zm0 14.76h24V16H0z" fill="#B22234"/>
+                  <rect width="10.4" height="8.62" fill="#3C3B6E"/>
+                  <g fill="#fff"><circle cx="1.5" cy="1.4" r=".35"/><circle cx="3.7" cy="1.4" r=".35"/><circle cx="5.9" cy="1.4" r=".35"/><circle cx="8.1" cy="1.4" r=".35"/><circle cx="2.6" cy="3.2" r=".35"/><circle cx="4.8" cy="3.2" r=".35"/><circle cx="7" cy="3.2" r=".35"/><circle cx="9.2" cy="3.2" r=".35"/><circle cx="1.5" cy="5" r=".35"/><circle cx="3.7" cy="5" r=".35"/><circle cx="5.9" cy="5" r=".35"/><circle cx="8.1" cy="5" r=".35"/><circle cx="2.6" cy="6.8" r=".35"/><circle cx="4.8" cy="6.8" r=".35"/><circle cx="7" cy="6.8" r=".35"/><circle cx="9.2" cy="6.8" r=".35"/></g>
+                </g>
+                <g data-flag="multi" fill="none" stroke="currentColor" stroke-width=".8">
+                  <rect width="24" height="16" fill="var(--paper)" stroke="none"/><circle cx="12" cy="8" r="5.5"/><path d="M6.8 8h10.4M12 2.5c2.6 2.6 2.6 8.4 0 11M12 2.5c-2.6 2.6-2.6 8.4 0 11"/>
+                </g>
+              </svg>
+              <span class="region-origin" id="region-origin">France</span>
+            </span>
           </div>
           <div class="product-summary">
             <div class="tier-picker">
@@ -1240,6 +1256,8 @@
     var tierButtons = document.querySelectorAll("[data-tier]");
     var plates = document.querySelectorAll("figure.plate");
     var autoBuyback = document.getElementById("auto-buyback");
+    var regionFlag = document.getElementById("region-flag");
+    var REGION_FLAGS = { bordeaux:"fr", burgundy:"fr", napa:"us", tuscany:"it", champagne:"fr", mix:"multi" };
 
     function formatMoney(value) {
       return "$" + value.toLocaleString("en-US");
@@ -1306,7 +1324,10 @@
       total.textContent = t;
       barTotal.textContent = "Total " + t;
       document.getElementById("crate-title").textContent = region.name + " Crate";
-      document.getElementById("region-origin").textContent = region.country === "Many regions" ? "Multiple regions" : region.country;
+      var countryLabel = region.country === "Many regions" ? "Multiple regions" : region.country;
+      document.getElementById("region-origin").textContent = countryLabel;
+      regionFlag.dataset.code = REGION_FLAGS[selectedRegion] || "multi";
+      regionFlag.setAttribute("aria-label", countryLabel === "Multiple regions" ? countryLabel : "Flag of " + countryLabel);
       document.querySelector(".hero-frame").style.setProperty("--region-accent", region.accent);
       document.getElementById("region-medallion").dataset.motif = region.motif;
       document.querySelector(".bar-label").textContent = region.name + " · " + tier.name;
