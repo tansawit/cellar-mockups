@@ -261,6 +261,14 @@
   .plate-art{position:relative;margin:0 auto}
   .plate-art svg{height:142px;width:auto;margin:0 auto}
   .plate-photo{display:block;width:auto;max-width:100%;height:142px;margin:0 auto;object-fit:contain}
+  .bottle-portrait{position:relative;width:94px;height:142px;margin:0 auto;display:grid;place-items:center;overflow:hidden}
+  .bottle-portrait .plate-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+  .identity-label{position:absolute;left:50%;top:49%;transform:translate(-50%,-50%);width:34px;min-height:25px;
+    display:grid;place-items:center;padding:3px 2px;background:rgba(251,250,246,.94);border:1px solid rgba(25,19,9,.64);
+    color:var(--wine);font-size:8px;font-weight:600;letter-spacing:.1em;line-height:1;text-transform:uppercase;box-shadow:0 0 0 2px rgba(251,250,246,.72)}
+  .identity-label[data-shape="oval"]{border-radius:50%}
+  .identity-label[data-shape="diamond"]{width:28px;min-height:28px;transform:translate(-50%,-50%) rotate(45deg)}
+  .identity-label[data-shape="diamond"] span{transform:rotate(-45deg)}
   figure.plate figcaption{margin-top:var(--space-2);display:flex;flex-direction:column;flex:1}
   .plate-name{font-size:var(--t-m);font-weight:500;line-height:1.2;font-style:normal}
   .plate-meta{margin-top:var(--space-1);font-size:var(--t-xs);letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--ink-soft)}
@@ -269,6 +277,73 @@
     display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-2)}
   .plate-buy .k{font-size:var(--t-xs);letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--ink-soft)}
   .plate-buy em{font-style:normal;font-weight:600;color:var(--wine);font-size:var(--t-m);font-variant-numeric:tabular-nums lining-nums}
+  .plate-open{margin-top:var(--space-2);min-height:36px;padding:0 var(--space-3);font:inherit;font-size:var(--t-xs);
+    letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--ink);background:transparent;border:1px solid var(--rule);
+    cursor:pointer;transition:border-color .18s ease,color .18s ease,transform .14s var(--ease-out)}
+  .plate-open:hover{border-color:var(--wine);color:var(--wine)}
+  .plate-open:active{transform:scale(.97)}
+  .plate-open:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
+  .collection-tools{margin:var(--space-5) 0 var(--space-4);padding:var(--space-4);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .tool-row{display:grid;grid-template-columns:minmax(220px,1.4fr) repeat(3,minmax(130px,.7fr)) auto;gap:var(--space-2);align-items:end}
+  .tool-field{display:grid;gap:var(--space-1)}
+  .tool-field span{font-size:var(--t-xs);letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--ink-soft)}
+  .tool-field input,.tool-field select{width:100%;min-height:42px;padding:0 var(--space-3);font:inherit;font-size:var(--t-m);color:var(--ink);
+    background:var(--paper);border:1px solid var(--rule);border-radius:0}
+  .tool-field input:focus,.tool-field select:focus{outline:1px solid var(--wine);outline-offset:1px;border-color:var(--wine)}
+  .tool-reset{min-height:42px;padding:0 var(--space-3);font:inherit;font-size:var(--t-xs);letter-spacing:var(--tracking-label);
+    text-transform:uppercase;color:var(--ink-soft);background:transparent;border:1px solid var(--rule);cursor:pointer}
+  .tool-reset:hover{color:var(--wine);border-color:var(--wine)}
+  .tool-summary{display:flex;justify-content:space-between;gap:var(--space-3);margin-top:var(--space-3);font-size:var(--t-s);color:var(--ink-soft);font-style:italic}
+  .tool-context{font-style:normal;font-size:var(--t-xs);letter-spacing:.12em;text-transform:uppercase}
+  .empty-collection{text-align:center;padding:var(--space-7) var(--space-4);border:1px solid var(--rule);font-style:italic;color:var(--ink-soft)}
+
+  .appraisal-link{margin-top:var(--space-2);padding:0;background:none;border:0;border-bottom:1px dotted var(--rule);font:inherit;
+    font-size:var(--t-s);font-style:italic;color:var(--ink-soft);cursor:pointer}
+  .appraisal-link:hover{color:var(--wine);border-color:var(--wine)}
+  .appraisal-link:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
+
+  dialog{color:var(--ink);background:var(--paper);border:1px solid var(--ink);font:inherit;padding:0;margin:auto;max-height:calc(100svh - 40px)}
+  dialog::backdrop{background:rgba(25,19,9,.48)}
+  .dossier{width:min(900px,calc(100vw - 32px));overflow:auto}
+  .method{width:min(620px,calc(100vw - 32px));overflow:auto}
+  .dialog-close{position:sticky;float:right;top:12px;right:12px;z-index:3;width:42px;height:42px;display:grid;place-items:center;
+    font:inherit;font-size:var(--t-l);color:var(--ink);background:var(--paper);border:1px solid var(--ink);cursor:pointer;transition:transform .14s var(--ease-out)}
+  .dialog-close:active{transform:scale(.97)}
+  .dialog-close:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
+  .dossier-inner{display:grid;grid-template-columns:minmax(190px,.72fr) minmax(0,1.45fr);gap:clamp(var(--space-5),4vw,var(--space-8));padding:clamp(var(--space-5),4vw,var(--space-7))}
+  .dossier-art{min-height:430px;display:grid;place-items:center;background:var(--paper-2);border:1px solid var(--rule);position:relative;overflow:hidden}
+  .dossier-art img{width:100%;height:100%;object-fit:contain;filter:contrast(1.02)}
+  .dossier-label{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:92px;min-height:72px;padding:10px 7px;
+    display:grid;place-items:center;text-align:center;background:rgba(251,250,246,.96);border:1px solid var(--ink);box-shadow:0 0 0 5px rgba(251,250,246,.8);
+    color:var(--wine);font-size:var(--t-s);line-height:1.1;letter-spacing:.08em;text-transform:uppercase}
+  .dossier-kicker{font-size:var(--t-xs);letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--wine)}
+  .dossier-title{font-size:var(--t-2xl);font-weight:500;line-height:1.06;margin-top:var(--space-2);padding-right:var(--space-7)}
+  .dossier-meta{margin-top:var(--space-2);font-size:var(--t-s);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-soft)}
+  .dossier-note{margin-top:var(--space-4);font-size:var(--t-l);font-style:italic;color:var(--ink-soft);line-height:1.35}
+  .dossier-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 var(--space-5);margin-top:var(--space-5);border-top:1px solid var(--rule)}
+  .dossier-fact{padding:var(--space-3) 0;border-bottom:1px solid var(--rule)}
+  .dossier-fact span{display:block;font-size:var(--t-xs);letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--ink-soft)}
+  .dossier-fact strong{display:block;margin-top:2px;font-size:var(--t-m);font-weight:500}
+  .taste-title{margin-top:var(--space-5);font-size:var(--t-xs);letter-spacing:var(--tracking-label);text-transform:uppercase}
+  .taste-grid{display:grid;gap:var(--space-2);margin-top:var(--space-3)}
+  .taste-row{display:grid;grid-template-columns:58px minmax(0,1fr) 58px;gap:var(--space-2);align-items:center;font-size:var(--t-s);color:var(--ink-soft)}
+  .taste-row span:last-child{text-align:right}
+  .taste-track{height:3px;background:rgba(25,19,9,.16);position:relative}
+  .taste-track i{position:absolute;top:50%;width:10px;height:10px;border:1px solid var(--wine);background:var(--paper);transform:translate(-50%,-50%) rotate(45deg)}
+  .appraisal-box{margin-top:var(--space-5);padding:var(--space-4);border:1px solid var(--rule);background:var(--paper-2)}
+  .appraisal-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-3)}
+  .appraisal-head span{font-size:var(--t-xs);letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--ink-soft)}
+  .appraisal-head strong{font-size:var(--t-l);font-weight:600;color:var(--wine)}
+  .appraisal-box p{margin-top:var(--space-2);font-size:var(--t-s);color:var(--ink-soft)}
+  .method-inner{padding:clamp(var(--space-5),4vw,var(--space-7))}
+  .method-inner h2{font-size:var(--t-xl);font-weight:500;letter-spacing:.12em;text-transform:uppercase}
+  .method-inner > p{margin-top:var(--space-3);color:var(--ink-soft)}
+  .method-list{margin-top:var(--space-5);list-style:none;border-top:1px solid var(--rule)}
+  .method-list li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:var(--space-3);padding:var(--space-3) 0;border-bottom:1px solid var(--rule)}
+  .method-list b{color:var(--wine);font-variant-numeric:tabular-nums}
+  .method-list strong{display:block;font-weight:600}
+  .method-list span{display:block;color:var(--ink-soft);font-size:var(--t-s)}
+  .method-fine{font-size:var(--t-s);font-style:italic}
   /* rarity corner devices: Rare = wine-outlined diamond, Epic = wine-filled, Grail = wine-filled twice-ringed */
   figure.plate[data-rarity="rare"] .plate-art::after,figure.plate[data-rarity="epic"] .plate-art::after,figure.plate[data-rarity="grail"] .plate-art::after{
     content:"";position:absolute;right:-18px;top:8px;width:14px;height:14px;border:1px solid var(--wine);transform:rotate(45deg);box-shadow:0 0 0 3px var(--paper)}
@@ -366,8 +441,26 @@
     figure.plate .plate-art{grid-area:art}
     figure.plate .plate-art svg{height:102px}
     figure.plate .plate-photo{height:102px}
+    .bottle-portrait{width:68px;height:102px}
+    .identity-label{width:25px;min-height:20px;font-size:6px}
     figure.plate figcaption{grid-area:caption;margin:0 0 0 var(--space-3)}
     .plate-note{display:none}
+    .plate-open{justify-self:start;padding:0 var(--space-2);min-height:34px}
+    .collection-tools{margin-top:var(--space-4);padding:var(--space-3) 0}
+    .tool-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .tool-field:first-child{grid-column:1 / -1}
+    .tool-reset{align-self:end}
+    .tool-summary{align-items:flex-start}
+    .tool-context{max-width:22ch;text-align:right}
+    .dossier{width:calc(100vw - 20px);max-height:calc(100svh - 20px)}
+    .dossier-inner{grid-template-columns:1fr;padding:var(--space-4);gap:var(--space-4)}
+    .dossier-art{min-height:240px}
+    .dossier-art img{height:270px}
+    .dossier-label{width:68px;min-height:54px;font-size:var(--t-xs)}
+    .dossier-title{font-size:var(--t-xl);padding-right:var(--space-6)}
+    .dossier-note{font-size:var(--t-m)}
+    .dossier-facts{grid-template-columns:1fr}
+    .taste-row{grid-template-columns:48px minmax(0,1fr) 48px}
     .sect-head{padding:var(--space-7) 0 var(--space-5)}
     .bar-inner{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--space-1) var(--space-3);padding:var(--space-2) var(--space-4);align-items:center}
     .bar-label{grid-column:1;grid-row:1;margin:0}
@@ -579,6 +672,7 @@
                 <p class="rarity-title" id="rarity-title">Composition of the Cellar</p>
               </div>
               <div class="comp-table" id="comp-table"></div>
+              <button class="appraisal-link" id="appraisal-info" type="button">How appraisals and buyback work</button>
             </div>
           </div>
 
@@ -756,7 +850,17 @@
     </svg>
   </figure>
 
-  <div class="wrap" style="padding-top:30px">
+  <div class="wrap">
+    <div class="collection-tools" aria-label="Filter bottles in this crate">
+      <div class="tool-row">
+        <label class="tool-field"><span>Find a bottle</span><input id="filter-search" type="search" placeholder="Name, region, grape" autocomplete="off"></label>
+        <label class="tool-field"><span>Rarity</span><select id="filter-rarity"><option value="all">All rarities</option><option value="common">Common</option><option value="uncommon">Uncommon</option><option value="rare">Rare</option><option value="epic">Epic</option><option value="grail">Grail</option></select></label>
+        <label class="tool-field"><span>Style</span><select id="filter-style"><option value="all">All styles</option><option value="red">Red</option><option value="white">White</option><option value="sparkling">Sparkling</option></select></label>
+        <label class="tool-field"><span>Appraisal</span><select id="filter-value"><option value="all">Any value</option><option value="under100">Under $100</option><option value="100to199">$100–$199</option><option value="200plus">$200+</option></select></label>
+        <button class="tool-reset" id="filter-reset" type="button">Clear</button>
+      </div>
+      <div class="tool-summary"><span id="filter-count">12 bottles shown</span><span class="tool-context" id="filter-context">Bordeaux · Cellar</span></div>
+    </div>
     <div class="plates">
 
       <!-- PLATE I — Ridge (Bordeaux, rect label) -->
@@ -1095,6 +1199,7 @@
       </figure>
 
     </div>
+    <p class="empty-collection" id="empty-collection" hidden>No bottles in this crate match those filters.</p>
   </div>
 </section>
 
@@ -1188,6 +1293,51 @@
   <p class="colophon">Set in EB Garamond · One script flourish in Pinyon · Engravings by the House</p>
 </footer>
 
+<dialog class="dossier" id="bottle-dossier" aria-labelledby="dossier-title">
+  <button class="dialog-close" type="button" aria-label="Close bottle dossier">×</button>
+  <div class="dossier-inner">
+    <div class="dossier-art">
+      <img src="assets/wine-bottle.jpg" alt="" width="480" height="720">
+      <div class="dossier-label" id="dossier-label"></div>
+    </div>
+    <div class="dossier-copy">
+      <p class="dossier-kicker" id="dossier-kicker"></p>
+      <h2 class="dossier-title" id="dossier-title"></h2>
+      <p class="dossier-meta" id="dossier-meta"></p>
+      <p class="dossier-note" id="dossier-note"></p>
+      <div class="dossier-facts">
+        <p class="dossier-fact"><span>Style</span><strong id="dossier-style"></strong></p>
+        <p class="dossier-fact"><span>Primary grape</span><strong id="dossier-grape"></strong></p>
+        <p class="dossier-fact"><span>Drinking window</span><strong id="dossier-window"></strong></p>
+        <p class="dossier-fact"><span>At the table</span><strong id="dossier-pairing"></strong></p>
+      </div>
+      <p class="taste-title">Structure of the wine</p>
+      <div class="taste-grid" id="dossier-taste"></div>
+      <div class="appraisal-box">
+        <div class="appraisal-head"><span>House appraisal</span><strong id="dossier-value"></strong></div>
+        <p id="dossier-range"></p>
+        <p id="dossier-basis"></p>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<dialog class="method" id="appraisal-dialog" aria-labelledby="method-title">
+  <button class="dialog-close" type="button" aria-label="Close appraisal explanation">×</button>
+  <div class="method-inner">
+    <p class="dossier-kicker">The House Method</p>
+    <h2 id="method-title">How appraisal works</h2>
+    <p>The figure shown at reveal is a current market estimate for the exact bottle and vintage—not a promised resale price.</p>
+    <ol class="method-list">
+      <li><b>1</b><div><strong>Comparable offers</strong><span>We inspect recent retail offers for the same wine, vintage, format, and condition.</span></div></li>
+      <li><b>2</b><div><strong>Market record</strong><span>Recent auction outcomes and bonded transactions temper unusually high or low listings.</span></div></li>
+      <li><b>3</b><div><strong>Condition and custody</strong><span>Fill, label, provenance, and continuous storage are verified before a bottle enters a crate.</span></div></li>
+      <li><b>4</b><div><strong>Buyback</strong><span>The house offers 85% of the displayed appraisal at reveal. The exact credit is shown before you decide.</span></div></li>
+    </ol>
+    <p class="method-fine">Appraisals in this prototype are dated 14 July 2026. Production values should always show their source window and last refresh.</p>
+  </div>
+</dialog>
+
 <!-- ============ catalogue running footer (sticky) ============ -->
 <div class="bar" id="cat-bar">
   <div class="bar-inner">
@@ -1257,14 +1407,57 @@
     var plates = document.querySelectorAll("figure.plate");
     var autoBuyback = document.getElementById("auto-buyback");
     var regionFlag = document.getElementById("region-flag");
+    var filterSearch = document.getElementById("filter-search");
+    var filterRarity = document.getElementById("filter-rarity");
+    var filterStyle = document.getElementById("filter-style");
+    var filterValue = document.getElementById("filter-value");
+    var dossier = document.getElementById("bottle-dossier");
+    var appraisalDialog = document.getElementById("appraisal-dialog");
+    var currentBottles = [];
     var REGION_FLAGS = { bordeaux:"fr", burgundy:"fr", napa:"us", tuscany:"it", champagne:"fr", mix:"multi" };
 
     function formatMoney(value) {
       return "$" + value.toLocaleString("en-US");
     }
 
+    function initials(name) {
+      return name.replace(/[’'\-]/g, " ").split(/\s+/).filter(function (word) {
+        return word.length > 2 && ["the", "des", "les", "del", "de", "du"].indexOf(word.toLowerCase()) === -1;
+      }).slice(0, 2).map(function (word) { return word.charAt(0); }).join("");
+    }
+
+    function labelShape(art) {
+      return art % 3 === 1 ? "oval" : art % 3 === 2 ? "diamond" : "rect";
+    }
+
+    function passesValue(price, key) {
+      if (key === "under100") return price < 100;
+      if (key === "100to199") return price >= 100 && price < 200;
+      if (key === "200plus") return price >= 200;
+      return true;
+    }
+
+    function applyFilters() {
+      var query = filterSearch.value.trim().toLowerCase();
+      var shown = 0;
+      Array.prototype.forEach.call(plates, function (plate, index) {
+        var bottle = currentBottles[index];
+        if (!bottle) { plate.hidden = true; return; }
+        var haystack = [bottle.name, bottle.region, bottle.grape, bottle.vintage].join(" ").toLowerCase();
+        var visible = (!query || haystack.indexOf(query) !== -1) &&
+          (filterRarity.value === "all" || bottle.rarity.toLowerCase() === filterRarity.value) &&
+          (filterStyle.value === "all" || bottle.style.toLowerCase() === filterStyle.value) &&
+          passesValue(bottle.price, filterValue.value);
+        plate.hidden = !visible;
+        if (visible) shown += 1;
+      });
+      document.getElementById("filter-count").textContent = shown + (shown === 1 ? " bottle shown" : " bottles shown");
+      document.getElementById("empty-collection").hidden = shown !== 0;
+    }
+
     function renderSamples(region, tier) {
       var bottles = catalogue.getBottles(selectedRegion, selectedTier);
+      currentBottles = bottles;
       Array.prototype.forEach.call(plates, function (plate, index) {
         var bottle = bottles[index];
         plate.hidden = !bottle;
@@ -1277,20 +1470,69 @@
         plate.querySelector(".plate-buy .k").textContent = "Value";
         plate.querySelector(".plate-buy em").textContent = formatMoney(bottle.price);
         var art = plate.querySelector(".plate-art");
-        var photo = art.querySelector(".plate-photo");
-        if (!photo) {
-          photo = document.createElement("img");
+        var portrait = art.querySelector(".bottle-portrait");
+        if (!portrait) {
+          portrait = document.createElement("div");
+          portrait.className = "bottle-portrait";
+          var photo = document.createElement("img");
           photo.className = "plate-photo";
           photo.src = "assets/wine-bottle.jpg";
           photo.width = 480;
           photo.height = 720;
           photo.loading = "lazy";
-          art.replaceChildren(photo);
+          var mark = document.createElement("span");
+          mark.className = "identity-label";
+          mark.appendChild(document.createElement("span"));
+          portrait.appendChild(photo);
+          portrait.appendChild(mark);
+          art.replaceChildren(portrait);
         }
+        var photo = portrait.querySelector(".plate-photo");
+        var mark = portrait.querySelector(".identity-label");
         photo.alt = bottle.name + " bottle";
+        mark.dataset.shape = labelShape(bottle.art);
+        mark.querySelector("span").textContent = initials(bottle.name);
+        var open = plate.querySelector(".plate-open");
+        if (!open) {
+          open = document.createElement("button");
+          open.type = "button";
+          open.className = "plate-open";
+          open.textContent = "View dossier";
+          plate.querySelector("figcaption").appendChild(open);
+        }
+        open.dataset.index = String(index);
       });
       document.getElementById("collection-kicker").textContent = "· " + region.name + " · " + tier.name + " ·";
       document.getElementById("collection-title").textContent = "Inside a " + region.name + " " + tier.name + " Crate";
+      document.getElementById("filter-context").textContent = region.name + " · " + tier.name;
+      applyFilters();
+    }
+
+    function tasteRow(left, right, value) {
+      return '<div class="taste-row"><span>' + left + '</span><span class="taste-track"><i style="left:' + value + '%"></i></span><span>' + right + '</span></div>';
+    }
+
+    function openDossier(index) {
+      var bottle = currentBottles[index];
+      if (!bottle) return;
+      document.getElementById("dossier-kicker").textContent = bottle.rarity + " · Plate " + bottle.plate;
+      document.getElementById("dossier-title").textContent = bottle.name;
+      document.getElementById("dossier-meta").textContent = bottle.vintage + " · " + bottle.region;
+      document.getElementById("dossier-note").textContent = bottle.note;
+      document.getElementById("dossier-style").textContent = bottle.style;
+      document.getElementById("dossier-grape").textContent = bottle.grape;
+      document.getElementById("dossier-window").textContent = bottle.drinkingWindow;
+      document.getElementById("dossier-pairing").textContent = bottle.pairing;
+      document.getElementById("dossier-label").textContent = initials(bottle.name) + " · " + bottle.vintage;
+      document.getElementById("dossier-value").textContent = formatMoney(bottle.price);
+      document.getElementById("dossier-range").textContent = "Observed market range " + formatMoney(bottle.appraisalLow) + "–" + formatMoney(bottle.appraisalHigh) + ". Buyback at reveal: " + formatMoney(bottle.buyback) + ".";
+      document.getElementById("dossier-basis").textContent = bottle.appraisalBasis + " · updated " + bottle.appraisalUpdated + ".";
+      document.getElementById("dossier-taste").innerHTML =
+        tasteRow("Light", "Bold", bottle.structure.body) +
+        tasteRow("Smooth", "Tannic", bottle.structure.tannin) +
+        tasteRow("Dry", "Sweet", bottle.structure.sweetness) +
+        tasteRow("Soft", "Acidic", bottle.structure.acidity);
+      dossier.showModal();
     }
 
     /* UI swatches stay quiet; detailed hatching is reserved for the bottle artwork. */
@@ -1364,6 +1606,27 @@
       });
     });
     autoBuyback.addEventListener("change", render);
+    [filterSearch, filterRarity, filterStyle, filterValue].forEach(function (control) {
+      control.addEventListener(control === filterSearch ? "input" : "change", applyFilters);
+    });
+    document.getElementById("filter-reset").addEventListener("click", function () {
+      filterSearch.value = "";
+      filterRarity.value = "all";
+      filterStyle.value = "all";
+      filterValue.value = "all";
+      applyFilters();
+    });
+    document.querySelector(".plates").addEventListener("click", function (event) {
+      var button = event.target.closest(".plate-open");
+      if (button) openDossier(parseInt(button.dataset.index, 10));
+    });
+    document.getElementById("appraisal-info").addEventListener("click", function () { appraisalDialog.showModal(); });
+    [dossier, appraisalDialog].forEach(function (dialog) {
+      dialog.querySelector(".dialog-close").addEventListener("click", function () { dialog.close(); });
+      dialog.addEventListener("click", function (event) {
+        if (event.target === dialog) dialog.close();
+      });
+    });
 
     function commit() {
       var digits = (input.value || "").replace(/[^0-9]/g, "");

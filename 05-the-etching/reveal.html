@@ -153,6 +153,20 @@
   .b-name{font-size:var(--text-xl);font-weight:500;line-height:1.15;margin-top:3px}
   .b-name span{white-space:pre}
   .b-note{margin-top:2px;font-size:var(--text-base);font-style:italic;color:var(--ink-soft)}
+  .reveal-intel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:620px;margin:12px auto 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .intel{padding:8px 12px;text-align:left;border-right:1px solid var(--rule)}
+  .intel:last-child{border-right:0}
+  .intel span{display:block;font-size:var(--text-xs);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
+  .intel strong{display:block;margin-top:1px;font-size:var(--text-sm);font-weight:500;line-height:1.25}
+  .reveal-why{max-width:56ch;margin:9px auto 0;font-size:var(--text-sm);color:var(--ink-soft)}
+  .reveal-why b{color:var(--ink);font-weight:600}
+  details.reveal-proof{max-width:620px;margin:7px auto 0;font-size:var(--text-xs);color:var(--ink-soft)}
+  details.reveal-proof summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;min-height:32px;
+    border-bottom:1px dotted var(--rule);letter-spacing:.12em;text-transform:uppercase}
+  details.reveal-proof summary::-webkit-details-marker{display:none}
+  details.reveal-proof summary:hover{color:var(--wine);border-color:var(--wine)}
+  details.reveal-proof summary:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
+  .proof-copy{margin:5px auto 0;max-width:56ch;font-style:italic}
 
   .exits{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:480px;margin:14px auto 0}
   .exit{
@@ -357,6 +371,12 @@
     .under{min-height:250px;margin-top:8px}
     .b-name{font-size:var(--text-lg)}
     .b-note{font-size:var(--text-sm)}
+    .reveal-intel{grid-template-columns:1fr;margin-top:9px}
+    .intel{display:flex;justify-content:space-between;gap:12px;padding:5px 8px;border-right:0;border-bottom:1px solid var(--rule);text-align:left}
+    .intel:last-child{border-bottom:0}
+    .intel strong{text-align:right}
+    .reveal-why{font-size:var(--text-xs);margin-top:7px}
+    details.reveal-proof{margin-top:3px}
     .exits{grid-template-columns:1fr;gap:8px;max-width:340px}
     .exit{min-height:52px;display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:8px 14px;text-align:left}
     .exit .x-head{font-size:var(--text-xs)}
@@ -694,6 +714,17 @@
       <h2 class="b-name" id="b-name"></h2>
       <p class="b-note" id="b-note"></p>
 
+      <div class="reveal-intel" aria-label="Bottle details">
+        <p class="intel"><span>Wine</span><strong id="b-wine"></strong></p>
+        <p class="intel"><span>Drink</span><strong id="b-window"></strong></p>
+        <p class="intel"><span>Market range</span><strong id="b-range"></strong></p>
+      </div>
+      <p class="reveal-why" id="b-why"></p>
+      <details class="reveal-proof">
+        <summary>How this bottle was appraised</summary>
+        <p class="proof-copy" id="b-proof"></p>
+      </details>
+
       <div class="exits" id="exits">
         <button type="button" class="exit" data-exit="sell">
           <span class="x-head">Sell back</span>
@@ -854,6 +885,16 @@
       });
       nameEl.appendChild(holder);
       document.getElementById("b-note").textContent = bottle.note;
+      document.getElementById("b-wine").textContent = bottle.style + " · " + bottle.grape;
+      document.getElementById("b-window").textContent = bottle.drinkingWindow;
+      document.getElementById("b-range").textContent = money(bottle.appraisalLow) + "–" + money(bottle.appraisalHigh);
+      var why = document.getElementById("b-why");
+      why.textContent = "";
+      var whyHead = document.createElement("b");
+      whyHead.textContent = "Why it matters — ";
+      why.appendChild(whyHead);
+      why.appendChild(document.createTextNode(bottle.why));
+      document.getElementById("b-proof").textContent = bottle.appraisalBasis + ". Updated " + bottle.appraisalUpdated + "; the " + money(bottle.buyback) + " buyback is fixed for this reveal decision.";
       document.getElementById("sub-sell").textContent = money(bottle.buyback) + " store credit";
       exits.hidden = false;
       confirmBox.hidden = true;
@@ -913,12 +954,12 @@
       var bLabel = bottle.name + ", " + bottle.vintage;
       if (key === "sell") {
         head = auto ? "Common · Auto-Sold" : "Sellback Requested";
-        rows = confRow(bLabel, money(bottle.price) + " appraised") + confRow("Store credit · 85%", money(bottle.buyback));
+        rows = confRow(bLabel, money(bottle.price) + " appraised") + confRow("Observed range", money(bottle.appraisalLow) + "–" + money(bottle.appraisalHigh)) + confRow("Store credit · 85%", money(bottle.buyback));
         note = "Credit reaches your account within the hour; the bottle returns to the racks unopened.";
         link = '<a href="inventory.html">View My Cellar</a>';
       } else {
         head = "Held in Bond";
-        rows = confRow(bLabel, money(bottle.price) + " appraised") + confRow("Storage", "free 90 days · 2.5%/yr");
+        rows = confRow(bLabel, money(bottle.price) + " appraised") + confRow("Drink", bottle.drinkingWindow) + confRow("Storage", "free 90 days · 2.5%/yr");
         note = "Custody verified · 55 °F / 70% RH · continuous telemetry from the bonded warehouse.";
         link = '<a href="inventory.html">View it in My Cellar</a>';
       }

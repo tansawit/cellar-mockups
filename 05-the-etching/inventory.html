@@ -130,6 +130,15 @@
 
   /* ---------- holdings ---------- */
   .holdings{padding-bottom:8px}
+  .holding-tools{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 18px;padding:12px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .status-filters{display:flex;gap:8px;flex-wrap:wrap}
+  .status-filter{min-height:38px;padding:0 14px;font:inherit;font-size:var(--t-xs);letter-spacing:.18em;text-transform:uppercase;
+    color:var(--ink-soft);background:transparent;border:1px solid var(--rule);cursor:pointer;transition:color .18s ease,border-color .18s ease,background-color .18s ease,transform .14s cubic-bezier(.23,1,.32,1)}
+  .status-filter:hover{border-color:var(--ink);color:var(--ink)}
+  .status-filter:active{transform:scale(.97)}
+  .status-filter[aria-pressed="true"]{color:var(--paper);background:var(--wine);border-color:var(--wine)}
+  .status-filter:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
+  .holding-count{font-size:var(--t-s);font-style:italic;color:var(--ink-soft);white-space:nowrap}
   .holding{padding:clamp(18px,2.4vw,28px) clamp(18px,2.8vw,34px);margin-bottom:20px}
   .holding:hover::before{border-color:var(--ink)}
   .holding-grid{display:grid;grid-template-columns:120px minmax(0,1fr);gap:clamp(18px,2.6vw,38px);align-items:start}
@@ -139,6 +148,18 @@
   .plate-name{font-size:var(--t-l);font-weight:500;line-height:1.15}
   .plate-meta{margin-top:4px;font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft)}
   .acq{margin-top:9px;font-style:italic;color:var(--ink-soft);font-size:var(--t-m)}
+  .holding-status{display:inline-flex;align-items:center;gap:7px;margin-top:10px;padding:4px 9px;border:1px solid var(--rule);
+    font-size:var(--t-xs);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+  .holding-status::before{content:"";width:6px;height:6px;background:var(--wine);transform:rotate(45deg)}
+  .holding[data-status="hold"] .holding-status::before{background:transparent;border:1px solid var(--wine)}
+  .holding[data-status="shipping"] .holding-status{color:var(--wine);border-color:var(--wine)}
+  .holding[data-status="sold"] .holding-status{color:var(--ink-soft)}
+  .holding[data-status="sold"] .holding-status::before{background:var(--ink-soft)}
+  .holding-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:720px;margin-top:12px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .holding-fact{padding:8px 12px;border-right:1px solid var(--rule)}
+  .holding-fact:last-child{border-right:0}
+  .holding-fact span{display:block;font-size:var(--t-xs);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
+  .holding-fact strong{display:block;margin-top:1px;font-size:var(--t-s);font-weight:500;line-height:1.3}
   .appr-line{margin-top:10px;display:flex;align-items:baseline;gap:10px;max-width:420px;font-size:var(--t-m)}
   .appr-line .k{font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft);white-space:nowrap}
   .appr-line em{font-style:normal;font-weight:600;color:var(--wine);font-size:var(--t-l);white-space:nowrap}
@@ -182,6 +203,11 @@
 
   /* ---------- ledger ---------- */
   .ledger{padding-bottom:10px}
+  .ledger-toggle{margin-top:16px;min-height:42px;padding:0 18px;font:inherit;font-size:var(--t-xs);letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ink);background:transparent;border:1px solid var(--ink);cursor:pointer;transition:background-color .18s ease,color .18s ease,transform .14s cubic-bezier(.23,1,.32,1)}
+  .ledger-toggle:hover{background:var(--wine);border-color:var(--wine);color:var(--paper)}
+  .ledger-toggle:active{transform:scale(.97)}
+  .ledger-toggle:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
   .ledger-frame{padding:clamp(20px,2.6vw,34px) clamp(20px,3vw,40px)}
   .lhead{display:grid;grid-template-columns:132px minmax(0,1fr) auto;gap:6px 16px;
     padding-bottom:9px;border-bottom:1px solid var(--ink);position:relative;
@@ -239,11 +265,19 @@
     .conditions li{gap:9px}
     .standing .conditions .v .fine-v{font-size:var(--t-s)}
     .holding{padding:18px 15px;margin-bottom:16px}
+    .holding-tools{align-items:flex-start;flex-direction:column;padding:10px 0}
+    .status-filters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
+    .status-filter:first-child{grid-column:1 / -1}
+    .holding-count{align-self:flex-end}
     .holding-grid{grid-template-columns:74px minmax(0,1fr);gap:14px}
     .holding-art svg{height:158px}
     .appr-line{gap:6px}
     .appr-line .lead{min-width:0}
     .actions{margin-top:14px}
+    .holding-facts{grid-template-columns:1fr;margin-top:10px}
+    .holding-fact{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-right:0;border-bottom:1px solid var(--rule)}
+    .holding-fact:last-child{border-bottom:0}
+    .holding-fact strong{text-align:right}
     .act{padding:0 14px;font-size:var(--t-xs);letter-spacing:.18em;flex:1 1 auto}
     .holding .actions,.holding .ship-note,.holding .receipt,.holding details.prov{grid-column:1 / -1}
     .holding details.prov .conditions li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 10px}
@@ -382,8 +416,19 @@
 
   <div class="wrap">
 
+    <div class="holding-tools" aria-label="Filter holdings by status">
+      <div class="status-filters">
+        <button class="status-filter" type="button" data-status-filter="all" aria-pressed="true">All holdings</button>
+        <button class="status-filter" type="button" data-status-filter="ready" aria-pressed="false">Ready now</button>
+        <button class="status-filter" type="button" data-status-filter="hold" aria-pressed="false">Hold</button>
+        <button class="status-filter" type="button" data-status-filter="shipping" aria-pressed="false">Dispatch</button>
+        <button class="status-filter" type="button" data-status-filter="sold" aria-pressed="false">Sold</button>
+      </div>
+      <p class="holding-count" id="holding-count">3 bottles shown</p>
+    </div>
+
     <!-- LOT I — Vietti (after Plate VIII) -->
-    <article class="holding frame" id="lot-1" data-price="176" data-buyback="150" data-name="Vietti Barolo Castiglione 2019">
+    <article class="holding frame" id="lot-1" data-status="hold" data-price="176" data-buyback="150" data-name="Vietti Barolo Castiglione 2019">
       <div class="holding-grid">
         <div class="holding-art">
           <svg viewBox="0 0 120 300" role="img" aria-label="Etched Albeisa bottle with pictorial label">
@@ -405,6 +450,12 @@
           <h3 class="plate-name">Vietti Barolo Castiglione</h3>
           <p class="plate-meta">2019 · Piedmont</p>
           <p class="acq">Acquired — Crate №&nbsp;0441 · 3 July 2026</p>
+          <p class="holding-status">Hold · opens 2027</p>
+          <div class="holding-facts">
+            <p class="holding-fact"><span>Drink</span><strong>2027–2035</strong></p>
+            <p class="holding-fact"><span>Wine</span><strong>Red · Nebbiolo</strong></p>
+            <p class="holding-fact"><span>Market range</span><strong>$162–$190</strong></p>
+          </div>
           <p class="appr-line"><span class="k">Current appraisal</span><span class="lead" aria-hidden="true"></span><em>$176</em></p>
 
           <div class="actions">
@@ -437,7 +488,7 @@
     </article>
 
     <!-- LOT II — Tempier (after Plate II) -->
-    <article class="holding frame" id="lot-2" data-price="142" data-buyback="121" data-name="Domaine Tempier Bandol Rouge 2020">
+    <article class="holding frame" id="lot-2" data-status="ready" data-price="142" data-buyback="121" data-name="Domaine Tempier Bandol Rouge 2020">
       <div class="holding-grid">
         <div class="holding-art">
           <svg viewBox="0 0 120 300" role="img" aria-label="Etched Burgundy bottle with oval label">
@@ -459,6 +510,12 @@
           <h3 class="plate-name">Domaine Tempier Bandol Rouge</h3>
           <p class="plate-meta">2020 · Bandol, Provence</p>
           <p class="acq">Acquired — Crate №&nbsp;0442 · 3 July 2026</p>
+          <p class="holding-status">Ready now · through 2032</p>
+          <div class="holding-facts">
+            <p class="holding-fact"><span>Drink</span><strong>Now–2032</strong></p>
+            <p class="holding-fact"><span>Wine</span><strong>Red · Mourvèdre blend</strong></p>
+            <p class="holding-fact"><span>Market range</span><strong>$131–$153</strong></p>
+          </div>
           <p class="appr-line"><span class="k">Current appraisal</span><span class="lead" aria-hidden="true"></span><em>$142</em></p>
 
           <div class="actions">
@@ -491,7 +548,7 @@
     </article>
 
     <!-- LOT III — Huet (after Plate VI) -->
-    <article class="holding frame" id="lot-3" data-price="112" data-buyback="95" data-name="Domaine Huet Le Mont Sec 2022">
+    <article class="holding frame" id="lot-3" data-status="ready" data-price="112" data-buyback="95" data-name="Domaine Huet Le Mont Sec 2022">
       <div class="holding-grid">
         <div class="holding-art">
           <svg viewBox="0 0 120 300" role="img" aria-label="Etched slender Loire flute bottle">
@@ -512,6 +569,12 @@
           <h3 class="plate-name">Domaine Huet Le Mont Sec</h3>
           <p class="plate-meta">2022 · Vouvray, Loire</p>
           <p class="acq">Acquired — Crate №&nbsp;0443 · 3 July 2026</p>
+          <p class="holding-status">Ready now · through 2030</p>
+          <div class="holding-facts">
+            <p class="holding-fact"><span>Drink</span><strong>Now–2030</strong></p>
+            <p class="holding-fact"><span>Wine</span><strong>White · Chenin Blanc</strong></p>
+            <p class="holding-fact"><span>Market range</span><strong>$103–$121</strong></p>
+          </div>
           <p class="appr-line"><span class="k">Current appraisal</span><span class="lead" aria-hidden="true"></span><em>$112</em></p>
 
           <div class="actions">
@@ -557,9 +620,10 @@
     </div>
     <h2>Schedule of Transactions</h2>
     <p class="sub">Every dealing between you and the house, entered as it occurred. Nothing is off the book.</p>
+    <button class="ledger-toggle" id="ledger-toggle" type="button" aria-expanded="false" aria-controls="ledger-record">Show transaction record</button>
   </header>
 
-  <div class="wrap">
+  <div class="wrap" id="ledger-record" hidden>
     <div class="frame ledger-frame">
       <div class="lhead" aria-hidden="true">
         <span>Date</span><span>Entry</span><span class="h-amt">Amount</span>
@@ -722,6 +786,8 @@
     var elBond = document.getElementById("stat-bond");
     var elHoldings = document.getElementById("stat-holdings");
     var ledgerRows = document.getElementById("ledger-rows");
+    var holdingsList = document.querySelectorAll(".holding");
+    var activeStatus = "all";
     var TODAY = "14 July 2026";
 
     function usd(n) { return "$" + n.toLocaleString("en-US"); }
@@ -729,6 +795,19 @@
       elCredit.textContent = usd(credit);
       elBond.textContent = String(bond);
       elHoldings.textContent = usd(holdings);
+    }
+
+    function applyStatusFilter() {
+      var shown = 0;
+      Array.prototype.forEach.call(holdingsList, function (lot) {
+        var visible = activeStatus === "all" || lot.dataset.status === activeStatus;
+        lot.hidden = !visible;
+        if (visible) shown += 1;
+      });
+      document.getElementById("holding-count").textContent = shown + (shown === 1 ? " bottle shown" : " bottles shown");
+      Array.prototype.forEach.call(document.querySelectorAll(".status-filter"), function (button) {
+        button.setAttribute("aria-pressed", String(button.dataset.statusFilter === activeStatus));
+      });
     }
 
     function ledgerEntry(name, price) {
@@ -770,6 +849,8 @@
         var name = lot.getAttribute("data-name");
 
         lot.classList.add("sold");
+        lot.dataset.status = "sold";
+        lot.querySelector(".holding-status").textContent = "Sold back · " + TODAY;
         lot.querySelector(".actions").hidden = true;
         lot.querySelector(".ship-note").hidden = true;
         lot.querySelector(".receipt").hidden = false;
@@ -781,6 +862,7 @@
         holdings -= price;
         renderStats();
         ledgerEntry(name, buyback);
+        applyStatusFilter();
       });
     });
 
@@ -793,10 +875,33 @@
         var open = panel.hidden;
         panel.hidden = !open;
         btn.setAttribute("aria-expanded", open ? "true" : "false");
+        if (open) {
+          lot.dataset.status = "shipping";
+          lot.querySelector(".holding-status").textContent = "Dispatch requested";
+          btn.firstChild.textContent = "Dispatch requested — ";
+          applyStatusFilter();
+        }
       });
     });
 
+    Array.prototype.forEach.call(document.querySelectorAll(".status-filter"), function (button) {
+      button.addEventListener("click", function () {
+        activeStatus = button.dataset.statusFilter;
+        applyStatusFilter();
+      });
+    });
+
+    var ledgerToggle = document.getElementById("ledger-toggle");
+    var ledgerRecord = document.getElementById("ledger-record");
+    ledgerToggle.addEventListener("click", function () {
+      var open = ledgerRecord.hidden;
+      ledgerRecord.hidden = !open;
+      ledgerToggle.setAttribute("aria-expanded", String(open));
+      ledgerToggle.textContent = open ? "Hide transaction record" : "Show transaction record";
+    });
+
     renderStats();
+    applyStatusFilter();
   })();
 </script>
 
