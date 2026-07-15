@@ -136,13 +136,13 @@
   .tier-choice .tier-appraise small{display:block;font:inherit;font-size:var(--t-xs);font-style:italic;color:var(--ink-soft);margin-bottom:var(--space-1);white-space:normal}
   .hero-frame{padding:clamp(var(--space-5),3vw,var(--space-7))}
   .hero-grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:clamp(var(--space-6),4vw,var(--space-8));align-items:center}
-  .crate-heading{display:flex;align-items:baseline;justify-content:flex-start;flex-wrap:wrap;gap:var(--space-2) var(--space-4)}
+  .crate-heading{display:flex;flex-direction:column;align-items:flex-start;gap:var(--space-2)}
   .hero h2.crate-title{font-size:var(--t-2xl);font-weight:500;line-height:1.15;letter-spacing:.01em}
-  .region-meta{display:inline-flex;align-items:center;gap:var(--space-2);white-space:nowrap}
-  .region-flag{display:block;flex:none;width:24px;height:16px;border:1px solid var(--rule);box-shadow:0 0 0 1px var(--paper)}
+  .region-meta{order:-1;display:inline-flex;align-items:center;gap:var(--space-2);min-height:20px;white-space:nowrap}
+  .region-flag{display:block;flex:none;width:21px;height:14px;border:1px solid var(--rule)}
   .region-flag [data-flag]{display:none}
   .region-flag[data-code="fr"] [data-flag="fr"],.region-flag[data-code="us"] [data-flag="us"],.region-flag[data-code="it"] [data-flag="it"],.region-flag[data-code="multi"] [data-flag="multi"]{display:block}
-  .region-origin{font-family:var(--script);font-size:var(--t-xl);line-height:1;color:var(--wine);white-space:nowrap}
+  .region-origin{font-size:var(--t-xs);line-height:1;letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--ink-soft);white-space:nowrap}
   .rarity-profile{margin:var(--space-4) 0 0;padding:var(--space-3) 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
   .rarity-head{display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-2)}
   .rarity-head::after{content:"";flex:1;height:1px;background:var(--rule)}
@@ -297,15 +297,9 @@
   .tool-context{font-style:normal;font-size:var(--t-xs);letter-spacing:.12em;text-transform:uppercase}
   .empty-collection{text-align:center;padding:var(--space-7) var(--space-4);border:1px solid var(--rule);font-style:italic;color:var(--ink-soft)}
 
-  .appraisal-link{margin-top:var(--space-2);padding:0;background:none;border:0;border-bottom:1px dotted var(--rule);font:inherit;
-    font-size:var(--t-s);font-style:italic;color:var(--ink-soft);cursor:pointer}
-  .appraisal-link:hover{color:var(--wine);border-color:var(--wine)}
-  .appraisal-link:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
-
   dialog{color:var(--ink);background:var(--paper);border:1px solid var(--ink);font:inherit;padding:0;margin:auto;max-height:calc(100svh - 40px)}
   dialog::backdrop{background:rgba(25,19,9,.48)}
   .dossier{width:min(900px,calc(100vw - 32px));overflow:auto}
-  .method{width:min(620px,calc(100vw - 32px));overflow:auto}
   .dialog-close{position:sticky;float:right;top:12px;right:12px;z-index:3;width:42px;height:42px;display:grid;place-items:center;
     font:inherit;font-size:var(--t-l);color:var(--ink);background:var(--paper);border:1px solid var(--ink);cursor:pointer;transition:transform .14s var(--ease-out)}
   .dialog-close:active{transform:scale(.97)}
@@ -335,15 +329,14 @@
   .appraisal-head span{font-size:var(--t-xs);letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--ink-soft)}
   .appraisal-head strong{font-size:var(--t-l);font-weight:600;color:var(--wine)}
   .appraisal-box p{margin-top:var(--space-2);font-size:var(--t-s);color:var(--ink-soft)}
-  .method-inner{padding:clamp(var(--space-5),4vw,var(--space-7))}
-  .method-inner h2{font-size:var(--t-xl);font-weight:500;letter-spacing:.12em;text-transform:uppercase}
-  .method-inner > p{margin-top:var(--space-3);color:var(--ink-soft)}
-  .method-list{margin-top:var(--space-5);list-style:none;border-top:1px solid var(--rule)}
-  .method-list li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:var(--space-3);padding:var(--space-3) 0;border-bottom:1px solid var(--rule)}
+  .appraisal-method{padding-bottom:var(--space-8);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:var(--paper-2)}
+  .method-panel{max-width:900px}
+  .method-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:0;list-style:none;border-top:1px solid var(--rule);border-left:1px solid var(--rule)}
+  .method-list li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:var(--space-3);padding:var(--space-4);border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
   .method-list b{color:var(--wine);font-variant-numeric:tabular-nums}
   .method-list strong{display:block;font-weight:600}
   .method-list span{display:block;color:var(--ink-soft);font-size:var(--t-s)}
-  .method-fine{font-size:var(--t-s);font-style:italic}
+  .method-fine{max-width:64ch;margin:var(--space-4) auto 0;text-align:center;font-size:var(--t-s);font-style:italic;color:var(--ink-soft)}
   /* rarity corner devices: Rare = wine-outlined diamond, Epic = wine-filled, Grail = wine-filled twice-ringed */
   figure.plate[data-rarity="rare"] .plate-art::after,figure.plate[data-rarity="epic"] .plate-art::after,figure.plate[data-rarity="grail"] .plate-art::after{
     content:"";position:absolute;right:-18px;top:8px;width:14px;height:14px;border:1px solid var(--wine);transform:rotate(45deg);box-shadow:0 0 0 3px var(--paper)}
@@ -461,6 +454,7 @@
     .dossier-note{font-size:var(--t-m)}
     .dossier-facts{grid-template-columns:1fr}
     .taste-row{grid-template-columns:48px minmax(0,1fr) 48px}
+    .method-list{grid-template-columns:1fr}
     .sect-head{padding:var(--space-7) 0 var(--space-5)}
     .bar-inner{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--space-1) var(--space-3);padding:var(--space-2) var(--space-4);align-items:center}
     .bar-label{grid-column:1;grid-row:1;margin:0}
@@ -672,7 +666,6 @@
                 <p class="rarity-title" id="rarity-title">Composition of the Cellar</p>
               </div>
               <div class="comp-table" id="comp-table"></div>
-              <button class="appraisal-link" id="appraisal-info" type="button">How appraisals and buyback work</button>
             </div>
           </div>
 
@@ -1203,6 +1196,24 @@
   </div>
 </section>
 
+<!-- ============ appraisal method ============ -->
+<section id="appraisals" class="appraisal-method">
+  <header class="sect-head wrap">
+    <p class="no">· The House Method ·</p>
+    <h2>How Appraisals Work</h2>
+    <p class="sub">Every bottle is valued using the same market, condition, and custody standards. The figure at reveal is an estimate for that exact wine and vintage—not a promised resale price.</p>
+  </header>
+  <div class="wrap method-panel">
+    <ol class="method-list">
+      <li><b>1</b><div><strong>Comparable offers</strong><span>Recent retail offers for the same wine, vintage, format, and condition.</span></div></li>
+      <li><b>2</b><div><strong>Market record</strong><span>Auction outcomes and bonded transactions temper unusually high or low listings.</span></div></li>
+      <li><b>3</b><div><strong>Condition and custody</strong><span>Fill, label, provenance, and continuous storage are verified before a bottle enters a crate.</span></div></li>
+      <li><b>4</b><div><strong>Instant buyback</strong><span>The house buys at 85% of the displayed appraisal. The exact credit is shown before you decide.</span></div></li>
+    </ol>
+    <p class="method-fine">Appraisals in this prototype are dated 14 July 2026. Production values should always show their source window and last refresh.</p>
+  </div>
+</section>
+
 <!-- ============ custody ============ -->
 <section id="cellar" class="custody">
   <header class="sect-head wrap">
@@ -1290,7 +1301,6 @@
     Storage free for 90&nbsp;days, then 2.5%/yr. Bottles are held in bond; prices in United
     States dollars. Instant buyback is offered at 85% of the current appraised value.</p>
   <p class="mark">CELLAR</p>
-  <p class="colophon">Set in EB Garamond · One script flourish in Pinyon · Photography and catalogue design by the House</p>
 </footer>
 
 <dialog class="dossier" id="bottle-dossier" aria-labelledby="dossier-title">
@@ -1318,22 +1328,6 @@
         <p id="dossier-range"></p>
       </div>
     </div>
-  </div>
-</dialog>
-
-<dialog class="method" id="appraisal-dialog" aria-labelledby="method-title">
-  <button class="dialog-close" type="button" aria-label="Close appraisal explanation">×</button>
-  <div class="method-inner">
-    <p class="dossier-kicker">The House Method</p>
-    <h2 id="method-title">How appraisal works</h2>
-    <p>The figure shown at reveal is a current market estimate for the exact bottle and vintage—not a promised resale price.</p>
-    <ol class="method-list">
-      <li><b>1</b><div><strong>Comparable offers</strong><span>We inspect recent retail offers for the same wine, vintage, format, and condition.</span></div></li>
-      <li><b>2</b><div><strong>Market record</strong><span>Recent auction outcomes and bonded transactions temper unusually high or low listings.</span></div></li>
-      <li><b>3</b><div><strong>Condition and custody</strong><span>Fill, label, provenance, and continuous storage are verified before a bottle enters a crate.</span></div></li>
-      <li><b>4</b><div><strong>Buyback</strong><span>The house offers 85% of the displayed appraisal at reveal. The exact credit is shown before you decide.</span></div></li>
-    </ol>
-    <p class="method-fine">Appraisals in this prototype are dated 14 July 2026. Production values should always show their source window and last refresh.</p>
   </div>
 </dialog>
 
@@ -1411,7 +1405,6 @@
     var filterStyle = document.getElementById("filter-style");
     var filterValue = document.getElementById("filter-value");
     var dossier = document.getElementById("bottle-dossier");
-    var appraisalDialog = document.getElementById("appraisal-dialog");
     var currentBottles = [];
     var REGION_FLAGS = { bordeaux:"fr", burgundy:"fr", napa:"us", tuscany:"it", champagne:"fr", mix:"multi" };
 
@@ -1618,11 +1611,7 @@
       var button = event.target.closest(".plate-open");
       if (button) openDossier(parseInt(button.dataset.index, 10));
     });
-    document.getElementById("appraisal-info").addEventListener("click", function () { appraisalDialog.showModal(); });
-    if (new URLSearchParams(location.search).get("appraisal") === "1") {
-      requestAnimationFrame(function () { appraisalDialog.showModal(); });
-    }
-    [dossier, appraisalDialog].forEach(function (dialog) {
+    [dossier].forEach(function (dialog) {
       dialog.querySelector(".dialog-close").addEventListener("click", function () { dialog.close(); });
       dialog.addEventListener("click", function (event) {
         if (event.target === dialog) dialog.close();

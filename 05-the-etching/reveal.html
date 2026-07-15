@@ -160,8 +160,6 @@
   .intel:last-child{border-right:0}
   .intel span{display:block;font-size:var(--text-xs);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
   .intel strong{display:block;margin-top:1px;font-size:var(--text-sm);font-weight:500;line-height:1.25}
-  .appraisal-global{display:inline-flex;margin-top:10px;min-height:32px;align-items:center;font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase}
-
   .exits{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:480px;margin:14px auto 0}
   .exit{
     font:inherit;text-align:center;cursor:pointer;min-height:64px;padding:9px 10px 7px;
@@ -720,7 +718,6 @@
         <p class="intel"><span>Drink</span><strong id="b-window"></strong></p>
         <p class="intel"><span>Market range</span><strong id="b-range"></strong></p>
       </div>
-      <a class="appraisal-global" href="index.html?appraisal=1">How appraisals and buyback work</a>
 
       <div class="exits" id="exits">
         <button type="button" class="exit" data-exit="sell">
@@ -752,7 +749,6 @@
     Storage free for 90&nbsp;days, then 2.5%/yr. Bottles are held in bond; prices in United
     States dollars. Instant buyback is offered at 85% of the current appraised value.</p>
   <p class="mark">CELLAR</p>
-  <p class="colophon">Set in EB Garamond · Photography and catalogue design by the House</p>
 </footer>
 
 <!-- ============ mobile bottom navigation ============ -->
@@ -943,9 +939,9 @@
       var head, rows, note, link;
       var bLabel = bottle.name + ", " + bottle.vintage;
       if (key === "sell") {
-        head = auto ? "Common · Auto-Sold" : "Sellback Requested";
-        rows = confRow(bLabel, money(bottle.price) + " appraised") + confRow("Observed range", money(bottle.appraisalLow) + "–" + money(bottle.appraisalHigh)) + confRow("Store credit · 85%", money(bottle.buyback));
-        note = "Credit reaches your account within the hour; the bottle returns to the racks unopened.";
+        head = (auto ? "Sold automatically · " : "Sold back · ") + money(bottle.buyback) + " credited";
+        rows = confRow(bLabel, "Sold to the house") + confRow("Store credit issued", money(bottle.buyback));
+        note = money(bottle.buyback) + " has been added to your account. The bottle has returned to the house inventory.";
         link = '<a href="inventory.html">View My Cellar</a>';
       } else {
         head = "Held in Bond";
