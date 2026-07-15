@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Cellar — Vol. I, No. 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F5F0E3;
+    --paper-deep: #F2EDE0;
+    --ink: #1A1512;
+    --ink-soft: #3A322B;
+    --wine: #6E1423;
+    --rule: rgba(26, 21, 18, 0.85);
+    --hairline: rgba(26, 21, 18, 0.28);
+    --serif: "Playfair Display", Georgia, "Times New Roman", serif;
+    --mono: "Courier Prime", "Courier New", monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    background: var(--paper);
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(26,21,18,0.025), transparent 60%),
+      radial-gradient(ellipse at 85% 100%, rgba(26,21,18,0.03), transparent 55%);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.5;
+    padding: clamp(10px, 1.8vw, 24px);
+    padding-bottom: 88px; /* clearance for the classified ticker */
+  }
+
+  .sheet {
+    max-width: 1280px;
+    margin: 0 auto;
+    background: var(--paper-deep);
+    border: 1px solid var(--rule);
+    box-shadow: 0 1px 0 rgba(26,21,18,0.15), 0 14px 40px -18px rgba(26,21,18,0.35);
+    padding: clamp(12px, 1.8vw, 26px) clamp(14px, 3.5vw, 52px) clamp(20px, 2.4vw, 36px);
+  }
+
+  a { color: inherit; }
+
+  ::selection { background: var(--wine); color: var(--paper); }
+
+  /* ---------- TOP BAR / NAV ---------- */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 9px;
+  }
+  .topbar nav { display: flex; gap: clamp(14px, 3vw, 34px); flex-wrap: wrap; }
+  .topbar a {
+    text-decoration: none;
+    padding: 12px 2px;
+    margin: -12px -2px;
+    position: relative;
+  }
+  .topbar a::after {
+    content: "";
+    position: absolute;
+    left: 2px; right: 2px; bottom: 8px;
+    height: 1px;
+    background: var(--wine);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+  .topbar a:hover::after, .topbar a:focus-visible::after { transform: scaleX(1); }
+  .topbar a:focus-visible { outline: 1px dotted var(--wine); outline-offset: 4px; }
+
+  /* ---------- MASTHEAD ---------- */
+  .masthead {
+    text-align: center;
+    padding: clamp(10px, 1vw, 14px) 0 0;
+    position: relative;
+  }
+  .masthead-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: clamp(10px, 2vw, 28px);
+  }
+  .ear {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    line-height: 1.5;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1px solid var(--rule);
+    padding: 7px 10px;
+    max-width: 172px;
+  }
+  .ear b { color: var(--wine); font-weight: 700; }
+  .ear-left { justify-self: start; text-align: left; }
+  .ear-right { justify-self: end; text-align: right; }
+
+  h1.title {
+    font-family: var(--serif);
+    font-weight: 900;
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 0.92;
+    letter-spacing: 0.015em;
+    white-space: nowrap;
+  }
+  h1.title .the {
+    font-size: 0.32em;
+    font-weight: 700;
+    font-style: italic;
+    letter-spacing: 0.08em;
+    vertical-align: 0.62em;
+    margin-right: 0.35em;
+  }
+
+  .masthead-motto {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(11px, 1.2vw, 13px);
+    margin-top: 6px;
+    color: var(--ink-soft);
+  }
+
+  .dateline {
+    margin-top: clamp(8px, 1.2vw, 12px);
+    border-top: 2px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .dateline::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: 3px;
+    border-top: 1px solid var(--rule);
+  }
+  .dateline .vol { color: var(--wine); font-weight: 700; }
+
+  /* ---------- LEAD STORY ---------- */
+  .lead-head {
+    text-align: center;
+    padding: clamp(10px, 1.2vw, 17px) clamp(0px, 4vw, 60px) clamp(8px, 1.2vw, 14px);
+  }
+  .kicker {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--wine);
+  }
+  .kicker::before, .kicker::after { content: "— "; color: var(--ink); }
+  .kicker::after { content: " —"; }
+
+  h2.headline {
+    font-weight: 900;
+    font-size: clamp(26px, 3.8vw, 50px);
+    line-height: 1.04;
+    letter-spacing: 0.005em;
+    margin-top: 10px;
+    text-wrap: balance;
+  }
+  .deck {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(14px, 1.4vw, 17px);
+    line-height: 1.45;
+    color: var(--ink-soft);
+    max-width: 640px;
+    margin: 10px auto 0;
+    text-wrap: balance;
+  }
+  .byline {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-top: 10px;
+  }
+  .byline b { font-weight: 700; }
+
+  .lead {
+    display: grid;
+    grid-template-columns: 4.4fr 4.2fr 3.6fr;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .lead > * { padding: clamp(14px, 1.6vw, 22px) clamp(14px, 1.6vw, 22px); min-width: 0; }
+  .lead > * + * { border-left: 1px solid var(--hairline); }
+
+  figure.newscut { text-align: center; }
+  figure.newscut svg { width: 100%; max-width: 330px; height: auto; display: block; margin: 0 auto; }
+  figcaption {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    line-height: 1.55;
+    letter-spacing: 0.04em;
+    text-align: left;
+    border-top: 1px solid var(--hairline);
+    margin-top: 10px;
+    padding-top: 8px;
+    color: var(--ink-soft);
+  }
+  figcaption b { text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; color: var(--ink); }
+
+  .story { font-size: 14.5px; line-height: 1.6; text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
+  .story p + p { margin-top: 0.85em; text-indent: 1.6em; }
+  .story .dateline-lede {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+  .story p:first-of-type::first-letter {
+    font-family: var(--serif);
+    font-weight: 900;
+    font-size: 3.55em;
+    line-height: 0.82;
+    float: left;
+    padding: 0.06em 0.1em 0 0;
+    color: var(--wine);
+  }
+  .story .subhed {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 1.4em 0 0.9em;
+  }
+  .story .subhed::before, .story .subhed::after { content: "·"; margin: 0 0.8em; color: var(--wine); }
+
+  /* ---------- ADVERT / BUY BOX ---------- */
+  .advert {
+    align-self: start;
+    position: sticky;
+    top: 12px;
+  }
+  .advert-box {
+    border: 2.5px solid var(--rule);
+    outline: 1px solid var(--rule);
+    outline-offset: 3px;
+    padding: clamp(13px, 1.4vw, 18px) clamp(13px, 1.3vw, 18px);
+    text-align: center;
+    background: var(--paper);
+  }
+  .advert-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .advert-rule {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 9px auto;
+    width: 46px;
+  }
+  .advert h3 {
+    font-weight: 900;
+    font-size: clamp(21px, 1.9vw, 25px);
+    line-height: 1.06;
+    letter-spacing: 0.01em;
+  }
+  .advert .price {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-style: italic;
+    font-size: 18px;
+    margin-top: 4px;
+    color: var(--wine);
+  }
+  .advert .honest {
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    margin-top: 9px;
+    color: var(--ink-soft);
+  }
+  .qty-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    margin: 10px 0 6px;
+  }
+  .qty {
+    display: flex;
+    border: 1px solid var(--rule);
+  }
+  .qty .step {
+    flex: 0 0 56px;
+    min-height: 46px;
+    background: transparent;
+    border: none;
+    font-family: var(--mono);
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--ink);
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease, opacity 0.18s ease;
+  }
+  .qty .step:hover:not(:disabled) { background: rgba(110, 20, 35, 0.08); }
+  .qty .step:disabled { opacity: 0.3; cursor: default; }
+  .qty .step:focus-visible { outline: 1px dotted var(--wine); outline-offset: -5px; }
+  .qty input {
+    flex: 1;
+    min-width: 0;
+    min-height: 46px;
+    text-align: center;
+    background: transparent;
+    border: none;
+    border-left: 1px solid var(--rule);
+    border-right: 1px solid var(--rule);
+    border-radius: 0;
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .qty input:focus-visible { outline: 1px dotted var(--wine); outline-offset: -5px; }
+
+  .total-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--hairline);
+    padding: 9px 2px 6px;
+  }
+  .total-line strong {
+    font-family: var(--serif);
+    font-size: 21px;
+    font-weight: 900;
+    letter-spacing: 0;
+  }
+  .cta {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    min-height: 48px;
+    background: var(--wine);
+    color: var(--paper);
+    border: 1px solid var(--wine);
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .cta:hover { background: var(--ink); border-color: var(--ink); }
+  .cta:focus-visible { outline: 1px dotted var(--wine); outline-offset: 4px; }
+  .advert .terms {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    line-height: 1.55;
+    letter-spacing: 0.04em;
+    margin-top: 8px;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- SECTION HEADS ---------- */
+  .section-head {
+    text-align: center;
+    padding: clamp(20px, 2.6vw, 34px) 0 clamp(10px, 1.6vw, 16px);
+  }
+  .section-head h2 {
+    font-weight: 900;
+    font-size: clamp(21px, 2.6vw, 32px);
+    letter-spacing: 0.06em;
+  }
+  .section-head .sub {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 6px;
+    color: var(--ink-soft);
+  }
+  .section-head .orn { margin-top: 8px; }
+  .section-head .orn svg { display: inline-block; vertical-align: middle; }
+
+  /* ---------- THREE DISPOSITIONS ---------- */
+  .exits {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .exit { padding: clamp(14px, 1.8vw, 24px) clamp(14px, 1.6vw, 22px); min-width: 0; }
+  .exit + .exit { border-left: 1px solid var(--hairline); }
+  .exit .glyph { display: block; margin-bottom: 10px; width: 44px; height: 44px; }
+  .exit h4 {
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.01em;
+  }
+  .exit .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--wine);
+    margin-bottom: 6px;
+  }
+  .exit p {
+    font-size: 13.5px;
+    line-height: 1.55;
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    margin-top: 8px;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- STANDING INVENTORY ---------- */
+  .inventory {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .brief {
+    padding: clamp(14px, 1.6vw, 20px) clamp(12px, 1.4vw, 18px);
+    border-left: 1px solid var(--hairline);
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.25s ease;
+  }
+  .brief:nth-child(4n + 1) { border-left: none; }
+  .brief:nth-child(n + 5) { border-top: 1px solid var(--hairline); }
+  .brief:hover { background: rgba(110, 20, 35, 0.035); }
+  .brief .cut { text-align: center; padding: 2px 0 10px; }
+  .brief .cut svg { height: 108px; width: auto; }
+  .brief .lot {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: center;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    padding: 5px 0;
+  }
+  .brief h4 {
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.2;
+    margin-top: 10px;
+    text-wrap: balance;
+  }
+  .brief h4 .vintage { font-weight: 400; font-style: italic; }
+  .brief .note {
+    font-size: 13.5px;
+    line-height: 1.5;
+    margin-top: 6px;
+    color: var(--ink-soft);
+  }
+  .brief .note .region-dateline {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .brief .buyback {
+    margin-top: auto;
+    padding-top: 11px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .brief .buyback strong {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: 0;
+    color: var(--wine);
+  }
+
+  /* ---------- CUSTODY NOTICE ---------- */
+  .notice-wrap { padding: clamp(20px, 2.6vw, 36px) 0 clamp(6px, 1.2vw, 10px); }
+  .notice {
+    max-width: 820px;
+    margin: 0 auto;
+    border: 2.5px solid var(--rule);
+    outline: 1px solid var(--rule);
+    outline-offset: 3px;
+    background: var(--paper);
+    padding: clamp(16px, 2.2vw, 26px) clamp(16px, 3vw, 38px);
+    text-align: center;
+  }
+  .notice .notice-kicker {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--wine);
+  }
+  .notice h3 {
+    font-weight: 900;
+    font-size: clamp(19px, 2.2vw, 25px);
+    letter-spacing: 0.04em;
+    margin-top: 8px;
+  }
+  .notice p.body {
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 10px auto 0;
+    color: var(--ink-soft);
+  }
+  .telemetry {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 0;
+    margin-top: 14px;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    padding: 9px 0;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .telemetry span { padding: 0 clamp(10px, 2vw, 22px); }
+  .telemetry span + span { border-left: 1px solid var(--hairline); }
+  .telemetry b { color: var(--wine); font-weight: 700; }
+  .notice .attest {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    margin-top: 11px;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    margin-top: clamp(20px, 2.4vw, 32px);
+    border-top: 2.5px solid var(--rule);
+    position: relative;
+    padding-top: 16px;
+    text-align: center;
+  }
+  footer::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: 3px;
+    border-top: 1px solid var(--rule);
+  }
+  footer .wordmark {
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: 0.28em;
+    text-indent: 0.28em;
+  }
+  footer .fine {
+    font-family: var(--mono);
+    font-size: 10px;
+    line-height: 1.7;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    max-width: 700px;
+    margin: 10px auto 0;
+  }
+  footer .colophon {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 10px;
+  }
+
+  /* ---------- CLASSIFIED TICKER (sticky bar) ---------- */
+  .ticker {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 60;
+    background: var(--paper);
+    border-top: 1px solid var(--rule);
+    transform: translateY(103%);
+    visibility: hidden;
+    transition: transform 0.32s ease, visibility 0.32s ease;
+  }
+  .ticker::before, .ticker::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0;
+    border-top: 1px solid var(--rule);
+  }
+  .ticker::before { top: 2px; }
+  .ticker::after { top: 5px; }
+  .ticker.on { transform: translateY(0); visibility: visible; }
+  .ticker-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: clamp(10px, 2vw, 24px);
+    padding: 13px clamp(14px, 3vw, 28px) 11px;
+  }
+  .ticker .t-info {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    min-width: 0;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .ticker .t-crate { font-weight: 700; white-space: nowrap; }
+  .ticker .t-crate b { color: var(--wine); }
+  .ticker .t-sep { color: var(--wine); }
+  .ticker .t-total { white-space: nowrap; }
+  .ticker .t-total strong {
+    font-family: var(--serif);
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+  }
+  .ticker .t-cta {
+    margin-left: auto;
+    flex: 0 0 auto;
+    min-height: 44px;
+    padding: 0 clamp(14px, 2vw, 26px);
+    background: var(--paper);
+    color: var(--ink);
+    border: 1.5px solid var(--rule);
+    box-shadow: 0 0 0 3px var(--paper), 0 0 0 4px var(--rule);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .ticker .t-cta:hover { background: var(--wine); border-color: var(--wine); color: var(--paper); }
+  .ticker .t-cta:focus-visible { outline: 1px dotted var(--wine); outline-offset: 5px; }
+
+  /* ---------- SVG SHARED ---------- */
+  svg .ln { stroke: var(--ink); fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  svg .hatch { stroke: var(--ink); fill: none; stroke-width: 0.7; opacity: 0.62; stroke-linecap: round; }
+  svg .wine-fill { fill: var(--wine); }
+  svg .paper-fill { fill: var(--paper); }
+  svg text { font-family: var(--mono); fill: var(--ink); }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 980px) {
+    .lead { grid-template-columns: 1fr 1fr; }
+    .lead .advert {
+      grid-column: 1 / -1;
+      border-left: none;
+      border-top: 1px solid var(--hairline);
+      position: static;
+    }
+    .advert-box { max-width: 460px; margin: 0 auto; }
+    .inventory { grid-template-columns: repeat(2, 1fr); }
+    .brief:nth-child(4n + 1) { border-left: 1px solid var(--hairline); }
+    .brief:nth-child(2n + 1) { border-left: none; }
+    .brief:nth-child(n + 3) { border-top: 1px solid var(--hairline); }
+  }
+
+  @media (max-width: 720px) {
+    body { font-size: 15px; }
+    .masthead-row { grid-template-columns: 1fr; }
+    .ear { display: none; }
+    h1.title { white-space: normal; }
+    .masthead-motto { display: none; }
+    .deck { display: none; }
+    .lead-head { padding-top: 12px; padding-bottom: 10px; }
+    .byline { margin-top: 8px; }
+    .lead { grid-template-columns: 1fr; }
+    .lead > * + * { border-left: none; border-top: 1px solid var(--hairline); }
+    /* the house advert reads directly under the headline on mobile */
+    .lead .advert { order: -1; border-top: none; border-bottom: 1px solid var(--hairline); }
+    figure.newscut svg { max-width: 260px; }
+    .exits { grid-template-columns: 1fr; }
+    .exit + .exit { border-left: none; border-top: 1px solid var(--hairline); }
+    .exit p { text-align: left; }
+    .inventory { grid-template-columns: 1fr; }
+    .brief { border-left: none !important; }
+    .brief:nth-child(n + 2) { border-top: 1px solid var(--hairline); }
+    .story { text-align: left; }
+    .dateline { justify-content: center; text-align: center; row-gap: 2px; }
+    .ticker .t-info { flex-direction: column; gap: 2px; }
+    .ticker .t-sep { display: none; }
+    .ticker .t-total strong { font-size: 15px; }
+    .ticker-inner { padding-top: 11px; padding-bottom: 9px; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <!-- ============ TOP BAR ============ -->
+  <div class="topbar">
+    <span>All the wine that&rsquo;s fit to hold</span>
+    <nav aria-label="Sections">
+      <a href="#inventory">The Collection</a>
+      <a href="#">My Cellar</a>
+      <a href="#custody">About</a>
+    </nav>
+  </div>
+
+  <!-- ============ MASTHEAD ============ -->
+  <header class="masthead">
+    <div class="masthead-row">
+      <div class="ear ear-left" aria-label="Cellar conditions">
+        Cellar today:<br><b>55&deg;F &middot; 70% RH</b><br>Steady, as always.
+      </div>
+      <h1 class="title"><span class="the">The</span>CELLAR</h1>
+      <div class="ear ear-right" aria-label="Inventory count">
+        Eight bottles standing.<br><b>One leaves</b> in every crate.
+      </div>
+    </div>
+    <p class="masthead-motto">Published from a bonded warehouse, at fifty-five degrees, in perpetuity.</p>
+    <div class="dateline">
+      <span>Tuesday, July 14, 2026</span>
+      <span class="vol">Vol. I &mdash; No. 1 &middot; California &middot; Est. 2026</span>
+      <span>Price: $135 the crate</span>
+    </div>
+  </header>
+
+  <!-- ============ LEAD STORY ============ -->
+  <main>
+    <div class="lead-head">
+      <p class="kicker">The Lead Story</p>
+      <h2 class="headline">A CRATE, SEALED; A BOTTLE, CERTAIN.</h2>
+      <p class="deck">Every crate from this house holds exactly one bottle, drawn from the standing inventory and appraised between $110 and $180. No jackpots. No empties. Just wine, and the paperwork to prove it.</p>
+      <p class="byline">By <b>The Cellar Desk</b> &nbsp;&middot;&nbsp; Filed from the bond</p>
+    </div>
+
+    <div class="lead">
+      <!-- Engraved news cut -->
+      <figure class="newscut">
+        <svg viewBox="0 0 420 320" role="img" aria-label="Engraving of a sealed wooden wine crate with a wax seal">
+          <!-- crate top face -->
+          <polygon class="ln" stroke-width="1.6" points="72,128 148,66 372,66 296,128"/>
+          <line class="ln" stroke-width="1" x1="110" y1="126" x2="184" y2="66"/>
+          <line class="ln" stroke-width="1" x1="168" y1="124" x2="242" y2="66"/>
+          <line class="ln" stroke-width="1" x1="226" y1="126" x2="300" y2="66"/>
+          <line class="ln" stroke-width="1" x1="270" y1="127" x2="344" y2="67"/>
+          <!-- lid seam nails on top -->
+          <circle class="ln" stroke-width="1" cx="96" cy="118" r="1.6"/>
+          <circle class="ln" stroke-width="1" cx="286" cy="118" r="1.6"/>
+          <circle class="ln" stroke-width="1" cx="160" cy="76" r="1.6"/>
+          <circle class="ln" stroke-width="1" cx="352" cy="76" r="1.6"/>
+          <!-- crate front face -->
+          <rect class="ln" stroke-width="1.6" x="72" y="128" width="224" height="152"/>
+          <!-- planks, front -->
+          <line class="ln" stroke-width="1" x1="72" y1="166" x2="296" y2="166"/>
+          <line class="ln" stroke-width="1" x1="72" y1="242" x2="296" y2="242"/>
+          <!-- corner battens -->
+          <line class="ln" stroke-width="1.2" x1="86" y1="128" x2="86" y2="280"/>
+          <line class="ln" stroke-width="1.2" x1="282" y1="128" x2="282" y2="280"/>
+          <!-- nails, front -->
+          <circle class="ln" stroke-width="1" cx="79" cy="136" r="1.4"/>
+          <circle class="ln" stroke-width="1" cx="289" cy="136" r="1.4"/>
+          <circle class="ln" stroke-width="1" cx="79" cy="272" r="1.4"/>
+          <circle class="ln" stroke-width="1" cx="289" cy="272" r="1.4"/>
+          <!-- stencil text -->
+          <text x="184" y="154" text-anchor="middle" font-size="13" font-weight="700" letter-spacing="6">CELLAR</text>
+          <text x="184" y="196" text-anchor="middle" font-size="19" font-weight="700" letter-spacing="3">CRATE No. 001</text>
+          <text x="184" y="216" text-anchor="middle" font-size="10" letter-spacing="2.5">ONE BOTTLE &mdash; IN BOND</text>
+          <text x="184" y="264" text-anchor="middle" font-size="9" letter-spacing="2">THIS SIDE UP &middot; 55&deg;F &middot; HANDLE AS EVIDENCE</text>
+          <!-- side face -->
+          <polygon class="ln" stroke-width="1.6" points="296,128 372,66 372,218 296,280"/>
+          <line class="ln" stroke-width="1" x1="296" y1="166" x2="372" y2="104"/>
+          <line class="ln" stroke-width="1" x1="296" y1="242" x2="372" y2="180"/>
+          <!-- side hatching (engraved shade) -->
+          <g class="hatch">
+            <line x1="302" y1="140" x2="366" y2="88"/>
+            <line x1="302" y1="152" x2="366" y2="100"/>
+            <line x1="302" y1="164" x2="366" y2="112"/>
+            <line x1="302" y1="176" x2="366" y2="124"/>
+            <line x1="302" y1="188" x2="366" y2="136"/>
+            <line x1="302" y1="200" x2="366" y2="148"/>
+            <line x1="302" y1="212" x2="366" y2="160"/>
+            <line x1="302" y1="224" x2="366" y2="172"/>
+            <line x1="302" y1="236" x2="366" y2="184"/>
+            <line x1="302" y1="248" x2="366" y2="196"/>
+            <line x1="302" y1="260" x2="366" y2="208"/>
+            <line x1="302" y1="272" x2="366" y2="220"/>
+          </g>
+          <!-- ground shadow hatching -->
+          <g class="hatch">
+            <line x1="60" y1="292" x2="86" y2="292"/>
+            <line x1="52" y1="298" x2="150" y2="298"/>
+            <line x1="70" y1="304" x2="250" y2="304"/>
+            <line x1="120" y1="310" x2="330" y2="310"/>
+            <line x1="240" y1="304" x2="352" y2="304"/>
+            <line x1="300" y1="298" x2="368" y2="298"/>
+          </g>
+          <!-- twine across the crate -->
+          <line class="ln" stroke-width="1.2" x1="72" y1="206" x2="296" y2="204"/>
+          <line class="ln" stroke-width="1.2" x1="296" y1="204" x2="372" y2="142"/>
+          <!-- wax seal -->
+          <g transform="translate(296,204)">
+            <circle class="wine-fill" cx="0" cy="0" r="24"/>
+            <circle class="ln" stroke="#F2EDE0" stroke-width="1" cx="0" cy="0" r="19" fill="none"/>
+            <text x="0" y="7" text-anchor="middle" font-size="20" font-weight="700" fill="#F2EDE0" style="font-family:'Playfair Display',Georgia,serif">C</text>
+            <path class="wine-fill" d="M -8 22 Q -14 34 -6 40 Q -2 34 -4 26 Z" opacity="0.9"/>
+          </g>
+        </svg>
+        <figcaption><b>The news cut.</b> &mdash; Crate No. 001 as it leaves the bond: nailed, stenciled, and certain of exactly one thing. The wax is decorative. The custody record is not.</figcaption>
+      </figure>
+
+      <!-- Story text -->
+      <article class="story">
+        <p><span class="dateline-lede">CALIFORNIA, IN BOND &mdash;</span> Each bottle in the inventory rests where it has always rested: in a bonded warehouse, at fifty-five degrees, under seventy percent humidity, its condition attested by instruments that do not sleep. When a crate is opened, the bottle it names does not move. What changes hands is the right to it &mdash; to sell it back at once for store credit at appraised value, to keep it sleeping under our roof, or to have it driven, signed for, and set on a Californian table.</p>
+        <p class="subhed">No Empty Crates</p>
+        <p>Skeptics will ask what stands behind the stencil. The answer is unglamorous and complete: continuous custody, storage attestation on the hour, and an authentication file older than the sale. Every crate holds one bottle. Every bottle holds its ground. The rest &mdash; the machinery of record-keeping &mdash; is our business, conducted quietly, so that yours can be the wine. The presses, and the cellar doors, are now open.</p>
+      </article>
+
+      <!-- Advert / buy module -->
+      <aside class="advert" aria-label="Purchase a crate">
+        <div class="advert-box">
+          <p class="advert-tag">Advertisement &mdash; House</p>
+          <hr class="advert-rule">
+          <h3>CRATE No. 001</h3>
+          <p class="price">$135 the crate</p>
+          <p class="honest">Every crate holds one bottle,<br>appraised between $110&ndash;$180.</p>
+          <p class="qty-label">Number of crates</p>
+          <div class="qty" role="group" aria-label="Quantity of crates">
+            <button type="button" class="step" id="qty-minus" aria-label="One crate fewer" disabled>&minus;</button>
+            <input type="text" inputmode="numeric" id="qty-input" value="1" aria-label="Number of crates, 1 to 12" autocomplete="off">
+            <button type="button" class="step" id="qty-plus" aria-label="One crate more">+</button>
+          </div>
+          <p class="total-line"><span id="qty-words">1 crate</span> <strong id="total">$135</strong></p>
+          <button type="button" class="cta" id="cta">Open a Crate</button>
+          <p class="terms">Sell back &middot; keep in bond &middot; or ship (CA only, 21+).<br>Authenticated &middot; in bond &middot; custody verified.</p>
+        </div>
+      </aside>
+    </div>
+
+    <!-- ============ THREE DISPOSITIONS ============ -->
+    <section aria-labelledby="exits-hed">
+      <div class="section-head">
+        <p class="kicker">Page Two</p>
+        <h2 id="exits-hed">THE THREE DISPOSITIONS</h2>
+        <p class="sub">What may lawfully become of a revealed bottle</p>
+      </div>
+      <div class="exits">
+        <article class="exit">
+          <svg class="glyph" width="52" height="52" viewBox="0 0 52 52" role="img" aria-label="Ledger engraving">
+            <path class="ln" stroke-width="1.4" d="M26 10 Q14 4 5 8 L5 42 Q14 38 26 44 Q38 38 47 42 L47 8 Q38 4 26 10 Z"/>
+            <line class="ln" stroke-width="1.4" x1="26" y1="10" x2="26" y2="44"/>
+            <g class="hatch">
+              <line x1="10" y1="16" x2="22" y2="17"/>
+              <line x1="10" y1="22" x2="22" y2="23"/>
+              <line x1="10" y1="28" x2="22" y2="29"/>
+              <line x1="30" y1="17" x2="42" y2="16"/>
+              <line x1="30" y1="23" x2="42" y2="22"/>
+              <line x1="30" y1="29" x2="42" y2="28"/>
+            </g>
+            <text x="36" y="39" text-anchor="middle" font-size="8" font-weight="700" fill="#6E1423">$</text>
+          </svg>
+          <p class="tag">Disposition the First</p>
+          <h4>Sell it back, on the spot</h4>
+          <p>The house buys at appraised value, instantly, in store credit. No listing, no waiting, no haggling in the classifieds. The bottle returns to the standing inventory; the credit returns to you, spendable on the next crate.</p>
+        </article>
+        <article class="exit">
+          <svg class="glyph" width="52" height="52" viewBox="0 0 52 52" role="img" aria-label="Cellar arch engraving">
+            <path class="ln" stroke-width="1.4" d="M8 46 L8 24 Q8 8 26 8 Q44 8 44 24 L44 46"/>
+            <line class="ln" stroke-width="1.4" x1="4" y1="46" x2="48" y2="46"/>
+            <g class="hatch">
+              <path d="M12 24 Q12 12 26 12" fill="none"/>
+              <line x1="8" y1="32" x2="12" y2="32"/>
+              <line x1="40" y1="32" x2="44" y2="32"/>
+              <line x1="8" y1="39" x2="12" y2="39"/>
+              <line x1="40" y1="39" x2="44" y2="39"/>
+            </g>
+            <path class="ln" stroke-width="1.2" d="M23.5 45 L23.5 32 Q23.5 29 25 27.5 L25 22 L27 22 L27 27.5 Q28.5 29 28.5 32 L28.5 45 Z"/>
+          </svg>
+          <p class="tag">Disposition the Second</p>
+          <h4>Keep it in the cellar</h4>
+          <p>The bottle stays exactly where it has aged best: our bond, our racks, our thermometers. Storage is free for ninety days, then 2.5% a year &mdash; roughly the price of worrying about it yourself, without the worrying.</p>
+        </article>
+        <article class="exit">
+          <svg class="glyph" width="52" height="52" viewBox="0 0 52 52" role="img" aria-label="Parcel engraving">
+            <rect class="ln" stroke-width="1.4" x="8" y="14" width="36" height="28"/>
+            <line class="ln" stroke-width="1.2" x1="8" y1="14" x2="26" y2="22"/>
+            <line class="ln" stroke-width="1.2" x1="44" y1="14" x2="26" y2="22"/>
+            <line class="ln" stroke-width="1.2" x1="26" y1="22" x2="26" y2="42"/>
+            <g class="hatch">
+              <line x1="29" y1="26" x2="41" y2="21"/>
+              <line x1="29" y1="31" x2="41" y2="26"/>
+              <line x1="29" y1="36" x2="41" y2="31"/>
+            </g>
+            <circle class="ln" stroke="#6E1423" stroke-width="1.2" cx="16" cy="32" r="5.5" fill="none"/>
+            <text x="16" y="35" text-anchor="middle" font-size="7" font-weight="700" fill="#6E1423">21</text>
+          </svg>
+          <p class="tag">Disposition the Third</p>
+          <h4>Ship it home</h4>
+          <p>California addresses only, an adult signature at the door, and a bottle that has never known a warm afternoon. It travels the way it was stored: on its side, in the dark, taken seriously the whole way.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ STANDING INVENTORY ============ -->
+    <section id="inventory" aria-labelledby="inventory-hed">
+      <div class="section-head">
+        <p class="kicker">The Illustrated Column</p>
+        <h2 id="inventory-hed">THE STANDING INVENTORY</h2>
+        <p class="sub">Eight bottles in bond &middot; appraisals current as of press time</p>
+        <p class="orn" aria-hidden="true">
+          <svg width="120" height="16" viewBox="0 0 120 16">
+            <line class="ln" stroke-width="1" x1="0" y1="8" x2="46" y2="8"/>
+            <circle class="ln" stroke-width="1" cx="55" cy="8" r="2.4"/>
+            <circle class="wine-fill" cx="60" cy="8" r="2.6"/>
+            <circle class="ln" stroke-width="1" cx="65" cy="8" r="2.4"/>
+            <line class="ln" stroke-width="1" x1="74" y1="8" x2="120" y2="8"/>
+          </svg>
+        </p>
+      </div>
+
+      <div class="inventory">
+
+        <!-- 1 · Ridge — Bordeaux bottle -->
+        <article class="brief">
+          <div class="cut">
+            <svg viewBox="0 0 72 168" role="img" aria-label="Line engraving of a Bordeaux bottle">
+              <path class="ln" stroke-width="1.5" d="M31 6 L41 6 L41 14 L31 14 Z"/>
+              <path class="ln" stroke-width="1.5" d="M32 14 L32 52 Q32 60 26 66 Q23 70 23 78 L23 156 Q23 160 27 160 L45 160 Q49 160 49 156 L49 78 Q49 70 46 66 Q40 60 40 52 L40 14"/>
+              <line class="ln" stroke-width="0.9" x1="31" y1="22" x2="41" y2="22"/>
+              <rect class="ln" stroke-width="1" x="28" y="92" width="16" height="34"/>
+              <line class="ln" stroke-width="0.8" x1="30" y1="100" x2="42" y2="100"/>
+              <line class="hatch" x1="30" y1="107" x2="42" y2="107"/>
+              <line class="hatch" x1="30" y1="112" x2="42" y2="112"/>
+              <circle class="wine-fill" cx="36" cy="119" r="2.2"/>
+              <g class="hatch">
+                <line x1="45" y1="80" x2="45" y2="154"/>
+                <line x1="47" y1="86" x2="47" y2="150"/>
+                <line x1="38.5" y1="18" x2="38.5" y2="50"/>
+              </g>
+              <ellipse class="hatch" cx="36" cy="163" rx="16" ry="2"/>
+            </svg>
+          </div>
+          <p class="lot">Lot No. 1 &middot; Cabernet Sauvignon</p>
+          <h4>Ridge Estate Cabernet Sauvignon <span class="vintage">&mdash; 2019</span></h4>
+          <p class="note"><span class="region-dateline">Santa Cruz Mts. &mdash;</span> Structured, cedar and cassis; a mountain wine with its affairs in order.</p>
+          <p class="buyback"><span>Buyback</span> <strong>$128</strong></p>
+        </article>
+
+        <!-- 2 · Tempier — Provençal bottle -->
+        <article class="brief">
+          <div class="cut">
+            <svg viewBox="0 0 72 168" role="img" aria-label="Line engraving of a Bandol bottle">
+              <path class="ln" stroke-width="1.5" d="M31 6 L41 6 L41 15 L31 15 Z"/>
+              <path class="ln" stroke-width="1.5" d="M32 15 L32 48 Q32 62 25 72 Q22 77 22 84 L22 156 Q22 160 26 160 L46 160 Q50 160 50 156 L50 84 Q50 77 47 72 Q40 62 40 48 L40 15"/>
+              <line class="ln" stroke-width="0.9" x1="31" y1="24" x2="41" y2="24"/>
+              <path class="ln" stroke-width="1" d="M28 96 L44 96 L44 128 L28 128 Z"/>
+              <path class="ln" stroke-width="0.8" d="M31 104 Q36 100 41 104"/>
+              <line class="hatch" x1="30" y1="112" x2="42" y2="112"/>
+              <line class="hatch" x1="30" y1="117" x2="42" y2="117"/>
+              <path class="ln" stroke="#6E1423" stroke-width="1" d="M33 122 L39 122" fill="none"/>
+              <g class="hatch">
+                <line x1="45.5" y1="86" x2="45.5" y2="154"/>
+                <line x1="47.5" y1="92" x2="47.5" y2="150"/>
+                <line x1="38.5" y1="19" x2="38.5" y2="46"/>
+              </g>
+              <ellipse class="hatch" cx="36" cy="163" rx="16" ry="2"/>
+            </svg>
+          </div>
+          <p class="lot">Lot No. 2 &middot; Mourv&egrave;dre Blend</p>
+          <h4>Domaine Tempier Bandol Rouge <span class="vintage">&mdash; 2020</span></h4>
+          <p class="note"><span class="region-dateline">Bandol, Provence &mdash;</span> Wild herbs and dark plum; smells like the hill it grew on.</p>
+          <p class="buyback"><span>Buyback</span> <strong>$142</strong></p>
+        </article>
+
+        <!-- 3 · Produttori — Albeisa bottle -->
+        <article class="brief">
+          <div class="cut">
+            <svg viewBox="0 0 72 168" role="img" aria-label="Line engraving of a Barbaresco bottle">
+              <path class="ln" stroke-width="1.5" d="M31 8 L41 8 L41 16 L31 16 Z"/>
+              <path class="ln" stroke-width="1.5" d="M32 16 L32 44 Q32 60 26 70 Q23 76 23 84 L23 156 Q23 160 27 160 L45 160 Q49 160 49 156 L49 84 Q49 76 46 70 Q40 60 40 44 L40 16"/>
+              <line class="ln" stroke-width="0.9" x1="31" y1="25" x2="41" y2="25"/>
+              <circle class="ln" stroke-width="1" cx="36" cy="106" r="12"/>
+              <path class="hatch" d="M31 103 Q36 98 41 103"/>
+              <path class="hatch" d="M31 109 Q36 114 41 109"/>
+              <circle class="wine-fill" cx="36" cy="106" r="2"/>
+              <line class="ln" stroke-width="0.8" x1="29" y1="126" x2="43" y2="126"/>
+              <g class="hatch">
+                <line x1="45" y1="86" x2="45" y2="154"/>
+                <line x1="47" y1="92" x2="47" y2="150"/>
+                <line x1="38.5" y1="20" x2="38.5" y2="42"/>
+              </g>
+              <ellipse class="hatch" cx="36" cy="163" rx="16" ry="2"/>
+            </svg>
+          </div>
+          <p class="lot">Lot No. 3 &middot; Nebbiolo</p>
+          <h4>Produttori del Barbaresco <span class="vintage">&mdash; 2019</span></h4>
+          <p class="note"><span class="region-dateline">Piedmont &mdash;</span> Rose petal, tar, fine tannin; the co-operative at its quiet best.</p>
+          <p class="buyback"><span>Buyback</span> <strong>$118</strong></p>
+        </article>
+
+        <!-- 4 · Musar — long-capsule Bordeaux -->
+        <article class="brief">
+          <div class="cut">
+            <svg viewBox="0 0 72 168" role="img" aria-label="Line engraving of a Château Musar bottle">
+              <path class="ln" stroke-width="1.5" d="M31 5 L41 5 L41 13 L31 13 Z"/>
+              <path class="ln" stroke-width="1.5" d="M32 13 L32 50 Q32 59 26 65 Q23 69 23 77 L23 156 Q23 160 27 160 L45 160 Q49 160 49 156 L49 77 Q49 69 46 65 Q40 59 40 50 L40 13"/>
+              <line class="ln" stroke-width="0.9" x1="31" y1="34" x2="41" y2="34"/>
+              <g class="hatch">
+                <line x1="33" y1="16" x2="33" y2="32"/>
+                <line x1="36" y1="16" x2="36" y2="32"/>
+                <line x1="39" y1="16" x2="39" y2="32"/>
+              </g>
+              <path class="ln" stroke-width="1" d="M28 90 L44 90 L44 126 L36 132 L28 126 Z"/>
+              <path class="ln" stroke-width="0.8" d="M31 98 L41 98"/>
+              <line class="hatch" x1="30" y1="106" x2="42" y2="106"/>
+              <line class="hatch" x1="30" y1="111" x2="42" y2="111"/>
+              <path class="ln" stroke="#6E1423" stroke-width="1" d="M32 118 L36 122 L40 118" fill="none"/>
+              <g class="hatch">
+                <line x1="45" y1="79" x2="45" y2="154"/>
+                <line x1="47" y1="85" x2="47" y2="150"/>
+              </g>
+              <ellipse class="hatch" cx="36" cy="163" rx="16" ry="2"/>
+            </svg>
+          </div>
+          <p class="lot">Lot No. 4 &middot; Red Blend</p>
+          <h4>Ch&acirc;teau Musar Rouge <span class="vintage">&mdash; 2017</span></h4>
+          <p class="note"><span class="region-dateline">Bekaa Valley &mdash;</span> Fig, leather, sweet spice; unrepeatable, and unbothered by fashion.</p>
+          <p class="buyback"><span>Buyback</span> <strong>$155</strong></p>
+        </article>
+
+        <!-- 5 · Tondonia — Rioja with wire net -->
+        <article class="brief">
+          <div class="cut">
+            <svg viewBox="0 0 72 168" role="img" aria-label="Line engraving of a Rioja bottle wrapped in wire netting">
+              <path class="ln" stroke-width="1.5" d="M31 6 L41 6 L41 14 L31 14 Z"/>
+              <path class="ln" stroke-width="1.5" d="M32 14 L32 50 Q32 60 26 67 Q23 71 23 79 L23 156 Q23 160 27 160 L45 160 Q49 160 49 156 L49 79 Q49 71 46 67 Q40 60 40 50 L40 14"/>
+              <line class="ln" stroke-width="0.9" x1="31" y1="22" x2="41" y2="22"/>
+              <!-- wire mesh -->
+              <g class="hatch">
+                <line x1="23" y1="86" x2="49" y2="112"/>
+                <line x1="23" y1="100" x2="49" y2="126"/>
+                <line x1="23" y1="114" x2="49" y2="140"/>
+                <line x1="23" y1="128" x2="45" y2="150"/>
+                <line x1="49" y1="86" x2="23" y2="112"/>
+                <line x1="49" y1="100" x2="23" y2="126"/>
+                <line x1="49" y1="114" x2="23" y2="140"/>
+                <line x1="49" y1="128" x2="27" y2="150"/>
+              </g>
+              <rect class="paper-fill" x="28" y="103" width="16" height="18"/>
+              <rect class="ln" stroke-width="1" x="28" y="103" width="16" height="18" fill="none"/>
+              <line class="ln" stroke-width="0.8" x1="30" y1="109" x2="42" y2="109"/>
+              <line class="ln" stroke="#6E1423" stroke-width="1" x1="32" y1="115" x2="40" y2="115"/>
+              <ellipse class="hatch" cx="36" cy="163" rx="16" ry="2"/>
+            </svg>
+          </div>
+          <p class="lot">Lot No. 5 &middot; Tempranillo Blend</p>
+          <h4>Vi&ntilde;a Tondonia Reserva <span class="vintage">&mdash; 2011</span></h4>
+          <p class="note"><span class="region-dateline">Rioja &mdash;</span> Dried cherry, cedar, long; fifteen years old and barely clearing its throat.</p>
+          <p class="buyback"><span>Buyback</span> <strong>$168</strong></p>
+        </article>
+
+        <!-- 6 · Huet — slim Loire bottle -->
+        <article class="brief">
+          <div class="cut">
+            <svg viewBox="0 0 72 168" role="img" aria-label="Line engraving of a slender Vouvray bottle">
+              <path class="ln" stroke-width="1.5" d="M32 5 L40 5 L40 13 L32 13 Z"/>
+              <path class="ln" stroke-width="1.5" d="M33 13 L33 44 Q33 66 29 82 Q27 90 27 98 L27 156 Q27 160 31 160 L41 160 Q45 160 45 156 L45 98 Q45 90 43 82 Q39 66 39 44 L39 13"/>
+              <line class="ln" stroke-width="0.9" x1="32" y1="21" x2="40" y2="21"/>
+              <path class="ln" stroke-width="1" d="M30 108 L42 108 L42 134 L30 134 Z"/>
+              <path class="hatch" d="M32 115 Q36 112 40 115"/>
+              <line class="hatch" x1="32" y1="121" x2="40" y2="121"/>
+              <circle class="ln" stroke="#6E1423" stroke-width="1" cx="36" cy="128" r="2.2" fill="none"/>
+              <g class="hatch">
+                <line x1="41.5" y1="100" x2="41.5" y2="154"/>
+                <line x1="43" y1="106" x2="43" y2="150"/>
+                <line x1="37.5" y1="17" x2="37.5" y2="42"/>
+              </g>
+              <ellipse class="hatch" cx="36" cy="163" rx="13" ry="2"/>
+            </svg>
+          </div>
+          <p class="lot">Lot No. 6 &middot; Chenin Blanc</p>
+          <h4>Domaine Huet Le Mont Sec <span class="vintage">&mdash; 2022</span></h4>
+          <p class="note"><span class="region-dateline">Vouvray, Loire &mdash;</span> Chenin, quince, chalk; dry as a court transcript, twice as interesting.</p>
+          <p class="buyback"><span>Buyback</span> <strong>$112</strong></p>
+        </article>
+
+        <!-- 7 · Montelena — Burgundy-shape chardonnay -->
+        <article class="brief">
+          <div class="cut">
+            <svg viewBox="0 0 72 168" role="img" aria-label="Line engraving of a Napa chardonnay bottle">
+              <path class="ln" stroke-width="1.5" d="M31 7 L41 7 L41 15 L31 15 Z"/>
+              <path class="ln" stroke-width="1.5" d="M32 15 L32 42 Q32 58 25 69 Q22 74 22 82 L22 156 Q22 160 26 160 L46 160 Q50 160 50 156 L50 82 Q50 74 47 69 Q40 58 40 42 L40 15"/>
+              <line class="ln" stroke-width="0.9" x1="31" y1="24" x2="41" y2="24"/>
+              <path class="ln" stroke-width="1" d="M27 94 L45 94 L45 124 L27 124 Z"/>
+              <path class="ln" stroke-width="0.8" d="M30 102 L42 102"/>
+              <path class="hatch" d="M30 108 Q33 105 36 108 Q39 111 42 108"/>
+              <line class="hatch" x1="30" y1="114" x2="42" y2="114"/>
+              <circle class="wine-fill" cx="36" cy="119" r="1.8"/>
+              <g class="hatch">
+                <line x1="46" y1="84" x2="46" y2="154"/>
+                <line x1="48" y1="90" x2="48" y2="150"/>
+                <line x1="38.5" y1="19" x2="38.5" y2="40"/>
+              </g>
+              <ellipse class="hatch" cx="36" cy="163" rx="16" ry="2"/>
+            </svg>
+          </div>
+          <p class="lot">Lot No. 7 &middot; Chardonnay</p>
+          <h4>Chateau Montelena Chardonnay <span class="vintage">&mdash; 2021</span></h4>
+          <p class="note"><span class="region-dateline">Napa Valley &mdash;</span> Stone fruit, no oak excess; a chardonnay that knows when to stop talking.</p>
+          <p class="buyback"><span>Buyback</span> <strong>$134</strong></p>
+        </article>
+
+        <!-- 8 · Vietti — Albeisa with crest -->
+        <article class="brief">
+          <div class="cut">
+            <svg viewBox="0 0 72 168" role="img" aria-label="Line engraving of a Barolo bottle">
+              <path class="ln" stroke-width="1.5" d="M31 8 L41 8 L41 16 L31 16 Z"/>
+              <path class="ln" stroke-width="1.5" d="M32 16 L32 44 Q32 60 26 70 Q23 76 23 84 L23 156 Q23 160 27 160 L45 160 Q49 160 49 156 L49 84 Q49 76 46 70 Q40 60 40 44 L40 16"/>
+              <line class="ln" stroke-width="0.9" x1="31" y1="26" x2="41" y2="26"/>
+              <path class="ln" stroke-width="1" d="M28 94 L44 94 L44 120 Q36 128 28 120 Z"/>
+              <path class="ln" stroke="#6E1423" stroke-width="1" d="M36 100 L39 106 L36 112 L33 106 Z" fill="none"/>
+              <line class="hatch" x1="30" y1="116" x2="42" y2="116"/>
+              <line class="ln" stroke-width="0.8" x1="29" y1="132" x2="43" y2="132"/>
+              <line class="hatch" x1="31" y1="137" x2="41" y2="137"/>
+              <g class="hatch">
+                <line x1="45" y1="86" x2="45" y2="154"/>
+                <line x1="47" y1="92" x2="47" y2="150"/>
+                <line x1="38.5" y1="20" x2="38.5" y2="42"/>
+              </g>
+              <ellipse class="hatch" cx="36" cy="163" rx="16" ry="2"/>
+            </svg>
+          </div>
+          <p class="lot">Lot No. 8 &middot; Nebbiolo</p>
+          <h4>Vietti Barolo Castiglione <span class="vintage">&mdash; 2019</span></h4>
+          <p class="note"><span class="region-dateline">Piedmont &mdash;</span> Sour cherry, licorice, grip; the crate&rsquo;s best argument for patience.</p>
+          <p class="buyback"><span>Buyback</span> <strong>$176</strong></p>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ============ CUSTODY NOTICE ============ -->
+    <section id="custody" class="notice-wrap" aria-labelledby="notice-hed">
+      <div class="notice">
+        <p class="notice-kicker">Public Notice</p>
+        <h3 id="notice-hed">NOTICE OF CONTINUOUS CUSTODY</h3>
+        <p class="body">Be it known that every bottle offered in these pages is held in a bonded warehouse under continuous professional custody; that each was authenticated upon intake and its provenance placed on file; and that its keeping conditions are attested by instruments, hourly, without exception or enthusiasm.</p>
+        <div class="telemetry">
+          <span>Bonded warehouse</span>
+          <span>Authenticated on intake</span>
+          <span><b>55&deg;F</b> / <b>70% RH</b> telemetry</span>
+          <span>Custody verified</span>
+        </div>
+        <p class="attest">authenticated &middot; in bond &middot; attested this day, July 14, 2026 &mdash; the Keeper of Records</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <p class="wordmark">CELLAR</p>
+    <p class="fine">21+ only. California shipping only. Cellar is the seller of record.<br>Storage free for 90 days, then 2.5%/yr. Appraisals refreshed at press time.</p>
+    <p class="colophon">Set in Playfair Display &amp; Courier Prime. Printed on cream, at fifty-five degrees. &mdash; Vol. I, No. 1</p>
+  </footer>
+
+</div>
+
+<!-- ============ CLASSIFIED TICKER ============ -->
+<div class="ticker" id="ticker" role="region" aria-label="Purchase, continued">
+  <div class="ticker-inner">
+    <div class="t-info">
+      <span class="t-crate">Crate <b>No. 001</b></span>
+      <span class="t-sep" aria-hidden="true">&middot;</span>
+      <span class="t-total"><span id="ticker-count">1 crate</span> &mdash; <strong id="ticker-total">$135</strong></span>
+    </div>
+    <button type="button" class="t-cta" id="ticker-cta">Open a Crate</button>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var CRATE_PRICE = 135;
+    var MIN = 1, MAX = 12;
+    var qty = 1;
+
+    var minus = document.getElementById("qty-minus");
+    var plus = document.getElementById("qty-plus");
+    var input = document.getElementById("qty-input");
+    var wordsEl = document.getElementById("qty-words");
+    var totalEl = document.getElementById("total");
+    var ctaEl = document.getElementById("cta");
+    var tickerCountEl = document.getElementById("ticker-count");
+    var tickerTotalEl = document.getElementById("ticker-total");
+    var tickerCtaEl = document.getElementById("ticker-cta");
+
+    function format(n) {
+      return "$" + n.toLocaleString("en-US");
+    }
+    function crates(n) {
+      return n + (n === 1 ? " crate" : " crates");
+    }
+    function render() {
+      input.value = qty;
+      minus.disabled = qty <= MIN;
+      plus.disabled = qty >= MAX;
+      var total = format(CRATE_PRICE * qty);
+      var label = qty === 1 ? "Open a Crate" : "Open " + qty + " Crates";
+      wordsEl.textContent = crates(qty);
+      totalEl.textContent = total;
+      ctaEl.textContent = label;
+      tickerCountEl.textContent = crates(qty);
+      tickerTotalEl.textContent = total;
+      tickerCtaEl.textContent = label;
+    }
+    function stepBy(delta) {
+      qty = Math.min(MAX, Math.max(MIN, qty + delta));
+      render();
+    }
+    function commitInput() {
+      var digits = input.value.replace(/[^0-9]/g, "");
+      if (digits !== "") {
+        qty = Math.min(MAX, Math.max(MIN, parseInt(digits, 10)));
+      }
+      render(); /* empty or non-numeric entries revert to the last good count */
+    }
+
+    minus.addEventListener("click", function () { stepBy(-1); });
+    plus.addEventListener("click", function () { stepBy(1); });
+    input.addEventListener("blur", commitInput);
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { commitInput(); input.blur(); }
+    });
+
+    /* Classified ticker: in view only while the house advert is not */
+    var ticker = document.getElementById("ticker");
+    var advertBox = document.querySelector(".advert-box");
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        ticker.classList.toggle("on", !entries[0].isIntersecting);
+      }, { threshold: 0 }).observe(advertBox);
+    }
+    tickerCtaEl.addEventListener("click", function () {
+      advertBox.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    render();
+  })();
+</script>
+</body>
+</html>

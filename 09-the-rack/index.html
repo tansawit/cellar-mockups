@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cellar — The Rack</title>
+<meta name="description" content="Cellar. Sealed crates, one bottle each, appraised between $110–$180. Bonded warehouse, continuous custody.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,420;0,9..144,560;1,9..144,340;1,9..144,420&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F1E4;
+    --paper-2:#F2EDE0;
+    --ink:#17120C;
+    --ink-soft:rgba(23,18,12,.62);
+    --wine:#6E1423;
+    --wine-deep:#5A0F1D;
+    --serif:"Fraunces", Georgia, serif;
+    --mono:"Courier Prime", "Courier New", monospace;
+    --gutter:clamp(20px, 5vw, 72px);
+    --wellh:180px;
+    --exwellh:110px;
+    --shelf:2px solid var(--ink);
+    --hair:1px solid rgba(23,18,12,.28);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;scroll-padding-bottom:90px}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--serif);
+    font-weight:340;
+    line-height:1.5;
+    overflow-x:clip;
+    -webkit-font-smoothing:antialiased;
+  }
+  body.has-bar{padding-bottom:76px}
+  ::selection{background:var(--wine);color:var(--paper)}
+  a{color:inherit}
+  svg text{font-family:var(--mono)}
+
+  .wrap{padding-inline:var(--gutter)}
+
+  /* ---------- annotations (chalk tags) ---------- */
+  .anno{
+    font-family:var(--mono);
+    font-size:.625rem;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .anno b{color:var(--ink);font-weight:400}
+
+  /* ---------- header ---------- */
+  header{
+    display:flex;align-items:baseline;justify-content:space-between;
+    padding:1.1rem var(--gutter) .95rem;
+    border-bottom:var(--hair);
+  }
+  .wordmark{
+    font-family:var(--serif);font-weight:560;font-size:1.05rem;
+    letter-spacing:.42em;text-transform:uppercase;text-decoration:none;
+  }
+  header nav{display:flex;gap:clamp(1.2rem,3vw,2.6rem)}
+  header nav a{
+    font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
+    text-decoration:underline;text-decoration-color:transparent;text-underline-offset:.45em;
+    padding:.6rem 0;transition:text-decoration-color .18s ease;
+  }
+  header nav a:hover{text-decoration-color:currentColor}
+  a:focus-visible,button:focus-visible,input:focus-visible,.rack:focus-visible{outline:1px solid var(--ink);outline-offset:4px}
+
+  /* ---------- hero ---------- */
+  .hero-copy{padding:clamp(1.4rem,3.2vh,2.4rem) var(--gutter) 0}
+  .annos{display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;margin-bottom:clamp(1rem,2.4vh,1.7rem)}
+  .display{
+    font-weight:340;
+    font-variation-settings:"opsz" 144;
+    font-size:clamp(2.5rem, 5vw + .4rem, 4.6rem);
+    line-height:.94;
+    letter-spacing:-.018em;
+    max-width:18ch;
+  }
+  .display em{font-style:italic;font-weight:420}
+  .lede{
+    margin-top:1rem;
+    font-size:clamp(.92rem, 1.1vw, 1.08rem);
+    line-height:1.5;
+    max-width:58ch;
+    color:var(--ink);
+  }
+
+  .hero-stage{margin-top:clamp(1rem,2.6vh,1.8rem)}
+  .hero-shelf{
+    border-bottom:var(--shelf);
+    padding-inline:var(--gutter);
+    display:flex;align-items:flex-end;justify-content:space-between;
+    gap:clamp(1.5rem,4vw,4.5rem);
+  }
+  .hero-art{
+    display:block;
+    height:clamp(168px, 17vw, 238px);
+    max-width:100%;
+    flex:0 1 auto;
+  }
+  .shelf-tags{
+    padding:.7rem var(--gutter) 0;
+    display:flex;justify-content:space-between;gap:1rem;
+  }
+  .buy{
+    position:relative;
+    width:min(396px, 44%);
+    background:var(--paper-2);
+    border:1px solid var(--ink);
+    padding:1.85rem 1.6rem 1.3rem;
+  }
+  .buy::before{ /* punched hole — bin-tag detail */
+    content:"";position:absolute;top:.7rem;left:50%;transform:translateX(-50%);
+    width:9px;height:9px;border:1px solid var(--ink);border-radius:50%;
+  }
+  .buy .anno{display:block;text-align:center;margin-bottom:.8rem}
+  .buy h2{
+    font-weight:420;font-variation-settings:"opsz" 100;
+    font-size:clamp(1.4rem,1.8vw,1.7rem);text-align:center;line-height:1.1;
+  }
+  .price{display:flex;align-items:baseline;justify-content:center;gap:.6rem;margin:.35rem 0 1rem}
+  .price .amt{font-family:var(--serif);font-weight:420;font-size:1.6rem;color:var(--wine)}
+  .price .per{font-family:var(--mono);font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft)}
+  .qty{display:flex;align-items:center;gap:.55rem;justify-content:center;border-top:var(--hair);padding-top:1rem}
+  .qlabel{font-family:var(--mono);font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-right:.35rem}
+  .qty button{
+    width:44px;height:44px;flex:0 0 auto;
+    background:var(--paper);border:1px solid var(--ink);border-radius:0;
+    font-family:var(--mono);font-size:1.05rem;line-height:1;color:var(--ink);
+    cursor:pointer;transition:background .18s ease,color .18s ease,opacity .18s ease;
+  }
+  .qty button:hover:not(:disabled){background:var(--ink);color:var(--paper)}
+  .qty button:disabled{opacity:.32;cursor:default}
+  .qty input{
+    width:58px;height:44px;flex:0 0 auto;
+    background:var(--paper);border:1px solid var(--ink);border-radius:0;
+    font-family:var(--mono);font-size:1rem;color:var(--ink);text-align:center;
+  }
+  .total{
+    display:flex;align-items:baseline;justify-content:space-between;
+    margin-top:1rem;padding-top:.8rem;border-top:var(--hair);
+  }
+  .tlabel{font-family:var(--mono);font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft)}
+  #total{font-family:var(--serif);font-weight:420;font-size:1.35rem;color:var(--wine)}
+  .crateword{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);text-align:right;margin-top:.1rem}
+  .cta{
+    display:block;width:100%;margin-top:1.05rem;
+    background:var(--wine);color:var(--paper);
+    border:1px solid var(--wine);border-radius:0;
+    font-family:var(--serif);font-weight:420;font-size:1rem;letter-spacing:.06em;
+    padding:.8rem 1rem;min-height:48px;cursor:pointer;
+    transition:background .18s ease,border-color .18s ease;
+  }
+  .cta:hover{background:var(--wine-deep);border-color:var(--wine-deep)}
+  .honest{margin-top:.8rem;font-style:italic;font-size:.82rem;line-height:1.45;text-align:center;color:var(--ink)}
+  .exits-mini{margin-top:.45rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;text-align:center;color:var(--ink-soft)}
+
+  /* ---------- section heads ---------- */
+  .sec-head{padding:clamp(2.6rem,6.5vh,4.5rem) var(--gutter) clamp(1.2rem,3vh,2rem)}
+  .sec-head .anno{display:block;margin-bottom:.9rem}
+  .display-2{
+    font-weight:340;font-variation-settings:"opsz" 144;
+    font-size:clamp(1.85rem, 3.4vw, 2.9rem);line-height:1;letter-spacing:-.01em;
+  }
+  .display-2 em{font-style:italic;font-weight:420}
+  .sec-note{margin-top:.85rem;max-width:52ch;font-size:.94rem;color:var(--ink)}
+
+  /* ---------- the rack (collection shelves) ---------- */
+  .row-meta{
+    display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
+    padding:1.5rem var(--gutter) 0;
+  }
+  .rack-outer{position:relative}
+  .rack-outer .shelf-line{
+    position:absolute;left:0;right:0;top:calc(var(--wellh) - 2px);
+    height:2px;background:var(--ink);
+  }
+  .rack{
+    display:flex;
+    gap:clamp(1.2rem,2.4vw,2.4rem);
+    overflow-x:auto;
+    padding-inline:var(--gutter);
+    scroll-snap-type:x mandatory;
+    scroll-padding-inline:var(--gutter);
+    scrollbar-width:none;
+    position:relative;
+  }
+  .rack::-webkit-scrollbar{display:none}
+  .slot{
+    flex:0 0 clamp(200px, 21vw, 300px);
+    scroll-snap-align:start;
+    display:flex;flex-direction:column;
+  }
+  .well{
+    position:relative;
+    height:var(--wellh);
+    display:flex;align-items:flex-end;justify-content:center;
+  }
+  .bottle{display:block;height:calc(var(--wellh) * var(--bh, .95));width:auto}
+  .bin{
+    position:absolute;right:8px;bottom:8px;
+    font-family:var(--mono);font-size:.52rem;letter-spacing:.18em;text-transform:uppercase;
+    border:1px solid var(--ink);padding:.24rem .42rem;background:var(--paper);
+    color:var(--ink);transition:background .18s ease,color .18s ease;
+  }
+  .slot:hover .bin{background:var(--ink);color:var(--paper)}
+  .cap{padding:1rem .4rem 0;text-align:center;max-width:230px;margin-inline:auto}
+  .cap h3{
+    font-weight:420;font-variation-settings:"opsz" 60;
+    font-size:.95rem;line-height:1.28;
+    text-decoration:underline;text-decoration-color:transparent;
+    text-decoration-thickness:1px;text-underline-offset:.3em;
+    transition:text-decoration-color .18s ease;
+  }
+  .slot:hover .cap h3{text-decoration-color:var(--ink)}
+  .cap .meta{margin-top:.4rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
+  .cap .note{margin-top:.4rem;font-style:italic;font-size:.82rem;color:var(--ink)}
+  .cap .buyback{margin-top:.55rem;font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft)}
+  .cap .buyback span{color:var(--wine);font-weight:700}
+  .rack-gap{height:clamp(1.8rem,4.5vh,3.2rem)}
+
+  /* ---------- three exits ---------- */
+  .exits-outer{position:relative;margin-top:.8rem}
+  .exits-outer .shelf-line{
+    position:absolute;left:0;right:0;top:calc(var(--exwellh) - 2px);
+    height:2px;background:var(--ink);
+  }
+  .exits-row{
+    display:flex;justify-content:center;
+    gap:clamp(2rem,7vw,7rem);
+    padding-inline:var(--gutter);
+    position:relative;
+  }
+  .exit{flex:0 1 290px;display:flex;flex-direction:column}
+  .exit .well{height:var(--exwellh)}
+  .exit .well svg{display:block;height:92px;width:auto}
+  .exit .cap{padding-top:1.1rem}
+  .exit .cap h3{font-family:var(--mono);font-weight:700;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;text-decoration:none}
+  .exit .cap p{margin-top:.5rem;font-size:.88rem;line-height:1.5;color:var(--ink)}
+
+  /* ---------- custody strip ---------- */
+  .custody{
+    margin-top:clamp(2.8rem,7vh,4.75rem);
+    border-top:1px solid var(--wine); /* the one thin wine shelf */
+    background:var(--paper-2);
+    padding:0 var(--gutter) clamp(2.2rem,5vh,3.4rem);
+  }
+  .custody-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    gap:clamp(1.5rem,3vw,3rem);
+  }
+  .custody-cell{padding-top:1.9rem;position:relative}
+  .custody-cell::before{ /* tag string hanging from the wine shelf */
+    content:"";position:absolute;top:0;left:1px;width:1px;height:1.1rem;background:var(--ink);
+  }
+  .custody-cell h3{font-family:var(--mono);font-weight:700;font-size:.64rem;letter-spacing:.24em;text-transform:uppercase}
+  .custody-cell p{margin-top:.6rem;font-size:.86rem;line-height:1.5;color:var(--ink)}
+  .custody-foot{
+    margin-top:clamp(1.6rem,4vh,2.4rem);padding-top:1.1rem;border-top:var(--hair);
+    display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  }
+
+  /* ---------- footer ---------- */
+  footer{border-top:var(--shelf);padding:1.8rem 0 0;overflow:hidden}
+  .foot-row{
+    display:flex;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;
+    padding-inline:var(--gutter);
+  }
+  .fineprint{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;line-height:2;text-transform:uppercase;color:var(--ink-soft);max-width:64ch}
+  footer nav{display:flex;gap:1.8rem;flex-wrap:wrap}
+  footer nav a{
+    font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;
+    text-decoration:underline;text-decoration-color:transparent;text-underline-offset:.45em;
+    padding:.5rem 0;transition:text-decoration-color .18s ease;
+  }
+  footer nav a:hover{text-decoration-color:currentColor}
+  .ghost{
+    display:block;text-align:center;
+    font-weight:560;font-variation-settings:"opsz" 144;
+    font-size:clamp(3.5rem,12vw,10rem);
+    letter-spacing:.28em;text-indent:.28em;
+    line-height:.72;margin-top:1.8rem;margin-bottom:-.16em;
+    color:rgba(23,18,12,.1);user-select:none;
+  }
+
+  /* ---------- sticky low shelf ---------- */
+  .bar{
+    position:fixed;left:0;right:0;bottom:0;z-index:60;
+    background:var(--paper-2);
+    border-top:var(--shelf);
+    transform:translateY(calc(100% + 44px));
+    visibility:hidden;
+    transition:transform .3s ease, visibility 0s linear .3s;
+  }
+  .bar.shown{
+    transform:none;visibility:visible;
+    transition:transform .3s ease;
+  }
+  .bar-bottle{
+    position:absolute;bottom:100%;left:calc(var(--gutter) + 4px);
+    height:34px;width:auto;pointer-events:none;
+  }
+  .bar-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:clamp(.7rem,2vw,1.6rem);
+    padding:.55rem var(--gutter) .65rem;
+  }
+  .bar-name{white-space:nowrap;color:var(--ink)}
+  .bar-total{
+    font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-soft);white-space:nowrap;margin-left:auto;
+  }
+  .bar-total b{color:var(--wine);font-weight:700}
+  .bar .cta{
+    width:auto;margin:0;flex:0 0 auto;
+    min-height:44px;padding:.55rem 1.3rem;font-size:.95rem;
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:1000px){
+    :root{--wellh:160px}
+    .buy{width:min(380px,47%)}
+  }
+  @media (max-width:820px){
+    .hero-shelf{flex-direction:column-reverse;align-items:center;gap:1.1rem;padding-top:.3rem}
+    .buy{width:100%;max-width:520px}
+    .hero-art{height:clamp(148px,38vw,200px)}
+    .annos span:nth-child(2){display:none}
+    .shelf-tags{padding-bottom:0}
+  }
+  @media (max-width:560px){
+    header{flex-direction:column;align-items:flex-start;gap:.15rem;padding-block:.85rem .6rem}
+    header nav{width:100%;justify-content:space-between;gap:.8rem}
+    header nav a{font-size:.6rem;letter-spacing:.16em;white-space:nowrap;padding:.45rem 0}
+    .annos span:nth-child(3){display:none}
+    .shelf-tags{flex-direction:column;gap:.15rem}
+    .buy{padding-inline:1.15rem}
+    .bar-total{font-size:.62rem;letter-spacing:.08em}
+    .bar .cta{padding:.5rem .9rem;font-size:.88rem}
+    .bar-bottle{height:28px}
+  }
+  @media (max-width:720px){
+    :root{--wellh:140px;--exwellh:96px}
+    .rack{flex-wrap:wrap;overflow:visible;gap:0;padding-inline:0;scroll-snap-type:none}
+    .slot{flex:0 0 50%;max-width:50%}
+    .rack-outer .shelf-line{display:none}
+    .well{border-bottom:var(--shelf)}
+    .bottle{margin-bottom:-1px}
+    .bin{right:6px;bottom:6px;padding:.2rem .34rem;font-size:.48rem}
+    .cap{padding:.85rem .7rem 1.7rem;max-width:none}
+    .cap h3{font-size:.86rem}
+    .row-meta .slide-note{display:none}
+    .exits-outer .shelf-line{display:none}
+    .exits-row{flex-direction:column;gap:0;padding-inline:0}
+    .exit{flex:1 1 auto}
+    .exit .well svg{height:76px;margin-bottom:-1px}
+    .exit .cap{padding:1rem var(--gutter) 1.9rem;max-width:44ch}
+    .custody-grid{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+
+<!-- ======== shared bottle + glyph symbols (one stroke language) ======== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+
+    <!-- Bordeaux — high shoulder -->
+    <symbol id="b-bordeaux">
+      <g stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+        <path fill="var(--paper)" d="M52 46 V84 C52 96 49 104 44 112 C35 126 25 134 25 152 V330 Q25 336 31 336 H89 Q95 336 95 330 V152 C95 134 85 126 76 112 C71 104 68 96 68 84 V46 Z"/>
+        <g stroke-width="1" opacity=".5">
+          <path d="M34 328 V156 C34 142 41 133 47 120"/>
+          <path d="M86 328 V156 C86 142 79 133 73 120"/>
+          <path d="M34 150 Q60 160 86 150"/>
+          <path d="M32 329 Q60 334 88 329"/>
+        </g>
+        <g stroke-width="1">
+          <rect x="34" y="198" width="52" height="60" fill="var(--paper)"/>
+          <path d="M40 210 H80 M40 244 H80"/>
+          <circle cx="60" cy="234" r="5"/>
+        </g>
+        <path fill="var(--paper)" d="M49 18 Q49 14 53 14 H67 Q71 14 71 18 V46 H49 Z"/>
+        <path stroke-width="1" d="M49 40 H71"/>
+      </g>
+    </symbol>
+
+    <!-- Burgundy — sloped shoulder -->
+    <symbol id="b-burgundy">
+      <g stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+        <path fill="var(--paper)" d="M53 42 V64 C53 76 50 86 45 97 C35 118 20 138 20 178 V330 Q20 336 26 336 H94 Q100 336 100 330 V178 C100 138 85 118 75 97 C70 86 67 76 67 64 V42 Z"/>
+        <g stroke-width="1" opacity=".5">
+          <path d="M29 328 V182 C29 148 40 128 48 110"/>
+          <path d="M91 328 V182 C91 148 80 128 72 110"/>
+          <path d="M29 174 Q60 186 91 174"/>
+          <path d="M28 329 Q60 334 92 329"/>
+        </g>
+        <g stroke-width="1">
+          <rect x="32" y="202" width="56" height="54" fill="var(--paper)"/>
+          <path d="M38 214 H82 M38 248 H82"/>
+          <circle cx="60" cy="239" r="4.5"/>
+        </g>
+        <path fill="var(--paper)" d="M50 14 Q50 10 54 10 H66 Q70 10 70 14 V44 H50 Z"/>
+        <path stroke-width="1" d="M50 38 H70"/>
+      </g>
+    </symbol>
+
+    <!-- Flute — tall, slender -->
+    <symbol id="b-flute">
+      <g stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+        <path fill="var(--paper)" d="M54 36 V58 C54 72 52 86 48 102 C42 126 34 144 34 172 V330 Q34 336 40 336 H80 Q86 336 86 330 V172 C86 144 78 126 72 102 C68 86 66 72 66 58 V36 Z"/>
+        <g stroke-width="1" opacity=".5">
+          <path d="M42 328 V174 C42 148 48 128 53 106"/>
+          <path d="M78 328 V174 C78 148 72 128 67 106"/>
+          <path d="M41 329 Q60 333 79 329"/>
+        </g>
+        <g stroke-width="1">
+          <rect x="44" y="206" width="32" height="56" fill="var(--paper)"/>
+          <path d="M49 216 H71 M49 252 H71"/>
+          <circle cx="60" cy="242" r="4"/>
+        </g>
+        <path fill="var(--paper)" d="M51 12 Q51 8 55 8 H65 Q69 8 69 12 V38 H51 Z"/>
+        <path stroke-width="1" d="M51 32 H69"/>
+      </g>
+    </symbol>
+
+    <!-- Albeisa — Piedmont, banded label -->
+    <symbol id="b-albeisa">
+      <g stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
+        <path fill="var(--paper)" d="M53 40 V60 C53 70 50 79 46 88 C37 106 23 122 23 158 V330 Q23 336 29 336 H91 Q97 336 97 330 V158 C97 122 83 106 74 88 C70 79 67 70 67 60 V40 Z"/>
+        <g stroke-width="1" opacity=".5">
+          <path d="M32 328 V160 C32 132 42 116 49 100"/>
+          <path d="M88 328 V160 C88 132 78 116 71 100"/>
+          <path d="M32 152 Q60 163 88 152"/>
+          <path d="M31 329 Q60 334 89 329"/>
+        </g>
+        <g stroke-width="1">
+          <rect x="28" y="200" width="64" height="54" fill="var(--paper)" stroke="none"/>
+          <path d="M28 200 H92 M28 254 H92"/>
+          <circle cx="60" cy="238" r="6"/>
+          <circle cx="60" cy="238" r="2"/>
+        </g>
+        <path fill="var(--paper)" d="M50 12 Q50 8 54 8 H66 Q70 8 70 12 V42 H50 Z"/>
+        <path stroke-width="1" d="M50 36 H70"/>
+      </g>
+    </symbol>
+
+    <!-- glyph: coins (sell back) -->
+    <symbol id="g-coins">
+      <g stroke="currentColor" stroke-width="1.5" fill="var(--paper)" stroke-linejoin="round">
+        <ellipse cx="60" cy="109" rx="34" ry="8.5"/>
+        <ellipse cx="60" cy="94" rx="34" ry="8.5"/>
+        <ellipse cx="60" cy="79" rx="34" ry="8.5"/>
+        <ellipse cx="60" cy="79" rx="24" ry="5.7" fill="none" stroke-width="1" opacity=".55"/>
+      </g>
+    </symbol>
+
+    <!-- glyph: cellar arch (keep) -->
+    <symbol id="g-arch">
+      <g stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path fill="var(--paper)" d="M26 118 V76 A34 34 0 0 1 94 76 V118 Z"/>
+        <path stroke-width="1" opacity=".55" d="M34 118 V78 A26 26 0 0 1 86 78 V118"/>
+        <path stroke-width="1" d="M26 88 l-6 -1.5 M31 66 l-5 -4 M46 50 l-3 -5.5 M74 50 l3 -5.5 M89 66 l5 -4 M94 88 l6 -1.5"/>
+        <path fill="var(--paper)" d="M52 118 V99 C52 93 56 91 56 85 V79 H64 V85 C64 91 68 93 68 99 V118 Z"/>
+        <path stroke-width="1" fill="var(--paper)" d="M55 74 H65 V79 H55 Z"/>
+      </g>
+    </symbol>
+
+    <!-- glyph: shipping crate (ship) -->
+    <symbol id="g-ship">
+      <g stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="18" y="74" width="84" height="44" fill="var(--paper)"/>
+        <path stroke-width="1" opacity=".6" d="M30 74 V118 M90 74 V118"/>
+        <path stroke-width="1" opacity=".55" d="M44 74 q6 -12 16 -11 M68 74 q4 -9 13 -9"/>
+        <rect x="38" y="85" width="44" height="17" stroke-width="1" fill="var(--paper)"/>
+        <text x="60" y="97" font-size="8" letter-spacing="1.5" text-anchor="middle" fill="currentColor" stroke="none">CA&#160;&#183;&#160;21+</text>
+      </g>
+    </symbol>
+
+  </defs>
+</svg>
+
+<!-- ================= header ================= -->
+<header>
+  <a class="wordmark" href="#top">Cellar</a>
+  <nav aria-label="Primary">
+    <a href="#collection">The Collection</a>
+    <a href="#">My Cellar</a>
+    <a href="#about">About</a>
+  </nav>
+</header>
+
+<!-- ================= hero ================= -->
+<section class="hero" id="top">
+  <div class="hero-copy">
+    <p class="annos">
+      <span class="anno">Bonded warehouse — Napa, California</span>
+      <span class="anno">Single-bottle crates &#183; USD only</span>
+      <span class="anno">55&#176;F &#183; 70% RH</span>
+    </p>
+    <h1 class="display">Walk the <em>rack.</em></h1>
+    <p class="lede">Eight bottles rest on these shelves, authenticated and in bond. A sealed crate takes one down&nbsp;&mdash; which one, the cellar decides.</p>
+  </div>
+
+  <div class="hero-stage">
+    <div class="hero-shelf">
+      <svg class="hero-art" viewBox="0 0 640 457" role="img" aria-label="A wine bottle standing beside a wooden Cellar crate, two bottle necks rising from its open top">
+        <!-- display bottle -->
+        <use href="#b-bordeaux" transform="translate(30 52.8) scale(1.2)"/>
+        <text x="102" y="325" font-size="8" letter-spacing="2.2" text-anchor="middle" fill="currentColor">CELLAR</text>
+        <!-- bottles at rest inside the crate -->
+        <g transform="translate(303 120)"><use href="#b-burgundy" transform="rotate(-7 60 336)"/></g>
+        <g transform="translate(392 124)"><use href="#b-flute" transform="rotate(6 60 336)"/></g>
+        <!-- the crate, frontal -->
+        <g stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="200" y="296" width="310" height="160" fill="var(--paper)"/>
+          <path stroke-width="1" opacity=".55" d="M200 349 H510 M200 403 H510"/>
+          <path stroke-width="1" d="M218 296 V456 M492 296 V456"/>
+          <path stroke-width="1" opacity=".55" d="M238 296 q8 -16 22 -14 M262 296 q4 -12 16 -12 M436 296 q-6 -14 -20 -13 M462 296 q-2 -10 -14 -11"/>
+          <g fill="currentColor" stroke="none">
+            <circle cx="209" cy="306" r="1.6"/><circle cx="209" cy="376" r="1.6"/><circle cx="209" cy="446" r="1.6"/>
+            <circle cx="501" cy="306" r="1.6"/><circle cx="501" cy="376" r="1.6"/><circle cx="501" cy="446" r="1.6"/>
+          </g>
+        </g>
+        <text x="355" y="328" font-size="9" letter-spacing="3" text-anchor="middle" fill="currentColor">CRATE N&#186; 001 &#183; IN BOND</text>
+        <text x="355" y="382" font-family="Fraunces, Georgia, serif" font-weight="560" font-size="27" letter-spacing="10" text-anchor="middle" fill="currentColor">CELLAR</text>
+        <text x="355" y="436" font-size="8" letter-spacing="2.5" text-anchor="middle" fill="currentColor" opacity=".65">HOLD AT 55&#176;F &mdash; THIS SIDE UP</text>
+        <!-- a cork, set down beside the crate -->
+        <g stroke="currentColor" stroke-width="1.5" fill="var(--paper)" stroke-linejoin="round">
+          <rect x="545" y="441" width="38" height="15" rx="5"/>
+          <path stroke-width=".8" opacity=".5" fill="none" d="M551 445 H577 M551 452 H577"/>
+        </g>
+      </svg>
+
+      <aside class="buy" aria-labelledby="buy-title">
+        <span class="anno">Sealed &#183; one bottle inside</span>
+        <h2 id="buy-title">Crate No. 001</h2>
+        <p class="price"><span class="amt">$135</span><span class="per">per crate</span></p>
+        <div class="qty" role="group" aria-label="Number of crates">
+          <span class="qlabel">Crates</span>
+          <button type="button" id="q-minus" aria-label="One fewer crate" disabled>&#8722;</button>
+          <input id="q-input" type="text" inputmode="numeric" autocomplete="off" value="1" aria-label="Number of crates, one to twelve">
+          <button type="button" id="q-plus" aria-label="One more crate">+</button>
+        </div>
+        <p class="total"><span class="tlabel">Total</span><span id="total">$135</span></p>
+        <p class="crateword" id="crateword">one crate &#183; one bottle</p>
+        <button type="button" class="cta" id="cta">Open a Crate</button>
+        <p class="honest">Every crate holds one bottle, appraised between $110&ndash;$180.</p>
+        <p class="exits-mini">Sell it back &#183; keep it in bond &#183; ship&nbsp;it&nbsp;(CA,&nbsp;21+)</p>
+      </aside>
+    </div>
+
+    <div class="shelf-tags">
+      <span class="anno">Shelf 01 &mdash; the crate</span>
+      <span class="anno">Continuous custody &#183; N&#186; 001</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= the collection ================= -->
+<section id="collection">
+  <div class="sec-head">
+    <span class="anno">The Collection &mdash; rows I&ndash;II &#183; bins 01&ndash;08</span>
+    <h2 class="display-2">Eight bottles, <em>two shelves.</em></h2>
+    <p class="sec-note">Every crate is drawn from the bins below. Walk the row&nbsp;&mdash; the shelf continues past the edge of the page.</p>
+  </div>
+
+  <!-- Row I -->
+  <div class="row-meta">
+    <span class="anno"><b>Row I</b> &mdash; bins 01&ndash;04</span>
+    <span class="anno slide-note">slide &#8594;</span>
+  </div>
+  <div class="rack-outer">
+    <div class="shelf-line" aria-hidden="true"></div>
+    <div class="rack" role="region" aria-label="Row one, bins one through four" tabindex="0">
+
+      <article class="slot">
+        <div class="well">
+          <svg class="bottle" style="--bh:.96" viewBox="0 0 120 337" role="img" aria-label="Bottle of Ridge Estate Cabernet Sauvignon">
+            <use href="#b-bordeaux"/>
+            <text x="60" y="228" font-size="10" letter-spacing="1" text-anchor="middle" fill="currentColor">RIDGE</text>
+          </svg>
+          <span class="bin">Bin 01</span>
+        </div>
+        <div class="cap">
+          <h3>Ridge Estate Cabernet Sauvignon</h3>
+          <p class="meta">2019 &#183; Santa Cruz Mountains</p>
+          <p class="note">Structured, cedar and cassis.</p>
+          <p class="buyback">Buyback <span>$128</span></p>
+        </div>
+      </article>
+
+      <article class="slot">
+        <div class="well">
+          <svg class="bottle" style="--bh:.92" viewBox="0 0 120 337" role="img" aria-label="Bottle of Domaine Tempier Bandol Rouge">
+            <use href="#b-burgundy"/>
+            <text x="60" y="232" font-size="9" letter-spacing=".8" text-anchor="middle" fill="currentColor">TEMPIER</text>
+          </svg>
+          <span class="bin">Bin 02</span>
+        </div>
+        <div class="cap">
+          <h3>Domaine Tempier Bandol Rouge</h3>
+          <p class="meta">2020 &#183; Bandol, Provence</p>
+          <p class="note">Wild herbs, dark plum.</p>
+          <p class="buyback">Buyback <span>$142</span></p>
+        </div>
+      </article>
+
+      <article class="slot">
+        <div class="well">
+          <svg class="bottle" style="--bh:.99" viewBox="0 0 120 337" role="img" aria-label="Bottle of Produttori del Barbaresco">
+            <use href="#b-albeisa"/>
+            <text x="60" y="228" font-size="8" letter-spacing=".5" text-anchor="middle" fill="currentColor">PRODUTTORI</text>
+          </svg>
+          <span class="bin">Bin 03</span>
+        </div>
+        <div class="cap">
+          <h3>Produttori del Barbaresco</h3>
+          <p class="meta">2019 &#183; Piedmont</p>
+          <p class="note">Rose petal, tar, fine tannin.</p>
+          <p class="buyback">Buyback <span>$118</span></p>
+        </div>
+      </article>
+
+      <article class="slot">
+        <div class="well">
+          <svg class="bottle" style="--bh:.94" viewBox="0 0 120 337" role="img" aria-label="Bottle of Château Musar Rouge">
+            <use href="#b-bordeaux"/>
+            <text x="60" y="228" font-size="10" letter-spacing="1" text-anchor="middle" fill="currentColor">MUSAR</text>
+          </svg>
+          <span class="bin">Bin 04</span>
+        </div>
+        <div class="cap">
+          <h3>Ch&#226;teau Musar Rouge</h3>
+          <p class="meta">2017 &#183; Bekaa Valley</p>
+          <p class="note">Fig, leather, sweet spice.</p>
+          <p class="buyback">Buyback <span>$155</span></p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+
+  <div class="rack-gap"></div>
+
+  <!-- Row II -->
+  <div class="row-meta">
+    <span class="anno"><b>Row II</b> &mdash; bins 05&ndash;08</span>
+    <span class="anno slide-note">slide &#8594;</span>
+  </div>
+  <div class="rack-outer">
+    <div class="shelf-line" aria-hidden="true"></div>
+    <div class="rack" role="region" aria-label="Row two, bins five through eight" tabindex="0">
+
+      <article class="slot">
+        <div class="well">
+          <svg class="bottle" style="--bh:.95" viewBox="0 0 120 337" role="img" aria-label="Bottle of Viña Tondonia Reserva">
+            <use href="#b-bordeaux"/>
+            <text x="60" y="228" font-size="8" letter-spacing=".5" text-anchor="middle" fill="currentColor">TONDONIA</text>
+          </svg>
+          <span class="bin">Bin 05</span>
+        </div>
+        <div class="cap">
+          <h3>Vi&#241;a Tondonia Reserva</h3>
+          <p class="meta">2011 &#183; Rioja</p>
+          <p class="note">Dried cherry, cedar, long.</p>
+          <p class="buyback">Buyback <span>$168</span></p>
+        </div>
+      </article>
+
+      <article class="slot">
+        <div class="well">
+          <svg class="bottle" style="--bh:1" viewBox="0 0 120 337" role="img" aria-label="Bottle of Domaine Huet Le Mont Sec">
+            <use href="#b-flute"/>
+            <text x="60" y="234" font-size="9" letter-spacing=".8" text-anchor="middle" fill="currentColor">HUET</text>
+          </svg>
+          <span class="bin">Bin 06</span>
+        </div>
+        <div class="cap">
+          <h3>Domaine Huet Le Mont Sec</h3>
+          <p class="meta">2022 &#183; Vouvray, Loire</p>
+          <p class="note">Chenin, quince, chalk.</p>
+          <p class="buyback">Buyback <span>$112</span></p>
+        </div>
+      </article>
+
+      <article class="slot">
+        <div class="well">
+          <svg class="bottle" style="--bh:.91" viewBox="0 0 120 337" role="img" aria-label="Bottle of Chateau Montelena Chardonnay">
+            <use href="#b-burgundy"/>
+            <text x="60" y="232" font-size="8" letter-spacing=".5" text-anchor="middle" fill="currentColor">MONTELENA</text>
+          </svg>
+          <span class="bin">Bin 07</span>
+        </div>
+        <div class="cap">
+          <h3>Chateau Montelena Chardonnay</h3>
+          <p class="meta">2021 &#183; Napa Valley</p>
+          <p class="note">Stone fruit, no oak excess.</p>
+          <p class="buyback">Buyback <span>$134</span></p>
+        </div>
+      </article>
+
+      <article class="slot">
+        <div class="well">
+          <svg class="bottle" style="--bh:.98" viewBox="0 0 120 337" role="img" aria-label="Bottle of Vietti Barolo Castiglione">
+            <use href="#b-albeisa"/>
+            <text x="60" y="228" font-size="10" letter-spacing="1" text-anchor="middle" fill="currentColor">VIETTI</text>
+          </svg>
+          <span class="bin">Bin 08</span>
+        </div>
+        <div class="cap">
+          <h3>Vietti Barolo Castiglione</h3>
+          <p class="meta">2019 &#183; Piedmont</p>
+          <p class="note">Sour cherry, licorice, grip.</p>
+          <p class="buyback">Buyback <span>$176</span></p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= three exits ================= -->
+<section id="exits">
+  <div class="sec-head">
+    <span class="anno">After the reveal &mdash; every bottle leaves one of three ways</span>
+    <h2 class="display-2">Three ways <em>off the shelf.</em></h2>
+  </div>
+
+  <div class="exits-outer">
+    <div class="shelf-line" aria-hidden="true"></div>
+    <div class="exits-row">
+
+      <div class="exit">
+        <div class="well">
+          <svg viewBox="0 0 120 119" role="img" aria-label="A stack of coins"><use href="#g-coins"/></svg>
+        </div>
+        <div class="cap">
+          <h3>Sell it back</h3>
+          <p>Instant store credit at appraised value. No listing, no waiting&nbsp;&mdash; the price is already on the shelf.</p>
+        </div>
+      </div>
+
+      <div class="exit">
+        <div class="well">
+          <svg viewBox="0 0 120 119" role="img" aria-label="A bottle resting under a cellar arch"><use href="#g-arch"/></svg>
+        </div>
+        <div class="cap">
+          <h3>Keep it</h3>
+          <p>Leave the bottle sleeping in bond at 55&#176;F. Your cellar, our cave&nbsp;&mdash; storage free for 90 days.</p>
+        </div>
+      </div>
+
+      <div class="exit">
+        <div class="well">
+          <svg viewBox="0 0 120 119" role="img" aria-label="A shipping crate stamped CA, 21 plus"><use href="#g-ship"/></svg>
+        </div>
+        <div class="cap">
+          <h3>Ship it</h3>
+          <p>California only, adult signature required. Twenty-one or over, at the door, no exceptions.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================= custody / trust ================= -->
+<section class="custody" id="about">
+  <div class="custody-grid">
+    <div class="custody-cell">
+      <h3>Bonded warehouse</h3>
+      <p>One sealed facility. Every bottle enters once and is tracked until the day it leaves.</p>
+    </div>
+    <div class="custody-cell">
+      <h3>Authenticated &#183; in bond</h3>
+      <p>Provenance checked on intake and again before release. Corks, capsules, fill levels&nbsp;&mdash; all on record.</p>
+    </div>
+    <div class="custody-cell">
+      <h3>55&#176;F / 70% RH</h3>
+      <p>Storage telemetry, logged hourly. The cellar keeps its own diary.</p>
+    </div>
+    <div class="custody-cell">
+      <h3>Custody verified</h3>
+      <p>Your bottle is yours&nbsp;&mdash; a recorded right of redemption, attested continuously.</p>
+    </div>
+  </div>
+  <div class="custody-foot">
+    <span class="anno">Provenance, kept &mdash; quietly</span>
+    <span class="anno">Cellar &#183; est. bin 001</span>
+  </div>
+</section>
+
+<!-- ================= footer ================= -->
+<footer>
+  <div class="foot-row">
+    <p class="fineprint">21+ only. California shipping only. Cellar is the seller of record. Storage free for 90 days, then 2.5%/yr.</p>
+    <nav aria-label="Footer">
+      <a href="#collection">The Collection</a>
+      <a href="#">My Cellar</a>
+      <a href="#about">About</a>
+    </nav>
+  </div>
+  <span class="ghost" aria-hidden="true">CELLAR</span>
+</footer>
+
+<!-- ================= sticky low shelf ================= -->
+<div class="bar" id="bar">
+  <svg class="bar-bottle" viewBox="0 0 120 337" aria-hidden="true" focusable="false"><use href="#b-bordeaux"/></svg>
+  <div class="bar-inner">
+    <span class="anno bar-name">Crate N&#186; 001</span>
+    <span class="bar-total" id="bar-total">1 crate &mdash; <b>$135</b></span>
+    <button type="button" class="cta" id="bar-cta">Open a Crate</button>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var PRICE = 135, MIN = 1, MAX = 12;
+    var qty = 1;
+    var WORDS = ["", "one", "two", "three", "four", "five", "six",
+                 "seven", "eight", "nine", "ten", "eleven", "twelve"];
+
+    var input = document.getElementById("q-input");
+    var minus = document.getElementById("q-minus");
+    var plus = document.getElementById("q-plus");
+    var total = document.getElementById("total");
+    var word = document.getElementById("crateword");
+    var cta = document.getElementById("cta");
+    var barTotal = document.getElementById("bar-total");
+    var barCta = document.getElementById("bar-cta");
+
+    function money(n) { return "$" + (PRICE * n).toLocaleString("en-US"); }
+
+    function render() {
+      input.value = String(qty);
+      minus.disabled = qty <= MIN;
+      plus.disabled = qty >= MAX;
+      total.textContent = money(qty);
+      word.textContent = qty === 1
+        ? "one crate · one bottle"
+        : WORDS[qty] + " crates · " + WORDS[qty] + " bottles";
+      var label = qty === 1 ? "Open a Crate" : "Open " + qty + " Crates";
+      cta.textContent = label;
+      barCta.textContent = label;
+      barTotal.innerHTML = qty + (qty === 1 ? " crate" : " crates") +
+        " — <b>" + money(qty) + "</b>";
+    }
+
+    function setQty(n) {
+      qty = Math.min(MAX, Math.max(MIN, n));
+      render();
+    }
+
+    minus.addEventListener("click", function () { setQty(qty - 1); });
+    plus.addEventListener("click", function () { setQty(qty + 1); });
+
+    function sanitize() {
+      var digits = (input.value || "").replace(/\D+/g, "");
+      if (!digits) { render(); return; } /* empty or garbage — revert */
+      setQty(parseInt(digits, 10));
+    }
+    input.addEventListener("blur", sanitize);
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); input.blur(); }
+    });
+
+    render();
+
+    /* sticky low shelf — appears only once the bin tag has left the viewport */
+    var bar = document.getElementById("bar");
+    var buy = document.querySelector(".buy");
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        var away = !entries[0].isIntersecting;
+        bar.classList.toggle("shown", away);
+        document.body.classList.toggle("has-bar", away);
+      }, { threshold: 0 }).observe(buy);
+    }
+  })();
+</script>
+
+</body>
+</html>

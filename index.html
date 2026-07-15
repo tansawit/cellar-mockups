@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cellar — 10 Design Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F5F0E4;
+    --ink: #17120C;
+    --wine: #6E1423;
+    --hairline: rgba(23, 18, 12, 0.25);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Cormorant Garamond", Georgia, serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 72px 32px 96px; }
+  header { text-align: center; padding-bottom: 48px; border-bottom: 1px solid var(--ink); margin-bottom: 12px; }
+  .over { font-family: "Courier Prime", monospace; font-size: 12px; letter-spacing: 0.35em; text-transform: uppercase; margin-bottom: 20px; }
+  h1 { font-size: clamp(48px, 7vw, 84px); font-weight: 500; letter-spacing: 0.06em; }
+  .sub { font-size: 18px; font-style: italic; margin-top: 12px; color: rgba(23,18,12,0.75); }
+  .rule2 { border-bottom: 1px solid var(--ink); margin-bottom: 56px; padding-top: 3px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 40px 32px; }
+  a.card { text-decoration: none; color: inherit; display: block; }
+  .frame {
+    border: 1px solid var(--ink);
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    position: relative;
+    background: #fff;
+    transition: box-shadow 0.25s ease;
+  }
+  a.card:hover .frame { box-shadow: 6px 6px 0 rgba(23,18,12,0.9); }
+  .frame iframe {
+    width: 400%;
+    height: 400%;
+    transform: scale(0.25);
+    transform-origin: top left;
+    border: 0;
+    pointer-events: none;
+  }
+  .meta { display: flex; justify-content: space-between; align-items: baseline; padding-top: 14px; }
+  .num { font-family: "Courier Prime", monospace; font-size: 12px; letter-spacing: 0.2em; color: var(--wine); }
+  .name { font-size: 26px; font-weight: 500; }
+  .desc { font-family: "Courier Prime", monospace; font-size: 12px; line-height: 1.6; color: rgba(23,18,12,0.65); padding-top: 6px; }
+  footer { margin-top: 88px; padding-top: 24px; border-top: 1px solid var(--hairline); text-align: center; font-family: "Courier Prime", monospace; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(23,18,12,0.5); }
+  @media (max-width: 480px) { .wrap { padding: 48px 20px 64px; } .grid { gap: 32px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="over">Design Exploration · Round 2 · No. 001 · 005 · 007 · 009</div>
+    <h1>CELLAR</h1>
+    <div class="sub">Four directions for the main page — black on cream, wine red, serif &amp; typewriter</div>
+  </header>
+  <div class="rule2"></div>
+  <div class="grid" id="grid"></div>
+  <footer>Cellar MVP · Design Directions · MMXXVI</footer>
+</div>
+<script>
+  const directions = [
+    ["01-the-label", "The Label", "The page composed as an engraved wine label — centered, symmetric, ornamental dividers, double-rule frames."],
+    ["05-the-etching", "The Etching Catalogue", "Victorian merchant's catalogue — hatched engravings, numbered plates, drop caps."],
+    ["07-the-broadsheet", "The Broadsheet", "Newspaper front page — masthead, columns, drop caps, classified-style buy module."],
+    ["09-the-rack", "The Cellar Rack", "Architectural shelves — bottles standing on full-bleed rules, monumental scale contrast."],
+  ];
+  document.getElementById("grid").innerHTML = directions.map(([dir, name, desc]) => `
+    <a class="card" href="${dir}/index.html">
+      <div class="frame"><iframe src="${dir}/index.html" tabindex="-1" scrolling="no"></iframe></div>
+      <div class="meta"><span class="name">${name}</span><span class="num">No. 0${dir.slice(0, 2)}</span></div>
+      <div class="desc">${desc}</div>
+    </a>`).join("");
+</script>
+</body>
+</html>

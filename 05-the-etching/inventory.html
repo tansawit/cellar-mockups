@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cellar — My Cellar · Holdings &amp; Transactions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F5EFDF;
+    --paper-2:#EDE5D0;
+    --ink:#191309;
+    --ink-soft:rgba(25,19,9,.72);
+    --wine:#641021;
+    --rule:rgba(25,19,9,.50);
+    --t-xs:11px;
+    --t-s:13px;
+    --t-m:16.5px;
+    --t-l:21px;
+    --t-xl:clamp(24px,3vw,30px);
+    --t-2xl:clamp(30px,4.5vw,44px);
+    --frame-orn:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='19' height='19'%3E%3Cg fill='none' stroke='%23191309' stroke-width='1.05'%3E%3Ccircle cx='9.5' cy='9.5' r='2.5'/%3E%3Cpath d='M9.5 .5V5.4M9.5 13.6v4.9M.5 9.5H5.4M13.6 9.5h4.9'/%3E%3C/g%3E%3Ccircle cx='9.5' cy='9.5' r='1' fill='%23191309'/%3E%3C/svg%3E");
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  [hidden]{display:none!important}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"EB Garamond",Georgia,serif;
+    font-size:var(--t-m);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  svg{color:var(--ink);display:block}
+  svg text{font-family:"EB Garamond",Georgia,serif;fill:var(--ink)}
+  ::selection{background:var(--wine);color:var(--paper)}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+  /* ---------- small-cap headers & shared type ---------- */
+  .sc{font-variant:normal;text-transform:uppercase;letter-spacing:.26em;font-weight:500;font-size:var(--t-xs)}
+  .red{color:var(--wine)}
+  .note{font-style:italic;color:var(--ink-soft)}
+
+  a{color:inherit;text-decoration:none;
+    background:linear-gradient(var(--wine),var(--wine)) no-repeat left calc(100% - 1px)/0% 1px;
+    transition:background-size .3s ease,color .3s ease;padding-bottom:2px}
+  a:hover,a:focus-visible{background-size:100% 1px;color:var(--wine)}
+  a:focus-visible{outline:1px dotted var(--wine);outline-offset:4px}
+
+  /* ---------- frames: thin double rules + corner ornaments ---------- */
+  .frame{
+    position:relative;
+    border:1px solid var(--ink);
+    background-image:var(--frame-orn),var(--frame-orn),var(--frame-orn),var(--frame-orn);
+    background-repeat:no-repeat;
+    background-position:top -1px left -1px,top -1px right -1px,bottom -1px left -1px,bottom -1px right -1px;
+    background-origin:border-box;
+    transition:border-color .35s ease;
+  }
+  .frame::before{
+    content:"";position:absolute;inset:5px;border:1px solid var(--rule);
+    pointer-events:none;transition:border-color .35s ease;
+  }
+
+  /* ---------- ornamented rule ---------- */
+  .orn-rule{display:flex;align-items:center;gap:14px;margin:0 auto;max-width:420px;color:var(--ink)}
+  .orn-rule span{flex:1;height:1px;background:var(--rule)}
+
+  /* ---------- masthead ---------- */
+  header.masthead{padding:16px 0 13px;border-bottom:1px solid var(--ink);position:relative}
+  header.masthead::after{content:"";position:absolute;left:0;right:0;bottom:3px;height:1px;background:var(--rule)}
+  header.masthead .wrap{position:relative;display:flex;align-items:center;gap:clamp(18px,3vw,46px);text-align:left}
+  .masthead h1.wordmark{
+    font-size:var(--t-xl);font-weight:600;letter-spacing:.3em;
+    text-indent:.34em;line-height:1.15;margin:0;
+  }
+  .masthead h1.wordmark a{background:none;color:inherit}
+  nav.cat-nav{display:flex;justify-content:flex-start;align-items:center;gap:12px;margin:0;flex-wrap:wrap}
+  nav.cat-nav a{font-size:var(--t-s);letter-spacing:.26em;text-transform:uppercase;padding:4px;
+    min-height:44px;display:inline-flex;align-items:center;
+    background-position:left calc(50% + 13px);background-size:0% 1px}
+  nav.cat-nav a:hover,nav.cat-nav a:focus-visible{background-size:100% 1px}
+  nav.cat-nav a[aria-current="page"]{color:var(--wine);background-size:100% 1px}
+  nav.cat-nav .dot{color:var(--ink-soft);font-size:var(--t-s)}
+  .connect{
+    margin-left:auto;
+    font:inherit;font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;
+    color:var(--ink);background:transparent;border:1px solid var(--ink);
+    box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--rule);
+    padding:0 22px;min-height:46px;display:inline-flex;align-items:center;gap:9px;
+    cursor:default;white-space:nowrap;
+  }
+  .connect .pip{width:6px;height:6px;border-radius:50%;background:var(--wine);flex:none}
+
+  /* ---------- mobile bottom navigation (shown ≤640px only) ---------- */
+  nav.bottom-nav{display:none}
+
+  /* ---------- section headers ---------- */
+  .sect-head{text-align:center;padding:44px 0 24px}
+  .sect-head .no{color:var(--wine);font-size:var(--t-xs);letter-spacing:.26em;text-indent:.26em;margin-bottom:12px;text-transform:uppercase}
+  .sect-head h2{font-size:var(--t-xl);font-weight:500;letter-spacing:.3em;text-indent:.3em;text-transform:uppercase;margin:14px 0 11px}
+  .sect-head .sub{font-style:italic;color:var(--ink-soft);max-width:56ch;margin:0 auto;font-size:var(--t-m)}
+
+  /* ---------- dotted-leader rows (shared catalogue table style) ---------- */
+  .conditions{list-style:none}
+  .conditions li{display:flex;align-items:baseline;gap:12px;padding:7px 0;font-size:var(--t-m)}
+  .conditions .k{font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft);white-space:nowrap}
+  .lead{flex:1;border-bottom:1px dotted var(--rule);transform:translateY(-5px);min-width:24px}
+  .conditions .v{text-align:right;font-style:italic}
+  .conditions .v em{font-style:normal;font-weight:600}
+  .conditions .v em,.appr-line em,.receipt .r-head em,.lrow .amt{font-variant-numeric:tabular-nums lining-nums}
+
+  /* ---------- account standing ---------- */
+  .standing{padding:26px 0 8px}
+  .standing-frame{padding:clamp(20px,2.6vw,32px) clamp(20px,3vw,40px)}
+  .standing-head{font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft);
+    text-align:center;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+  .standing-grid{display:flex;align-items:center;gap:clamp(20px,3vw,44px)}
+  .standing-grid .conditions{flex:1;min-width:0}
+  .standing .conditions .v{font-style:normal}
+  .standing .conditions .v em{font-style:normal;font-weight:600;font-size:var(--t-l)}
+  .standing .conditions .v .fine-v{font-style:italic;font-size:var(--t-m);color:var(--ink-soft)}
+  .stamp{flex:none;width:132px;transform:rotate(-7deg);opacity:.92}
+  .stamp svg{width:100%;height:auto}
+
+  /* ---------- holdings ---------- */
+  .holdings{padding-bottom:8px}
+  .holding{padding:clamp(18px,2.4vw,28px) clamp(18px,2.8vw,34px);margin-bottom:20px}
+  .holding:hover::before{border-color:var(--ink)}
+  .holding-grid{display:grid;grid-template-columns:120px minmax(0,1fr);gap:clamp(18px,2.6vw,38px);align-items:start}
+  .holding-art svg{height:212px;width:auto;margin:0 auto;transition:opacity .45s ease}
+  .holding.sold .holding-art svg{opacity:.4}
+  .plate-no{color:var(--wine);font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;margin-bottom:8px}
+  .plate-name{font-size:var(--t-l);font-weight:500;line-height:1.15}
+  .plate-meta{margin-top:4px;font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft)}
+  .acq{margin-top:9px;font-style:italic;color:var(--ink-soft);font-size:var(--t-m)}
+  .appr-line{margin-top:10px;display:flex;align-items:baseline;gap:10px;max-width:420px;font-size:var(--t-m)}
+  .appr-line .k{font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft);white-space:nowrap}
+  .appr-line em{font-style:normal;font-weight:600;color:var(--wine);font-size:var(--t-l);white-space:nowrap}
+  .actions{margin-top:16px;display:flex;gap:12px;flex-wrap:wrap}
+  .act{
+    font:inherit;font-size:var(--t-s);letter-spacing:.26em;text-transform:uppercase;
+    color:var(--ink);background:transparent;border:1px solid var(--ink);
+    box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--rule);
+    padding:0 18px;min-height:46px;display:inline-flex;align-items:center;justify-content:center;
+    cursor:pointer;white-space:nowrap;
+    transition:background .25s ease,color .25s ease,border-color .25s ease;
+  }
+  .act:hover{background:var(--wine);border-color:var(--wine);color:var(--paper)}
+  .act:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
+  .act .price{font-weight:600}
+
+  .ship-note{margin-top:14px;border:1px dashed var(--rule);padding:13px 16px;max-width:56ch}
+  .ship-note .sn-head{font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--wine);margin-bottom:4px}
+  .ship-note p{font-style:italic;color:var(--ink-soft);font-size:var(--t-m)}
+
+  .receipt{margin-top:16px;position:relative;border:1px solid var(--ink);padding:16px 18px 15px;max-width:56ch}
+  .receipt::before{content:"";position:absolute;inset:4px;border:1px dashed var(--rule);pointer-events:none}
+  .receipt .r-head{display:flex;align-items:baseline;gap:10px}
+  .receipt .r-head .k{font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--wine);font-weight:600;white-space:nowrap}
+  .receipt .r-head em{font-style:normal;font-weight:600;color:var(--wine);font-size:var(--t-l);white-space:nowrap}
+  .receipt p{margin-top:6px;font-style:italic;color:var(--ink-soft);font-size:var(--t-m)}
+
+  details.prov{margin-top:14px;border-top:1px solid var(--rule)}
+  details.prov summary{
+    list-style:none;cursor:pointer;min-height:44px;display:flex;align-items:center;gap:10px;
+    font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft);
+    transition:color .25s ease;
+  }
+  details.prov summary::-webkit-details-marker{display:none}
+  details.prov summary:hover,details.prov summary:focus-visible{color:var(--wine)}
+  details.prov summary:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
+  details.prov summary .twist{display:inline-block;transition:transform .3s ease;font-size:var(--t-s);color:var(--wine)}
+  details.prov[open] summary .twist{transform:rotate(45deg)}
+  details.prov .conditions{padding:2px 0 12px;max-width:560px}
+  details.prov .conditions li{font-size:var(--t-m);padding:5px 0}
+
+  /* ---------- ledger ---------- */
+  .ledger{padding-bottom:10px}
+  .ledger-frame{padding:clamp(20px,2.6vw,34px) clamp(20px,3vw,40px)}
+  .lhead{display:grid;grid-template-columns:132px minmax(0,1fr) auto;gap:6px 16px;
+    padding-bottom:9px;border-bottom:1px solid var(--ink);position:relative;
+    font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft)}
+  .lhead::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:1px;background:var(--rule)}
+  .lhead .h-amt{text-align:right}
+  .lrow{display:grid;grid-template-columns:132px minmax(0,1fr) auto;gap:2px 16px;
+    padding:11px 0 10px;border-bottom:1px solid var(--rule);align-items:baseline}
+  .lrow:last-child{border-bottom:none}
+  .lrow .date{font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft);white-space:nowrap;transform:translateY(-1px)}
+  .lrow .entry{display:flex;align-items:baseline;gap:10px;min-width:0}
+  .lrow .entry .what{font-size:var(--t-m);line-height:1.55}
+  .lrow .entry .what .d{font-style:italic;color:var(--ink-soft)}
+  .lrow .amt{font-size:var(--t-m);font-weight:600;white-space:nowrap;text-align:right}
+  .lrow .amt.credit{color:var(--wine)}
+  .lrow .amt.na{font-weight:400;color:var(--ink-soft)}
+  .ledger-foot{margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);
+    font-style:italic;color:var(--ink-soft);font-size:var(--t-m);text-align:center}
+
+  /* ---------- onward ---------- */
+  .onward{max-width:720px;margin:0 auto;padding:44px 28px 64px;text-align:center}
+  .onward .orn-rule{margin-bottom:28px}
+  .onward p.lede{font-style:italic;color:var(--ink-soft);font-size:var(--t-m);max-width:44ch;margin:0 auto}
+  .onward p.lede a{font-style:normal}
+  .onward .go{margin-top:22px;display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+  a.act{background-image:none}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--ink);position:relative;text-align:center;padding:38px 28px 44px}
+  footer::before{content:"";position:absolute;left:0;right:0;top:3px;height:1px;background:var(--rule)}
+  footer .tailpiece{margin:0 auto 18px;width:122px}
+  footer .tailpiece svg{width:100%;height:auto}
+  footer .fine{font-size:var(--t-s);color:var(--ink-soft);max-width:62ch;margin:0 auto;font-style:italic}
+  footer .mark{margin-top:22px;font-size:var(--t-m);letter-spacing:.42em;text-indent:.42em;text-transform:uppercase;font-weight:600}
+  footer .colophon{margin-top:8px;font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft)}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:980px){
+    header.masthead .wrap{gap:18px}
+    .masthead h1.wordmark{margin:0}
+    .standing-grid{flex-direction:column;align-items:stretch}
+    .stamp{margin:6px auto 0;width:118px}
+  }
+  @media (max-width:640px){
+    body{font-size:var(--t-m)}
+    .wrap{padding:0 18px}
+    header.masthead{padding:10px 0 9px}
+    header.masthead .wrap{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center}
+    .masthead h1.wordmark{font-size:var(--t-l);letter-spacing:.2em;text-indent:0;margin:0}
+    nav.cat-nav{display:none}
+    .connect{margin:0;font-size:var(--t-xs);letter-spacing:.1em;padding:0 8px;min-height:36px}
+    .sect-head{padding:34px 0 20px}
+    .standing{padding:20px 0 4px}
+    .standing-frame{padding:18px 16px}
+    .conditions li{gap:9px}
+    .standing .conditions .v .fine-v{font-size:var(--t-s)}
+    .holding{padding:18px 15px;margin-bottom:16px}
+    .holding-grid{grid-template-columns:74px minmax(0,1fr);gap:14px}
+    .holding-art svg{height:158px}
+    .appr-line{gap:6px}
+    .appr-line .lead{min-width:0}
+    .actions{margin-top:14px}
+    .act{padding:0 14px;font-size:var(--t-xs);letter-spacing:.18em;flex:1 1 auto}
+    .holding .actions,.holding .ship-note,.holding .receipt,.holding details.prov{grid-column:1 / -1}
+    .holding details.prov .conditions li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 10px}
+    .holding details.prov .conditions .lead{display:none}
+    .holding details.prov .conditions .v{min-width:0;text-align:right;overflow-wrap:anywhere}
+    .ledger-frame{padding:18px 14px}
+    .lhead{display:none}
+    .lrow{grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:12px 0 11px}
+    .lrow .date{grid-column:1 / -1;margin-bottom:1px}
+    .onward{padding:36px 18px 54px}
+    /* the page clears the bottom navigation */
+    :root{--bnav-h:calc(59px + env(safe-area-inset-bottom))}
+    body{padding-bottom:var(--bnav-h)}
+    /* mobile bottom navigation */
+    nav.bottom-nav{
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+      position:fixed;left:0;right:0;bottom:0;z-index:70;
+      background:var(--paper-2);border-top:1px solid var(--ink);
+      padding-bottom:env(safe-area-inset-bottom);
+    }
+    nav.bottom-nav::before{content:"";position:absolute;left:0;right:0;top:3px;height:1px;background:var(--rule)}
+    nav.bottom-nav a{
+      position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+      min-height:58px;padding:8px 4px 7px;background:none;color:var(--ink);
+    }
+    nav.bottom-nav a:hover,nav.bottom-nav a:focus-visible{background:none;color:var(--wine)}
+    nav.bottom-nav a:focus-visible{outline-offset:-4px}
+    nav.bottom-nav svg{color:inherit;width:25px;height:23px}
+    nav.bottom-nav .bn-label{font-size:var(--t-xs);letter-spacing:.14em;text-transform:uppercase;line-height:1;white-space:nowrap}
+    nav.bottom-nav a[aria-current="page"]{color:var(--wine)}
+    nav.bottom-nav a[aria-current="page"]::after{content:"";position:absolute;left:16px;right:16px;top:-1px;height:2px;background:var(--wine)}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ shared etching patterns ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- fine 45° hatch -->
+    <pattern id="e-h" width="3.2" height="3.2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="3.2" height="3.2" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="3.2" stroke="var(--ink)" stroke-width=".6"/>
+    </pattern>
+    <!-- fine 135° hatch -->
+    <pattern id="e-h2" width="3.2" height="3.2" patternUnits="userSpaceOnUse" patternTransform="rotate(135)">
+      <rect width="3.2" height="3.2" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="3.2" stroke="var(--ink)" stroke-width=".6"/>
+    </pattern>
+    <!-- dense 45° hatch -->
+    <pattern id="e-hd" width="2.1" height="2.1" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="2.1" height="2.1" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="2.1" stroke="var(--ink)" stroke-width=".65"/>
+    </pattern>
+    <!-- cross-hatch -->
+    <pattern id="e-x" width="3.4" height="3.4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="3.4" height="3.4" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="3.4" stroke="var(--ink)" stroke-width=".55"/>
+      <line x1="0" y1="0" x2="3.4" y2="0" stroke="var(--ink)" stroke-width=".55"/>
+    </pattern>
+    <!-- dense cross-hatch (deepest shadow) -->
+    <pattern id="e-xd" width="2.2" height="2.2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="2.2" height="2.2" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="2.2" stroke="var(--ink)" stroke-width=".65"/>
+      <line x1="0" y1="0" x2="2.2" y2="0" stroke="var(--ink)" stroke-width=".65"/>
+    </pattern>
+    <!-- vertical hatch -->
+    <pattern id="e-v" width="3" height="3" patternUnits="userSpaceOnUse">
+      <rect width="3" height="3" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="3" stroke="var(--ink)" stroke-width=".6"/>
+    </pattern>
+  </defs>
+</svg>
+
+<!-- ============ masthead ============ -->
+<header class="masthead">
+  <div class="wrap">
+    <h1 class="wordmark"><a href="index.html">CELLAR</a></h1>
+    <nav class="cat-nav" aria-label="Catalogue contents">
+      <a href="index.html"><span>The Collection</span></a><span class="dot" aria-hidden="true">·</span>
+      <a href="inventory.html" aria-current="page"><span>My Cellar</span></a><span class="dot" aria-hidden="true">·</span>
+      <a href="index.html#about"><span>About</span></a>
+    </nav>
+    <span class="connect" title="Signed in"><span class="pip" aria-hidden="true"></span>Connected · S.T.</span>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ account standing ============ -->
+<section class="standing" aria-label="Account standing">
+  <div class="wrap">
+    <div class="frame standing-frame">
+      <p class="standing-head">Account of S.T. · Standing as of 14 July 2026</p>
+      <div class="standing-grid">
+        <ul class="conditions">
+          <li><span class="k">Store credit</span><span class="lead" aria-hidden="true"></span>
+            <span class="v"><em class="red" id="stat-credit">$142</em></span></li>
+          <li><span class="k">Bottles in bond</span><span class="lead" aria-hidden="true"></span>
+            <span class="v"><em id="stat-bond">3</em></span></li>
+          <li><span class="k">Appraised holdings</span><span class="lead" aria-hidden="true"></span>
+            <span class="v"><em id="stat-holdings">$430</em></span></li>
+          <li><span class="k">Storage</span><span class="lead" aria-hidden="true"></span>
+            <span class="v"><span class="fine-v">Free until 12 October 2026, thereafter 2.5%/yr</span></span></li>
+        </ul>
+        <div class="stamp" aria-label="Authenticity and custody guarantee">
+          <svg viewBox="0 0 150 150" role="img" aria-label="Circular engraved Cellar guarantee">
+            <defs><path id="stampcirc" d="M75 21 a54 54 0 1 1 -0.01 0" fill="none"/></defs>
+            <circle cx="75" cy="75" r="70" fill="none" stroke="var(--wine)" stroke-width="1.1"/>
+            <circle cx="75" cy="75" r="64.5" fill="none" stroke="var(--wine)" stroke-width=".8" stroke-dasharray="2 3"/>
+            <circle cx="75" cy="75" r="42" fill="none" stroke="var(--wine)" stroke-width=".8"/>
+            <text font-size="10" letter-spacing="2.7" style="fill:var(--wine)"><textPath href="#stampcirc">AUTHENTICITY · CUSTODY GUARANTEED · </textPath></text>
+            <text x="75" y="72" text-anchor="middle" font-size="12.5" letter-spacing="4" font-weight="600" style="fill:var(--wine)">CELLAR</text>
+            <text x="76" y="86" text-anchor="middle" font-size="7.5" letter-spacing="1.8" style="fill:var(--wine)">SANTA ROSA · CALIF.</text>
+            <path d="M60 94 h30" stroke="var(--wine)" stroke-width=".7"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ holdings ============ -->
+<section class="holdings" aria-label="Holdings in bond">
+  <header class="sect-head wrap">
+    <p class="no">· Lots I – III ·</p>
+    <div class="orn-rule" aria-hidden="true">
+      <span></span>
+      <svg width="26" height="14" viewBox="0 0 26 14"><path d="M13 1 L19 7 L13 13 L7 7 Z" fill="none" stroke="currentColor" stroke-width=".9"/><circle cx="13" cy="7" r="1.3" fill="currentColor"/></svg>
+      <span></span>
+    </div>
+    <h2>Holdings in Bond</h2>
+    <p class="sub">Three bottles rest in the house cellar in your name. Each may be sold back at 85% of its
+      appraisal, or dispatched to a Californian door — the choice keeps.</p>
+  </header>
+
+  <div class="wrap">
+
+    <!-- LOT I — Vietti (after Plate VIII) -->
+    <article class="holding frame" id="lot-1" data-price="176" data-buyback="150" data-name="Vietti Barolo Castiglione 2019">
+      <div class="holding-grid">
+        <div class="holding-art">
+          <svg viewBox="0 0 120 300" role="img" aria-label="Etched Albeisa bottle with pictorial label">
+            <ellipse cx="60" cy="286" rx="31" ry="5" fill="url(#e-x)" stroke="none"/>
+            <path d="M53 18 L53 66 C53 90 40 98 40 124 L40 264 Q40 276 51 279 L69 279 Q80 276 80 264 L80 124 C80 98 67 90 67 66 L67 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M40 128 L40 264 Q40 274 49 277.5 L50 277.5 L50 122 Q43 122 40 128 Z" fill="url(#e-x)" stroke="none"/>
+            <rect x="68" y="118" width="5.6" height="132" rx="2.8" fill="var(--paper)"/>
+            <rect x="62.5" y="44" width="3.2" height="20" rx="1.6" fill="var(--paper)"/>
+            <rect x="50" y="11" width="21" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+            <rect x="52" y="18" width="17" height="23" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+            <rect x="45" y="146" width="30" height="48" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+            <rect x="47.5" y="148.5" width="25" height="43" fill="none" stroke="currentColor" stroke-width=".55"/>
+            <rect x="50" y="151" width="20" height="22" fill="url(#e-h)" stroke="currentColor" stroke-width=".6"/>
+            <path d="M52 180 h16 M54 186 h12" stroke="currentColor" stroke-width=".8"/>
+          </svg>
+        </div>
+        <div class="holding-body">
+          <p class="plate-no">Lot I · After Plate VIII</p>
+          <h3 class="plate-name">Vietti Barolo Castiglione</h3>
+          <p class="plate-meta">2019 · Piedmont</p>
+          <p class="acq">Acquired — Crate №&nbsp;0441 · 3 July 2026</p>
+          <p class="appr-line"><span class="k">Current appraisal</span><span class="lead" aria-hidden="true"></span><em>$176</em></p>
+
+          <div class="actions">
+            <button type="button" class="act sell" data-lot="lot-1">Sell back —&nbsp;<span class="price">$150</span></button>
+            <button type="button" class="act ship" data-lot="lot-1" aria-expanded="false">Ship it — CA&nbsp;·&nbsp;21+</button>
+          </div>
+          <div class="ship-note" hidden>
+            <p class="sn-head">Noted — Dispatch Requested</p>
+            <p>Very good. The concierge will write within the day to fix a dispatch date.
+              California addresses only; the signature of a person 21 or older is required at
+              the threshold. Storage continues, without charge, until it ships.</p>
+          </div>
+          <div class="receipt" hidden>
+            <p class="r-head"><span class="k">Credit issued</span><span class="lead" aria-hidden="true"></span><em>$150</em></p>
+            <p>Entered to your store credit this day, 14 July 2026. The bottle returns to the
+              house rack; the record above is amended.</p>
+          </div>
+
+          <details class="prov">
+            <summary><span class="twist" aria-hidden="true">✦</span>Provenance &amp; Custody</summary>
+            <ul class="conditions">
+              <li><span class="k">Source</span><span class="lead" aria-hidden="true"></span><span class="v">Ex-cellars, Castiglione Falletto</span></li>
+              <li><span class="k">Warehouse entry</span><span class="lead" aria-hidden="true"></span><span class="v">18 April 2026 · authenticated on intake</span></li>
+              <li><span class="k">Conditions</span><span class="lead" aria-hidden="true"></span><span class="v">55&nbsp;°F / 70%&nbsp;RH · attested daily</span></li>
+              <li><span class="k">Custody</span><span class="lead" aria-hidden="true"></span><span class="v">Continuous since intake · verified</span></li>
+            </ul>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <!-- LOT II — Tempier (after Plate II) -->
+    <article class="holding frame" id="lot-2" data-price="142" data-buyback="121" data-name="Domaine Tempier Bandol Rouge 2020">
+      <div class="holding-grid">
+        <div class="holding-art">
+          <svg viewBox="0 0 120 300" role="img" aria-label="Etched Burgundy bottle with oval label">
+            <ellipse cx="60" cy="286" rx="32" ry="5" fill="url(#e-x)" stroke="none"/>
+            <path d="M53 18 L53 70 C53 95 38 102 38 132 L38 264 Q38 276 50 279 L70 279 Q82 276 82 264 L82 132 C82 102 67 95 67 70 L67 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M38 134 L38 264 Q38 274 47 277.5 L48 277.5 L48 128 Q41 128 38 134 Z" fill="url(#e-x)" stroke="none"/>
+            <rect x="69.5" y="126" width="6" height="126" rx="3" fill="var(--paper)"/>
+            <rect x="62.5" y="46" width="3.2" height="22" rx="1.6" fill="var(--paper)"/>
+            <rect x="50" y="11" width="21" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+            <rect x="52" y="18" width="17" height="24" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+            <ellipse cx="60" cy="176" rx="17" ry="22" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+            <ellipse cx="60" cy="176" rx="14.5" ry="19" fill="none" stroke="currentColor" stroke-width=".55"/>
+            <path d="M52 168 h16 M53.5 174 h13 M55 180 h10" stroke="currentColor" stroke-width=".8"/>
+            <path d="M60 186 q-3 3 0 6 q3 -3 0 -6 Z" fill="none" stroke="currentColor" stroke-width=".8"/>
+          </svg>
+        </div>
+        <div class="holding-body">
+          <p class="plate-no">Lot II · After Plate II</p>
+          <h3 class="plate-name">Domaine Tempier Bandol Rouge</h3>
+          <p class="plate-meta">2020 · Bandol, Provence</p>
+          <p class="acq">Acquired — Crate №&nbsp;0442 · 3 July 2026</p>
+          <p class="appr-line"><span class="k">Current appraisal</span><span class="lead" aria-hidden="true"></span><em>$142</em></p>
+
+          <div class="actions">
+            <button type="button" class="act sell" data-lot="lot-2">Sell back —&nbsp;<span class="price">$121</span></button>
+            <button type="button" class="act ship" data-lot="lot-2" aria-expanded="false">Ship it — CA&nbsp;·&nbsp;21+</button>
+          </div>
+          <div class="ship-note" hidden>
+            <p class="sn-head">Noted — Dispatch Requested</p>
+            <p>Very good. The concierge will write within the day to fix a dispatch date.
+              California addresses only; the signature of a person 21 or older is required at
+              the threshold. Storage continues, without charge, until it ships.</p>
+          </div>
+          <div class="receipt" hidden>
+            <p class="r-head"><span class="k">Credit issued</span><span class="lead" aria-hidden="true"></span><em>$121</em></p>
+            <p>Entered to your store credit this day, 14 July 2026. The bottle returns to the
+              house rack; the record above is amended.</p>
+          </div>
+
+          <details class="prov">
+            <summary><span class="twist" aria-hidden="true">✦</span>Provenance &amp; Custody</summary>
+            <ul class="conditions">
+              <li><span class="k">Source</span><span class="lead" aria-hidden="true"></span><span class="v">Direct from the domaine, Le Plan du Castellet</span></li>
+              <li><span class="k">Warehouse entry</span><span class="lead" aria-hidden="true"></span><span class="v">2 March 2026 · authenticated on intake</span></li>
+              <li><span class="k">Conditions</span><span class="lead" aria-hidden="true"></span><span class="v">55&nbsp;°F / 70%&nbsp;RH · attested daily</span></li>
+              <li><span class="k">Custody</span><span class="lead" aria-hidden="true"></span><span class="v">Continuous since intake · verified</span></li>
+            </ul>
+          </details>
+        </div>
+      </div>
+    </article>
+
+    <!-- LOT III — Huet (after Plate VI) -->
+    <article class="holding frame" id="lot-3" data-price="112" data-buyback="95" data-name="Domaine Huet Le Mont Sec 2022">
+      <div class="holding-grid">
+        <div class="holding-art">
+          <svg viewBox="0 0 120 300" role="img" aria-label="Etched slender Loire flute bottle">
+            <ellipse cx="60" cy="286" rx="26" ry="5" fill="url(#e-x)" stroke="none"/>
+            <path d="M54 18 L54 55 C54 95 45 130 45 175 L45 265 Q45 277 54 279 L66 279 Q75 277 75 265 L75 175 C75 130 66 95 66 55 L66 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M45 182 L45 265 Q45 274 52 277.5 L53 277.5 L53 174 Q48 174 45 182 Z" fill="url(#e-x)" stroke="none"/>
+            <rect x="65" y="150" width="4.8" height="112" rx="2.4" fill="var(--paper)"/>
+            <rect x="61.5" y="42" width="3" height="24" rx="1.5" fill="var(--paper)"/>
+            <rect x="51" y="11" width="19" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+            <rect x="53" y="18" width="15" height="22" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+            <ellipse cx="60" cy="206" rx="13" ry="17" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+            <ellipse cx="60" cy="206" rx="10.8" ry="14.5" fill="none" stroke="currentColor" stroke-width=".55"/>
+            <path d="M54 200 h12 M55.5 206 h9 M57 212 h6" stroke="currentColor" stroke-width=".8"/>
+          </svg>
+        </div>
+        <div class="holding-body">
+          <p class="plate-no">Lot III · After Plate VI</p>
+          <h3 class="plate-name">Domaine Huet Le Mont Sec</h3>
+          <p class="plate-meta">2022 · Vouvray, Loire</p>
+          <p class="acq">Acquired — Crate №&nbsp;0443 · 3 July 2026</p>
+          <p class="appr-line"><span class="k">Current appraisal</span><span class="lead" aria-hidden="true"></span><em>$112</em></p>
+
+          <div class="actions">
+            <button type="button" class="act sell" data-lot="lot-3">Sell back —&nbsp;<span class="price">$95</span></button>
+            <button type="button" class="act ship" data-lot="lot-3" aria-expanded="false">Ship it — CA&nbsp;·&nbsp;21+</button>
+          </div>
+          <div class="ship-note" hidden>
+            <p class="sn-head">Noted — Dispatch Requested</p>
+            <p>Very good. The concierge will write within the day to fix a dispatch date.
+              California addresses only; the signature of a person 21 or older is required at
+              the threshold. Storage continues, without charge, until it ships.</p>
+          </div>
+          <div class="receipt" hidden>
+            <p class="r-head"><span class="k">Credit issued</span><span class="lead" aria-hidden="true"></span><em>$95</em></p>
+            <p>Entered to your store credit this day, 14 July 2026. The bottle returns to the
+              house rack; the record above is amended.</p>
+          </div>
+
+          <details class="prov">
+            <summary><span class="twist" aria-hidden="true">✦</span>Provenance &amp; Custody</summary>
+            <ul class="conditions">
+              <li><span class="k">Source</span><span class="lead" aria-hidden="true"></span><span class="v">Via the importer, ex-domaine, Vouvray</span></li>
+              <li><span class="k">Warehouse entry</span><span class="lead" aria-hidden="true"></span><span class="v">9 May 2026 · authenticated on intake</span></li>
+              <li><span class="k">Conditions</span><span class="lead" aria-hidden="true"></span><span class="v">55&nbsp;°F / 70%&nbsp;RH · attested daily</span></li>
+              <li><span class="k">Custody</span><span class="lead" aria-hidden="true"></span><span class="v">Continuous since intake · verified</span></li>
+            </ul>
+          </details>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============ schedule of transactions ============ -->
+<section class="ledger" aria-label="Schedule of transactions">
+  <header class="sect-head wrap">
+    <p class="no">· The Record ·</p>
+    <div class="orn-rule" aria-hidden="true">
+      <span></span>
+      <svg width="26" height="14" viewBox="0 0 26 14"><path d="M13 1 L19 7 L13 13 L7 7 Z" fill="none" stroke="currentColor" stroke-width=".9"/><circle cx="13" cy="7" r="1.3" fill="currentColor"/></svg>
+      <span></span>
+    </div>
+    <h2>Schedule of Transactions</h2>
+    <p class="sub">Every dealing between you and the house, entered as it occurred. Nothing is off the book.</p>
+  </header>
+
+  <div class="wrap">
+    <div class="frame ledger-frame">
+      <div class="lhead" aria-hidden="true">
+        <span>Date</span><span>Entry</span><span class="h-amt">Amount</span>
+      </div>
+      <div id="ledger-rows">
+
+        <div class="lrow">
+          <span class="date">9 July 2026</span>
+          <span class="entry"><span class="what">Shipment delivered — Ridge Estate Cabernet Sauvignon 2019 <span class="d">· signed for, 21+, Oakland, Calif.</span></span><span class="lead" aria-hidden="true"></span></span>
+          <span class="amt na">—</span>
+        </div>
+
+        <div class="lrow">
+          <span class="date">6 July 2026</span>
+          <span class="entry"><span class="what">Shipment dispatched — Ridge Estate Cabernet Sauvignon 2019 <span class="d">· California only</span></span><span class="lead" aria-hidden="true"></span></span>
+          <span class="amt na">—</span>
+        </div>
+
+        <div class="lrow">
+          <span class="date">3 July 2026</span>
+          <span class="entry"><span class="what">Bottles revealed &amp; entered in bond <span class="d">· Vietti Barolo Castiglione 2019 · Tempier Bandol Rouge 2020 · Huet Le Mont Sec 2022</span></span><span class="lead" aria-hidden="true"></span></span>
+          <span class="amt na">—</span>
+        </div>
+
+        <div class="lrow">
+          <span class="date">3 July 2026</span>
+          <span class="entry"><span class="what">Crates opened — №&nbsp;0441–0443 <span class="d">· three sealed crates</span></span><span class="lead" aria-hidden="true"></span></span>
+          <span class="amt">$405</span>
+        </div>
+
+        <div class="lrow">
+          <span class="date">1 July 2026</span>
+          <span class="entry"><span class="what">Crate opened — №&nbsp;0433 <span class="d">· Ridge Estate Cabernet Sauvignon 2019 revealed · balance to card</span></span><span class="lead" aria-hidden="true"></span></span>
+          <span class="amt">$25</span>
+        </div>
+
+        <div class="lrow">
+          <span class="date">1 July 2026</span>
+          <span class="entry"><span class="what">Store credit applied <span class="d">· toward Crate №&nbsp;0433</span></span><span class="lead" aria-hidden="true"></span></span>
+          <span class="amt">−$110</span>
+        </div>
+
+        <div class="lrow">
+          <span class="date">29 June 2026</span>
+          <span class="entry"><span class="what">Sold back to the house — Chateau Montelena Chardonnay 2021 <span class="d">· credit issued</span></span><span class="lead" aria-hidden="true"></span></span>
+          <span class="amt credit">$134</span>
+        </div>
+
+        <div class="lrow">
+          <span class="date">28 June 2026</span>
+          <span class="entry"><span class="what">Crate opened — №&nbsp;0428 <span class="d">· Chateau Montelena Chardonnay 2021 revealed</span></span><span class="lead" aria-hidden="true"></span></span>
+          <span class="amt">$135</span>
+        </div>
+
+        <div class="lrow">
+          <span class="date">26 June 2026</span>
+          <span class="entry"><span class="what">Sold back to the house — Produttori del Barbaresco 2019 <span class="d">· credit issued</span></span><span class="lead" aria-hidden="true"></span></span>
+          <span class="amt credit">$118</span>
+        </div>
+
+        <div class="lrow">
+          <span class="date">26 June 2026</span>
+          <span class="entry"><span class="what">Crate opened — №&nbsp;0417 <span class="d">· Produttori del Barbaresco 2019 revealed</span></span><span class="lead" aria-hidden="true"></span></span>
+          <span class="amt">$135</span>
+        </div>
+
+      </div>
+      <p class="ledger-foot">Amounts in United States dollars. Credits in <span class="red">wine</span>; the ink never lies.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ onward ============ -->
+<section class="onward">
+  <div class="orn-rule" aria-hidden="true">
+    <span></span>
+    <svg width="26" height="14" viewBox="0 0 26 14"><path d="M13 1 L19 7 L13 13 L7 7 Z" fill="none" stroke="currentColor" stroke-width=".9"/><circle cx="13" cy="7" r="1.3" fill="currentColor"/></svg>
+    <span></span>
+  </div>
+  <p class="lede">The crates continue — <a href="index.html">return to the Collection</a>,
+    where eight plates remain in circulation.</p>
+  <div class="go">
+    <a class="act" href="reveal.html">Open a Crate</a>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ footer ============ -->
+<footer>
+  <div class="tailpiece" aria-hidden="true">
+    <svg viewBox="0 0 160 120">
+      <path d="M80 8 q-3 14 0 24" fill="none" stroke="currentColor" stroke-width="1"/>
+      <path d="M74 18 q-22 -13 -33 2 q10 15 29 6 q6 -3 4 -8 Z" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+      <path d="M44 21 q13 6 26 1" fill="none" stroke="currentColor" stroke-width=".6"/>
+      <path d="M86 16 q15 -11 21 -2 q3 7 -4 9 q-5 1 -5 -3.5" fill="none" stroke="currentColor" stroke-width=".8"/>
+      <circle cx="66" cy="42" r="7.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+      <circle cx="81" cy="40" r="7.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+      <circle cx="96" cy="43" r="7.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+      <circle cx="73" cy="54" r="7.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+      <circle cx="88" cy="54" r="7.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+      <circle cx="80" cy="67" r="7.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+      <path d="M20 96 H62 M98 96 H140" stroke="currentColor" stroke-width=".8"/>
+      <path d="M80 90 l5 6 -5 6 -5 -6 Z" fill="none" stroke="currentColor" stroke-width=".9"/>
+    </svg>
+  </div>
+  <p class="fine">21+ only. California shipping only. Cellar is the seller of record.
+    Storage free for 90&nbsp;days, then 2.5%/yr. Bottles are held in bond; prices in United
+    States dollars. Instant buyback is offered at 85% of the current appraised value.</p>
+  <p class="mark">CELLAR</p>
+  <p class="colophon">Set in EB Garamond · Engravings by the House</p>
+</footer>
+
+<!-- ============ mobile bottom navigation ============ -->
+<nav class="bottom-nav" aria-label="Primary">
+  <a href="index.html">
+    <svg viewBox="0 0 28 26" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="currentColor" stroke-width="1">
+        <path d="M4.8 3 v3.4 q0 1.6 -1.6 2.6 V22 h5.6 V9 q-1.6 -1 -1.6 -2.6 V3 Z"/>
+        <path d="M12.8 3 v3.4 q0 1.6 -1.6 2.6 V22 h5.6 V9 q-1.6 -1 -1.6 -2.6 V3 Z"/>
+        <path d="M20.8 3 v3.4 q0 1.6 -1.6 2.6 V22 h5.6 V9 q-1.6 -1 -1.6 -2.6 V3 Z"/>
+        <path d="M1.6 24 h24.8" stroke-width=".8"/>
+      </g>
+    </svg>
+    <span class="bn-label">The Collection</span>
+  </a>
+  <a href="inventory.html" aria-current="page">
+    <svg viewBox="0 0 28 26" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="currentColor" stroke-width="1">
+        <circle cx="14" cy="7.2" r="4.2"/>
+        <circle cx="14" cy="7.2" r="1.7" stroke-width=".7"/>
+        <path d="M14 11.4 V23.5 M14 18.4 h4.4 M14 22 h3.4"/>
+      </g>
+    </svg>
+    <span class="bn-label">My Cellar</span>
+  </a>
+  <a href="index.html#about">
+    <svg viewBox="0 0 28 26" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="currentColor" stroke-width="1">
+        <path d="M14 2.5 q-1.6 3 0 6.2"/>
+        <path d="M12 5.6 q-5.4 -3.2 -8.2 .6 q2.6 3.8 7.4 1.6"/>
+        <path d="M16 5 q3.8 -2.8 5.6 -.4 q1 1.8 -1 2.4 q-1.6 .4 -1.6 -1.1"/>
+        <circle cx="11.4" cy="12.6" r="2.7"/>
+        <circle cx="16.6" cy="12.6" r="2.7"/>
+        <circle cx="9" cy="17.3" r="2.7"/>
+        <circle cx="14" cy="17.3" r="2.7"/>
+        <circle cx="19" cy="17.3" r="2.7"/>
+        <circle cx="11.6" cy="22" r="2.7"/>
+        <circle cx="16.4" cy="22" r="2.7"/>
+      </g>
+    </svg>
+    <span class="bn-label">About</span>
+  </a>
+</nav>
+
+<script>
+  (function () {
+    var credit = 142, bond = 3, holdings = 430;
+    var elCredit = document.getElementById("stat-credit");
+    var elBond = document.getElementById("stat-bond");
+    var elHoldings = document.getElementById("stat-holdings");
+    var ledgerRows = document.getElementById("ledger-rows");
+    var TODAY = "14 July 2026";
+
+    function usd(n) { return "$" + n.toLocaleString("en-US"); }
+    function renderStats() {
+      elCredit.textContent = usd(credit);
+      elBond.textContent = String(bond);
+      elHoldings.textContent = usd(holdings);
+    }
+
+    function ledgerEntry(name, price) {
+      var row = document.createElement("div");
+      row.className = "lrow";
+      var date = document.createElement("span");
+      date.className = "date";
+      date.textContent = TODAY;
+      var entry = document.createElement("span");
+      entry.className = "entry";
+      var what = document.createElement("span");
+      what.className = "what";
+      what.textContent = "Sold back to the house — " + name + " ";
+      var d = document.createElement("span");
+      d.className = "d";
+      d.textContent = "· credit issued";
+      what.appendChild(d);
+      var lead = document.createElement("span");
+      lead.className = "lead";
+      lead.setAttribute("aria-hidden", "true");
+      entry.appendChild(what);
+      entry.appendChild(lead);
+      var amt = document.createElement("span");
+      amt.className = "amt credit";
+      amt.textContent = usd(price);
+      row.appendChild(date);
+      row.appendChild(entry);
+      row.appendChild(amt);
+      ledgerRows.insertBefore(row, ledgerRows.firstChild);
+    }
+
+    /* sell back: flip the entry into a receipt, amend the account */
+    Array.prototype.forEach.call(document.querySelectorAll(".act.sell"), function (btn) {
+      btn.addEventListener("click", function () {
+        var lot = document.getElementById(btn.getAttribute("data-lot"));
+        if (!lot || lot.classList.contains("sold")) return;
+        var price = parseInt(lot.getAttribute("data-price"), 10);
+        var buyback = parseInt(lot.getAttribute("data-buyback"), 10);
+        var name = lot.getAttribute("data-name");
+
+        lot.classList.add("sold");
+        lot.querySelector(".actions").hidden = true;
+        lot.querySelector(".ship-note").hidden = true;
+        lot.querySelector(".receipt").hidden = false;
+        var acq = lot.querySelector(".acq");
+        acq.textContent = acq.textContent + " · Sold back — " + TODAY;
+
+        credit += buyback;
+        bond -= 1;
+        holdings -= price;
+        renderStats();
+        ledgerEntry(name, buyback);
+      });
+    });
+
+    /* ship: a quiet word from the concierge */
+    Array.prototype.forEach.call(document.querySelectorAll(".act.ship"), function (btn) {
+      btn.addEventListener("click", function () {
+        var lot = document.getElementById(btn.getAttribute("data-lot"));
+        if (!lot) return;
+        var panel = lot.querySelector(".ship-note");
+        var open = panel.hidden;
+        panel.hidden = !open;
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+    });
+
+    renderStats();
+  })();
+</script>
+
+</body>
+</html>

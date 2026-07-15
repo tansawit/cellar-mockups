@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cellar — The Opening of a Crate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F5EFDF;
+    --paper-2:#EDE5D0;
+    --ink:#191309;
+    --ink-soft:rgba(25,19,9,.72);
+    --wine:#641021;
+    --wine-deep:#470A17;
+    --rule:rgba(25,19,9,.50);
+    --text-xs:11px;
+    --text-sm:13px;
+    --text-base:16.5px;
+    --text-lg:21px;
+    --text-xl:clamp(24px, 3vw, 30px);
+    --text-display:clamp(30px, 4.5vw, 44px);
+    --chrome:96px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  [hidden]{display:none!important}
+  html,body,main{background:var(--paper)}
+  body{
+    color:var(--ink);
+    font-family:"EB Garamond",Georgia,serif;
+    font-size:var(--text-base);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  svg{color:var(--ink);display:block}
+  svg text{font-family:"EB Garamond",Georgia,serif;fill:var(--ink)}
+  ::selection{background:var(--wine);color:var(--paper)}
+  .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+  a{color:inherit;text-decoration:none;
+    background:linear-gradient(var(--wine),var(--wine)) no-repeat left calc(100% - 1px)/0% 1px;
+    transition:background-size .3s ease,color .3s ease;padding-bottom:2px}
+  a:hover,a:focus-visible{background-size:100% 1px;color:var(--wine)}
+  a:focus-visible{outline:1px dotted var(--wine);outline-offset:4px}
+
+  /* ---------- buttons ---------- */
+  .btn{
+    font:inherit;font-size:var(--text-xs);letter-spacing:.22em;text-transform:uppercase;
+    color:var(--ink);background:transparent;border:1px solid var(--ink);
+    box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--rule);
+    padding:13px 30px 11px;min-height:48px;cursor:pointer;
+    transition:background .2s ease,color .2s ease,border-color .2s ease,transform .14s cubic-bezier(.23,1,.32,1);
+  }
+  .btn:active,.cta:active{transform:scale(.97)}
+  .btn:hover{background:var(--wine);border-color:var(--wine);color:var(--paper)}
+  .btn:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
+  .cta{
+    display:inline-block;font:inherit;font-size:var(--text-sm);letter-spacing:.28em;text-transform:uppercase;
+    color:var(--paper);background:var(--wine);border:1px solid var(--wine);
+    padding:14px 32px 12px;min-height:48px;cursor:pointer;
+    transition:background .2s ease,border-color .2s ease,transform .14s cubic-bezier(.23,1,.32,1);
+  }
+  .cta:hover{background:var(--wine-deep);border-color:var(--wine-deep)}
+  .cta:focus-visible{outline:1px dotted var(--wine);outline-offset:4px}
+
+  /* ---------- masthead ---------- */
+  header.mast{border-bottom:1px solid var(--rule);position:relative}
+  header.mast::after{content:"";position:absolute;left:0;right:0;bottom:3px;height:1px;background:var(--rule)}
+  .mast-inner{max-width:1180px;margin:0 auto;padding:10px 28px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+  .mast .wordmark{font-size:var(--text-lg);font-weight:600;letter-spacing:.34em;background:none;padding-bottom:0;
+    display:inline-flex;align-items:center;min-height:44px}
+  .mast nav{display:flex;align-items:center;gap:12px;margin:0;flex-wrap:wrap;justify-content:flex-start}
+  .mast nav a{font-size:var(--text-xs);letter-spacing:.24em;text-transform:uppercase;padding:2px;
+    display:inline-flex;align-items:center;min-height:44px}
+  .mast nav .nav-icon{display:none}
+  .mast nav .dot{color:var(--rule)}
+  .mast .connect{
+    margin-left:auto;
+    font:inherit;font-size:var(--text-xs);letter-spacing:.26em;text-transform:uppercase;
+    color:var(--ink);background:transparent;border:1px solid var(--ink);
+    box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--rule);
+    padding:0 18px;min-height:44px;cursor:pointer;
+    transition:background .25s ease,color .25s ease,border-color .25s ease;
+  }
+  .mast .connect:hover{background:var(--wine);border-color:var(--wine);color:var(--paper)}
+  .mast .connect:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
+
+  /* ---------- mobile bottom navigation (shown ≤640px only) ---------- */
+  nav.bottom-nav{display:none}
+
+  /* ---------- ceremony shell ---------- */
+  .ceremony{
+    min-height:calc(100svh - var(--chrome));
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:12px 24px 24px;max-width:1180px;margin:0 auto;width:100%;text-align:center;
+  }
+  .kicker{color:var(--wine);font-size:var(--text-xs);letter-spacing:.4em;text-indent:.4em;text-transform:uppercase;font-weight:500}
+  .pips{display:flex;justify-content:center;gap:7px;margin:8px 0 2px;min-height:22px}
+  .pip{width:22px;height:22px;display:grid;place-items:center;border:1px solid var(--rule);
+    color:var(--ink-soft);font-size:var(--text-xs);line-height:1;padding-top:2px}
+  .pip.current{border-color:var(--wine);box-shadow:inset 0 0 0 1px var(--wine);color:var(--wine);font-weight:600}
+  .pip.done{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+
+  /* ---------- the stage ---------- */
+  .stage{
+    position:relative;margin:4px auto 0;
+    height:clamp(250px,44vh,410px);aspect-ratio:56/50;max-width:100%;
+  }
+  .layer{position:absolute;inset:0}
+  .layer svg{width:100%;height:100%;overflow:visible;pointer-events:none}
+  .layer-b{opacity:0;visibility:hidden}
+  .a3 .layer-b,.landed .layer-b{opacity:1;visibility:visible}
+  .landed .layer-a{opacity:0;visibility:hidden}
+
+  .skip{
+    position:absolute;right:-6px;bottom:-8px;min-width:44px;min-height:44px;
+    font:inherit;font-size:var(--text-xs);letter-spacing:.3em;text-indent:.3em;text-transform:uppercase;
+    color:var(--ink-soft);background:none;border:0;cursor:pointer;padding:12px 6px;
+    border-bottom:1px dotted var(--rule);transition:color .2s ease,border-color .2s ease;
+  }
+  .skip:hover{color:var(--wine);border-color:var(--wine)}
+  .skip:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
+  .landed .skip{display:none}
+
+  /* the appraisal stamp */
+  .stamp{
+    position:absolute;right:2%;bottom:9%;z-index:5;
+    color:var(--wine);font-size:var(--text-sm);font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+    border:1.5px solid var(--wine);box-shadow:inset 0 0 0 3px var(--paper),inset 0 0 0 4px rgba(100,16,33,.55);
+    padding:9px 14px 7px;background:var(--paper);
+    transform:rotate(-4deg);opacity:0;
+  }
+  .a3 .stamp,.landed .stamp{opacity:1}
+
+  /* ---------- under the stage: pre (CTA) / post (plate text + exits) ---------- */
+  .under{display:grid;width:100%;max-width:760px;margin:10px auto 0;min-height:236px}
+  .under > *{grid-area:1/1}
+  .pre{align-self:start}
+  .pre .btn{margin-top:10px}
+  .auto-mode{display:flex;align-items:center;justify-content:center;gap:7px;margin:12px auto 0;color:var(--wine);
+    font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase}
+  .auto-mode::before{content:"";width:6px;height:6px;background:var(--wine);transform:rotate(45deg)}
+  .post{opacity:0;visibility:hidden;align-self:start}
+  .a3 .post,.landed .post{opacity:1;visibility:visible}
+  .playing .pre{opacity:0;pointer-events:none}
+  .landed .pre{opacity:0;visibility:hidden;pointer-events:none}
+
+  .b-meta{font-size:var(--text-xs);letter-spacing:.26em;text-indent:.26em;text-transform:uppercase;color:var(--ink-soft)}
+  .b-meta .rar{color:var(--wine);font-weight:600}
+  .b-name{font-size:var(--text-xl);font-weight:500;line-height:1.15;margin-top:3px}
+  .b-name span{white-space:pre}
+  .b-note{margin-top:2px;font-size:var(--text-base);font-style:italic;color:var(--ink-soft)}
+
+  .exits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;max-width:680px;margin:14px auto 0}
+  .exit{
+    font:inherit;text-align:center;cursor:pointer;min-height:64px;padding:9px 10px 7px;
+    color:var(--ink);background:transparent;border:1px solid var(--ink);
+    box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--rule);
+    transition:background .2s ease,color .2s ease,border-color .2s ease,transform .14s cubic-bezier(.23,1,.32,1);
+  }
+  .exit:active{transform:scale(.98)}
+  .exit .x-head{display:block;font-size:var(--text-sm);letter-spacing:.22em;text-indent:.22em;text-transform:uppercase;font-weight:600}
+  .exit .x-sub{display:block;margin-top:2px;font-size:var(--text-xs);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+  .exit:hover{background:var(--wine);border-color:var(--wine);color:var(--paper)}
+  .exit:hover .x-sub{color:var(--paper)}
+  .exit:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
+  .exit[data-exit="sell"]{border-color:var(--wine);color:var(--wine);box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px rgba(100,16,33,.35)}
+  .exit[data-exit="sell"]:hover{color:var(--paper)}
+  .later{
+    display:inline-flex;align-items:center;justify-content:center;min-height:44px;margin-top:6px;padding:8px 12px;
+    font:inherit;font-size:var(--text-xs);letter-spacing:.26em;text-indent:.26em;text-transform:uppercase;
+    color:var(--ink-soft);background:none;border:0;border-bottom:1px dotted var(--rule);cursor:pointer;
+    transition:color .2s ease,border-color .2s ease;
+  }
+  .later:hover{color:var(--wine);border-color:var(--wine)}
+  .later:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
+
+  /* ---------- confirmation ---------- */
+  .confirm{max-width:520px;margin:6px auto 0}
+  .conf-head{color:var(--wine);font-size:var(--text-sm);letter-spacing:.34em;text-indent:.34em;text-transform:uppercase;font-weight:600;margin:6px 0 10px}
+  .rcpt{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:8px 4px}
+  .rcpt .row{display:flex;align-items:baseline;gap:10px;padding:4px 0;font-size:var(--text-base);text-align:left}
+  .rcpt .row .lead{flex:1;border-bottom:1px dotted var(--rule);transform:translateY(-4px);min-width:20px}
+  .rcpt .row em{font-style:normal;font-weight:600;color:var(--wine);white-space:nowrap}
+  .conf-note{margin:10px auto 0;max-width:46ch;font-size:var(--text-sm);font-style:italic;color:var(--ink-soft)}
+  .conf-links{margin-top:2px}
+  .conf-links a{font-size:var(--text-xs);letter-spacing:.24em;text-transform:uppercase;padding:2px 6px;
+    display:inline-flex;align-items:center;min-height:44px}
+  .next-cta{margin-top:6px}
+  .conf-actions{display:flex;justify-content:center;align-items:center;gap:14px;flex-wrap:wrap}
+
+  /* =========================================================
+     CHOREOGRAPHY — a JS timeline adds .enter on load, then
+     .playing → .a1 (seal) → .a2 (crate) → .a3 (revelation)
+     → .landed. All beats below are CSS keyframes hung off
+     those classes; .instant collapses every beat to its end.
+     ========================================================= */
+  .tw{transform-box:fill-box;transform-origin:center}
+  .crack-line{stroke-dasharray:100;stroke-dashoffset:100}
+  .ring-line{stroke-dasharray:100;stroke-dashoffset:0}
+  .frame-line{stroke-dasharray:100;stroke-dashoffset:100}
+  .a3 .frame-line,.landed .frame-line{stroke-dashoffset:0}
+  .a1 .crack-line,.landed .crack-line{stroke-dashoffset:0}
+  .tick{opacity:0}
+  .straw{opacity:0}
+  .a2 .straw,.a3 .straw{opacity:1}
+  .interior{opacity:0}
+  .a2 .interior,.a3 .interior{opacity:1}
+  .wrapped,.ribbons{transform:translateY(150px)}
+  .a2 .wrapped,.a2 .ribbons,.a3 .wrapped,.a3 .ribbons{transform:translateY(0)}
+  .a3 .twine,.a3 .seal,.a3 .lid,.landed .twine,.landed .seal,.landed .lid{opacity:0}
+
+  @media (prefers-reduced-motion: no-preference){
+    /* --- entrance: the sealed crate settles into place --- */
+    .enter .crate-all{animation:crate-drop .7s cubic-bezier(.32,1.35,.48,1) both}
+    .enter .shadow{animation:shadow-catch .7s cubic-bezier(.23,1,.32,1) .1s both}
+    .enter .ring-line{animation:ring-draw 1.05s cubic-bezier(.6,.05,.3,1) .25s both}
+    .enter .ring-dots{animation:dots-in .8s ease .8s both}
+    .enter .stencil{animation:ink-steps .55s steps(4) .6s both}
+    .enter .stencil-2{animation:ink-steps .55s steps(4) .85s both}
+    .enter .kicker,.enter .pips{animation:soft-rise .5s ease .1s both}
+    .enter .pre{animation:soft-rise .5s cubic-bezier(.23,1,.32,1) 1s both}
+    @keyframes crate-drop{from{opacity:0;transform:translateY(-24px)}55%{opacity:1}to{opacity:1;transform:none}}
+    @keyframes shadow-catch{from{opacity:0;transform:scaleX(.5)}to{opacity:1;transform:scaleX(1)}}
+    @keyframes ring-draw{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+    @keyframes dots-in{from{opacity:0;transform:rotate(-10deg)}to{opacity:.9;transform:none}}
+    @keyframes ink-steps{from{opacity:0}to{opacity:1}}
+    @keyframes soft-rise{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+
+    .playing .pre{animation:fade-off .35s ease both;visibility:visible}
+    .landed .pre{animation:none}
+    @keyframes fade-off{from{opacity:1}to{opacity:0}}
+
+    /* --- Act I · the seal (t = 0s) --- */
+    .a1 .crate-all{animation:tense .32s cubic-bezier(.36,.07,.19,.97) both}
+    @keyframes tense{0%{transform:none}30%{transform:translateX(-1.5px)}55%{transform:translateX(1.5px)}75%{transform:translateX(-.8px)}100%{transform:none}}
+    .a1 .twine-v{animation:snap-v .5s cubic-bezier(.55,-.2,.55,1) .22s both}
+    @keyframes snap-v{0%{transform:none;opacity:1}22%{transform:scaleY(1.012)}100%{transform:translateY(-34px) scaleY(.86);opacity:0}}
+    .a1 .twine-h{animation:snap-h .5s cubic-bezier(.55,-.2,.55,1) .32s both}
+    @keyframes snap-h{0%{transform:none;opacity:1}22%{transform:scaleX(1.012)}100%{transform:translateX(-40px) scaleX(.88);opacity:0}}
+    .a1 .rope-l{animation:whip-l .6s cubic-bezier(.25,.46,.45,.94) .24s both}
+    @keyframes whip-l{0%{transform:none;opacity:1}40%{transform:translate(-24px,10px) rotate(-38deg)}100%{transform:translate(-52px,30px) rotate(-80deg);opacity:0}}
+    .a1 .rope-r{animation:whip-r .6s cubic-bezier(.25,.46,.45,.94) .3s both}
+    @keyframes whip-r{0%{transform:none;opacity:1}40%{transform:translate(22px,12px) rotate(34deg)}100%{transform:translate(48px,34px) rotate(74deg);opacity:0}}
+    .a1 .crack-1{animation:crack-draw .3s cubic-bezier(.55,.06,.68,.19) .42s both,fade-off .3s ease 1s both}
+    .a1 .crack-2{animation:crack-draw .26s cubic-bezier(.55,.06,.68,.19) .56s both,fade-off .3s ease 1.05s both}
+    @keyframes crack-draw{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+    .a1 .seal-l{animation:seal-fall-l .62s cubic-bezier(.5,.02,.85,.4) .86s both}
+    @keyframes seal-fall-l{0%{transform:none;opacity:1}80%{opacity:1}100%{transform:translate(-34px,122px) rotate(-24deg);opacity:0}}
+    .a1 .seal-r{animation:seal-fall-r .62s cubic-bezier(.5,.02,.85,.4) .93s both}
+    @keyframes seal-fall-r{0%{transform:none;opacity:1}80%{opacity:1}100%{transform:translate(30px,128px) rotate(19deg);opacity:0}}
+
+    /* --- Act II · the crate (t = 1.5s) --- */
+    .a2 .nail{animation:nail-pop .3s cubic-bezier(.36,.07,.19,.97) both}
+    .a2 .tick{animation:tick-burst .4s cubic-bezier(.23,1,.32,1) both}
+    .a2 .n1 .nail,.a2 .n1 .tick{animation-delay:.05s}
+    .a2 .n2 .nail,.a2 .n2 .tick{animation-delay:.12s}
+    .a2 .n3 .nail,.a2 .n3 .tick{animation-delay:.19s}
+    .a2 .n4 .nail,.a2 .n4 .tick{animation-delay:.26s}
+    .a2 .n5 .nail,.a2 .n5 .tick{animation-delay:.33s}
+    .a2 .n6 .nail,.a2 .n6 .tick{animation-delay:.4s}
+    @keyframes nail-pop{0%{transform:none}45%{transform:translateY(-2.5px)}100%{transform:none}}
+    @keyframes tick-burst{0%{opacity:0;transform:scale(.2)}35%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.2)}}
+    .a2 .lid{animation:lid-off 1.1s cubic-bezier(.5,-.16,.32,1) .32s both}
+    @keyframes lid-off{0%{transform:none;opacity:1}16%{transform:translateY(4px) rotate(.6deg)}52%{transform:translate(16px,-52px) rotate(-6.5deg);opacity:1}100%{transform:translate(180px,-34px) rotate(11deg);opacity:0}}
+    .a2 .interior{animation:ink-steps .3s ease .78s both}
+    .a2 .straw{animation:straw-rise .55s cubic-bezier(.2,.9,.35,1.18) .95s both}
+    @keyframes straw-rise{from{opacity:0;transform:translateY(9px) scaleY(.55)}to{opacity:1;transform:none}}
+    .a2 .straw .s2{animation:straw-bit .45s ease 1.1s both}
+    .a2 .straw .s3{animation:straw-bit .45s ease 1.22s both}
+    @keyframes straw-bit{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    .a2 .wrapped,.a2 .ribbons{animation:bottle-rise 1.3s cubic-bezier(.18,.9,.26,1.02) 1.12s both}
+    @keyframes bottle-rise{0%{transform:translateY(150px)}72%{transform:translateY(-6px)}100%{transform:translateY(0)}}
+
+    /* --- Act III · the revelation (t = 3.7s) --- */
+    .a3 .cr-front,.a3 .shadow,.a3 .straw,.a3 .interior,.a3 .ring{animation:fade-off .7s ease .32s both}
+    .a3 .wrapped{animation:wrap-off .5s ease .4s both}
+    @keyframes wrap-off{from{opacity:1;transform:none}to{opacity:0;transform:none}}
+    .a3 .ribbon-1{animation:rib-1 .95s cubic-bezier(.42,0,.58,1) .16s both}
+    .a3 .ribbon-2{animation:rib-2 .95s cubic-bezier(.42,0,.58,1) .3s both}
+    .a3 .ribbon-3{animation:rib-3 .95s cubic-bezier(.42,0,.58,1) .44s both}
+    @keyframes rib-1{0%{transform:none;opacity:1}45%{transform:translate(-52px,-34px) rotate(-19deg);opacity:1}100%{transform:translate(-118px,-52px) rotate(-46deg);opacity:0}}
+    @keyframes rib-2{0%{transform:none;opacity:1}45%{transform:translate(56px,-16px) rotate(16deg);opacity:1}100%{transform:translate(126px,-16px) rotate(40deg);opacity:0}}
+    @keyframes rib-3{0%{transform:none;opacity:1}45%{transform:translate(-44px,26px) rotate(-14deg);opacity:1}100%{transform:translate(-104px,66px) rotate(-34deg);opacity:0}}
+    .a3 .layer-b{animation:ink-steps .45s ease .3s both}
+    .a3 .bottle-b{animation:stand-fwd .85s cubic-bezier(.2,.9,.28,1.06) .45s both}
+    @keyframes stand-fwd{from{opacity:0;transform:translateY(7px) scale(.98)}to{opacity:1;transform:none}}
+    .a3 .ray{animation:ray-in .5s cubic-bezier(.3,1.25,.4,1) both;transform-box:view-box;transform-origin:280px 235px}
+    .a3 .sunburst g:nth-child(1) .ray{animation-delay:.58s}.a3 .sunburst g:nth-child(2) .ray{animation-delay:.625s}
+    .a3 .sunburst g:nth-child(3) .ray{animation-delay:.67s}.a3 .sunburst g:nth-child(4) .ray{animation-delay:.715s}
+    .a3 .sunburst g:nth-child(5) .ray{animation-delay:.76s}.a3 .sunburst g:nth-child(6) .ray{animation-delay:.805s}
+    .a3 .sunburst g:nth-child(7) .ray{animation-delay:.85s}.a3 .sunburst g:nth-child(8) .ray{animation-delay:.895s}
+    .a3 .sunburst g:nth-child(9) .ray{animation-delay:.94s}.a3 .sunburst g:nth-child(10) .ray{animation-delay:.985s}
+    .a3 .sunburst g:nth-child(11) .ray{animation-delay:1.03s}.a3 .sunburst g:nth-child(12) .ray{animation-delay:1.075s}
+    @keyframes ray-in{from{opacity:0;transform:scale(.55)}to{opacity:1;transform:scale(1)}}
+    .a3 .burst-arc{animation:dots-in .6s ease 1.05s both}
+    .a3 .frame-outer{animation:frame-draw .85s cubic-bezier(.6,.05,.3,1) .9s both}
+    .a3 .frame-inner{animation:frame-draw .6s cubic-bezier(.6,.05,.3,1) 1.28s both}
+    @keyframes frame-draw{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+    .a3 .post{animation:ink-steps .01s linear .9s both}
+    .a3 .b-meta{animation:soft-rise .45s ease 1.12s both}
+    .a3 .b-name span{animation:letter-ink .32s cubic-bezier(.23,1,.32,1) both;animation-delay:calc(1.26s + var(--d,0s))}
+    @keyframes letter-ink{from{opacity:0;filter:blur(1.5px)}60%{opacity:1}to{opacity:1;filter:none}}
+    .a3 .b-note{animation:soft-rise .45s ease 1.82s both}
+    .a3 .stamp{animation:stamp-press .5s cubic-bezier(.2,.85,.32,1.35) 2.05s both}
+    @keyframes stamp-press{0%{opacity:0;transform:scale(1.55) rotate(-10deg)}55%{opacity:1;transform:scale(.94) rotate(-2.6deg)}100%{opacity:1;transform:scale(1) rotate(-4deg)}}
+    .a3 .exit:nth-child(1){animation:soft-rise .45s cubic-bezier(.23,1,.32,1) 2.3s both}
+    .a3 .exit:nth-child(2){animation:soft-rise .45s cubic-bezier(.23,1,.32,1) 2.42s both}
+    .a3 .exit:nth-child(3){animation:soft-rise .45s cubic-bezier(.23,1,.32,1) 2.54s both}
+    .a3 .later{animation:ink-steps .45s ease 2.75s both}
+    .landed .post,.landed .post *{animation:none}
+    .landed .exits,.landed .confirm .conf-body > *{animation:none}
+    .landed .confirm[data-live="1"] .conf-body{animation:soft-rise .4s cubic-bezier(.23,1,.32,1) both}
+  }
+  /* skip / mid-sequence click → everything lands instantly */
+  .instant *,.instant .layer,.instant{animation-duration:0s!important;animation-delay:0s!important;transition:none!important}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none!important;transition:none!important}
+    .layer-a,.layer-b,.pre,.post{transition:opacity .45s ease,visibility .45s ease!important}
+  }
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--rule);position:relative;text-align:center;padding:30px 28px 36px}
+  footer::before{content:"";position:absolute;left:0;right:0;top:3px;height:1px;background:var(--rule)}
+  .orn-rule{display:flex;align-items:center;gap:14px;margin:0 auto 16px;max-width:220px;color:var(--ink)}
+  .orn-rule span{flex:1;height:1px;background:var(--rule)}
+  footer .fine{font-size:var(--text-sm);color:var(--ink-soft);max-width:62ch;margin:0 auto;font-style:italic}
+  footer .mark{margin-top:18px;font-size:var(--text-base);letter-spacing:.42em;text-indent:.42em;text-transform:uppercase;font-weight:600}
+  footer .colophon{margin-top:6px;font-size:var(--text-xs);letter-spacing:.24em;text-transform:uppercase;color:var(--ink-soft)}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:640px){
+    :root{--chrome:119px;--bnav-h:calc(59px + env(safe-area-inset-bottom))}
+    body{padding-bottom:var(--bnav-h)}
+    .mast-inner{padding:8px 16px;display:grid;grid-template-columns:1fr auto;gap:6px}
+    .mast .wordmark{font-size:var(--text-base);letter-spacing:.2em}
+    .mast .connect{margin:0;min-height:36px;padding:0 9px;font-size:var(--text-xs);letter-spacing:.12em}
+    .mast nav{display:none}
+    /* mobile bottom navigation */
+    nav.bottom-nav{
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+      position:fixed;left:0;right:0;bottom:0;z-index:70;
+      background:var(--paper-2);border-top:1px solid var(--ink);
+      padding-bottom:env(safe-area-inset-bottom);
+    }
+    nav.bottom-nav::before{content:"";position:absolute;left:0;right:0;top:3px;height:1px;background:var(--rule)}
+    nav.bottom-nav a{
+      position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+      min-height:58px;padding:8px 4px 7px;background:none;color:var(--ink);
+    }
+    nav.bottom-nav a:hover,nav.bottom-nav a:focus-visible{background:none;color:var(--wine)}
+    nav.bottom-nav a:focus-visible{outline-offset:-4px}
+    nav.bottom-nav svg{color:inherit;width:25px;height:23px}
+    nav.bottom-nav .bn-label{font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase;line-height:1;white-space:nowrap}
+    nav.bottom-nav a[aria-current="page"]{color:var(--wine)}
+    nav.bottom-nav a[aria-current="page"]::after{content:"";position:absolute;left:16px;right:16px;top:-1px;height:2px;background:var(--wine)}
+    .ceremony{padding:10px 14px 20px}
+    .kicker{letter-spacing:.26em;text-indent:.26em}
+    .stage{height:clamp(220px,34vh,300px)}
+    .under{min-height:250px;margin-top:8px}
+    .b-name{font-size:var(--text-lg)}
+    .b-note{font-size:var(--text-sm)}
+    .exits{grid-template-columns:1fr;gap:8px;max-width:340px}
+    .exit{min-height:52px;display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:8px 14px;text-align:left}
+    .exit .x-head{font-size:var(--text-xs)}
+    .stamp{right:0;bottom:4%;font-size:var(--text-xs);padding:7px 10px 5px}
+    .skip{right:0;bottom:-40px}
+    .rcpt .row{font-size:var(--text-sm)}
+    .conf-note{font-size:var(--text-xs);letter-spacing:.04em}
+    .next-cta{padding:11px 20px 9px;font-size:var(--text-xs);letter-spacing:.18em}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ shared etching patterns, seal & bottle plates ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id="e-h" width="3.2" height="3.2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="3.2" height="3.2" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="3.2" stroke="var(--ink)" stroke-width=".6"/>
+    </pattern>
+    <pattern id="e-h2" width="3.2" height="3.2" patternUnits="userSpaceOnUse" patternTransform="rotate(135)">
+      <rect width="3.2" height="3.2" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="3.2" stroke="var(--ink)" stroke-width=".6"/>
+    </pattern>
+    <pattern id="e-hd" width="2.1" height="2.1" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="2.1" height="2.1" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="2.1" stroke="var(--ink)" stroke-width=".65"/>
+    </pattern>
+    <pattern id="e-x" width="3.4" height="3.4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="3.4" height="3.4" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="3.4" stroke="var(--ink)" stroke-width=".55"/>
+      <line x1="0" y1="0" x2="3.4" y2="0" stroke="var(--ink)" stroke-width=".55"/>
+    </pattern>
+    <pattern id="e-xd" width="2.2" height="2.2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="2.2" height="2.2" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="2.2" stroke="var(--ink)" stroke-width=".65"/>
+      <line x1="0" y1="0" x2="2.2" y2="0" stroke="var(--ink)" stroke-width=".65"/>
+    </pattern>
+    <pattern id="e-v" width="3" height="3" patternUnits="userSpaceOnUse">
+      <rect width="3" height="3" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="3" stroke="var(--ink)" stroke-width=".6"/>
+    </pattern>
+    <pattern id="e-o" width="3" height="2.8" patternUnits="userSpaceOnUse">
+      <rect width="3" height="2.8" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="3" y2="0" stroke="var(--ink)" stroke-width=".55"/>
+    </pattern>
+    <!-- wax: deep wine ground, deeper wine hatch -->
+    <pattern id="e-wax" width="2.4" height="2.4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="2.4" height="2.4" fill="var(--wine)"/>
+      <line x1="0" y1="0" x2="0" y2="2.4" stroke="#3D0812" stroke-width="1"/>
+    </pattern>
+
+    <!-- the wax seal, engraved once, split in two by the crack -->
+    <g id="sealArt">
+      <path d="M280 277 q20 -4 28 13 q8 16 -4 28 q-11 12 -27 9 q-17 -3 -21 -19 q-4 -15 6 -24 q8 -7 18 -7 Z"
+            fill="url(#e-wax)" stroke="#3D0812" stroke-width="1.3"/>
+      <circle cx="280" cy="303" r="16.5" fill="none" stroke="var(--paper)" stroke-width="1.2"/>
+      <circle cx="275.5" cy="299" r="3.1" fill="none" stroke="var(--paper)" stroke-width="1.1"/>
+      <circle cx="284.5" cy="299" r="3.1" fill="none" stroke="var(--paper)" stroke-width="1.1"/>
+      <circle cx="280" cy="306.5" r="3.1" fill="none" stroke="var(--paper)" stroke-width="1.1"/>
+      <path d="M280 295 q0 -6 4 -8" fill="none" stroke="var(--paper)" stroke-width="1.1"/>
+    </g>
+    <clipPath id="crackL"><path d="M242 258 L280 258 L273 286 L283 301 L274 317 L281 348 L242 348 Z"/></clipPath>
+    <clipPath id="crackR"><path d="M318 258 L280 258 L273 286 L283 301 L274 317 L281 348 L318 348 Z"/></clipPath>
+    <!-- the crate keeps its secrets: nothing shows beneath the floor line -->
+    <clipPath id="crateMouth"><rect x="0" y="0" width="560" height="399"/></clipPath>
+
+    <!-- Plates I–VIII: the house bottles, 120 × 300 -->
+    <g id="pl-0">
+      <ellipse cx="60" cy="286" rx="31" ry="5" fill="url(#e-x)" stroke="none"/>
+      <path d="M52 18 L52 80 C52 93 41 97 41 106 L41 266 Q41 277 52 279 L68 279 Q79 277 79 266 L79 106 C79 97 68 93 68 80 L68 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+      <path d="M41 112 L41 266 Q41 274 49 277.5 L50 277.5 L50 112 Z" fill="url(#e-x)" stroke="none"/>
+      <rect x="67" y="116" width="6" height="136" rx="3" fill="var(--paper)"/>
+      <rect x="62" y="50" width="3.4" height="26" rx="1.7" fill="var(--paper)"/>
+      <rect x="49" y="11" width="22" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+      <rect x="51" y="18" width="18" height="26" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+      <rect x="44" y="148" width="32" height="44" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+      <rect x="46.5" y="150.5" width="27" height="39" fill="none" stroke="currentColor" stroke-width=".55"/>
+      <path d="M50 160 h20 M52 166 h16 M54 172 h12" stroke="currentColor" stroke-width=".8"/>
+      <path d="M60 179 l3.2 3.2 -3.2 3.2 -3.2 -3.2 Z" fill="none" stroke="currentColor" stroke-width=".8"/>
+    </g>
+    <g id="pl-1">
+      <ellipse cx="60" cy="286" rx="32" ry="5" fill="url(#e-x)" stroke="none"/>
+      <path d="M53 18 L53 70 C53 95 38 102 38 132 L38 264 Q38 276 50 279 L70 279 Q82 276 82 264 L82 132 C82 102 67 95 67 70 L67 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+      <path d="M38 134 L38 264 Q38 274 47 277.5 L48 277.5 L48 128 Q41 128 38 134 Z" fill="url(#e-x)" stroke="none"/>
+      <rect x="69.5" y="126" width="6" height="126" rx="3" fill="var(--paper)"/>
+      <rect x="62.5" y="46" width="3.2" height="22" rx="1.6" fill="var(--paper)"/>
+      <rect x="50" y="11" width="21" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+      <rect x="52" y="18" width="17" height="24" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+      <ellipse cx="60" cy="176" rx="17" ry="22" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+      <ellipse cx="60" cy="176" rx="14.5" ry="19" fill="none" stroke="currentColor" stroke-width=".55"/>
+      <path d="M52 168 h16 M53.5 174 h13 M55 180 h10" stroke="currentColor" stroke-width=".8"/>
+      <path d="M60 186 q-3 3 0 6 q3 -3 0 -6 Z" fill="none" stroke="currentColor" stroke-width=".8"/>
+    </g>
+    <g id="pl-2">
+      <ellipse cx="60" cy="286" rx="31" ry="5" fill="url(#e-x)" stroke="none"/>
+      <path d="M53 18 L53 66 C53 90 40 98 40 124 L40 264 Q40 276 51 279 L69 279 Q80 276 80 264 L80 124 C80 98 67 90 67 66 L67 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+      <path d="M40 128 L40 264 Q40 274 49 277.5 L50 277.5 L50 122 Q43 122 40 128 Z" fill="url(#e-x)" stroke="none"/>
+      <rect x="68" y="118" width="5.6" height="132" rx="2.8" fill="var(--paper)"/>
+      <rect x="62.5" y="44" width="3.2" height="20" rx="1.6" fill="var(--paper)"/>
+      <rect x="50" y="11" width="21" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+      <rect x="52" y="18" width="17" height="23" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+      <rect x="42" y="150" width="36" height="34" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+      <rect x="44.5" y="152.5" width="31" height="29" fill="none" stroke="currentColor" stroke-width=".55"/>
+      <path d="M48 160 h24 M51 166 h18 M54 172 h12" stroke="currentColor" stroke-width=".8"/>
+      <circle cx="60" cy="177.5" r="1.6" fill="none" stroke="currentColor" stroke-width=".7"/>
+    </g>
+    <g id="pl-3">
+      <ellipse cx="60" cy="286" rx="28" ry="5" fill="url(#e-x)" stroke="none"/>
+      <path d="M54 16 L54 58 C54 92 44 112 44 150 L44 264 Q44 277 55 279 L65 279 Q76 277 76 264 L76 150 C76 112 66 92 66 58 L66 16 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+      <path d="M44 156 L44 264 Q44 274 52 277.5 L53 277.5 L53 148 Q47 148 44 156 Z" fill="url(#e-x)" stroke="none"/>
+      <rect x="66" y="140" width="5" height="118" rx="2.5" fill="var(--paper)"/>
+      <rect x="61.5" y="40" width="3" height="26" rx="1.5" fill="var(--paper)"/>
+      <path d="M51 10 h18 v8 q0 4 -4 4 h-10 q-4 0 -4 -4 Z" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+      <rect x="53" y="22" width="14" height="30" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+      <ellipse cx="60" cy="196" rx="14" ry="18" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+      <ellipse cx="60" cy="196" rx="11.5" ry="15" fill="none" stroke="currentColor" stroke-width=".55"/>
+      <path d="M54 190 h12 M55.5 196 h9 M57 202 h6" stroke="currentColor" stroke-width=".8"/>
+      <path d="M56 182 l4 -5 4 5" fill="none" stroke="currentColor" stroke-width=".7"/>
+    </g>
+    <g id="pl-4">
+      <ellipse cx="60" cy="286" rx="31" ry="5" fill="url(#e-x)" stroke="none"/>
+      <path d="M52 18 L52 80 C52 93 41 97 41 106 L41 266 Q41 277 52 279 L68 279 Q79 277 79 266 L79 106 C79 97 68 93 68 80 L68 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+      <path d="M41 112 L41 266 Q41 274 49 277.5 L50 277.5 L50 112 Z" fill="url(#e-x)" stroke="none"/>
+      <rect x="67" y="116" width="6" height="136" rx="3" fill="var(--paper)"/>
+      <rect x="62" y="50" width="3.4" height="26" rx="1.7" fill="var(--paper)"/>
+      <rect x="49" y="11" width="22" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+      <rect x="51" y="18" width="18" height="26" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+      <rect x="53" y="54" width="14" height="11" fill="var(--paper)" stroke="currentColor" stroke-width=".8"/>
+      <path d="M55.5 58 h9 M56.5 61.5 h7" stroke="currentColor" stroke-width=".6"/>
+      <ellipse cx="60" cy="174" rx="18" ry="24" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+      <ellipse cx="60" cy="174" rx="15" ry="20.5" fill="none" stroke="currentColor" stroke-width=".55"/>
+      <ellipse cx="60" cy="174" rx="12.5" ry="17.5" fill="none" stroke="currentColor" stroke-width=".45"/>
+      <path d="M53 168 h14 M54.5 174 h11 M56 180 h8" stroke="currentColor" stroke-width=".8"/>
+      <path d="M57 160 q3 -4 6 0" fill="none" stroke="currentColor" stroke-width=".8"/>
+    </g>
+    <g id="pl-5">
+      <ellipse cx="60" cy="286" rx="26" ry="5" fill="url(#e-x)" stroke="none"/>
+      <path d="M54 18 L54 55 C54 95 45 130 45 175 L45 265 Q45 277 54 279 L66 279 Q75 277 75 265 L75 175 C75 130 66 95 66 55 L66 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+      <path d="M45 182 L45 265 Q45 274 52 277.5 L53 277.5 L53 174 Q48 174 45 182 Z" fill="url(#e-x)" stroke="none"/>
+      <rect x="65" y="150" width="4.8" height="112" rx="2.4" fill="var(--paper)"/>
+      <rect x="61.5" y="42" width="3" height="24" rx="1.5" fill="var(--paper)"/>
+      <rect x="51" y="11" width="19" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+      <rect x="53" y="18" width="15" height="22" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+      <ellipse cx="60" cy="206" rx="13" ry="17" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+      <ellipse cx="60" cy="206" rx="10.8" ry="14.5" fill="none" stroke="currentColor" stroke-width=".55"/>
+      <path d="M54 200 h12 M55.5 206 h9 M57 212 h6" stroke="currentColor" stroke-width=".8"/>
+    </g>
+    <g id="pl-6">
+      <ellipse cx="60" cy="286" rx="32" ry="5" fill="url(#e-x)" stroke="none"/>
+      <path d="M53 18 L53 70 C53 95 38 102 38 132 L38 264 Q38 276 50 279 L70 279 Q82 276 82 264 L82 132 C82 102 67 95 67 70 L67 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+      <path d="M38 134 L38 264 Q38 274 47 277.5 L48 277.5 L48 128 Q41 128 38 134 Z" fill="url(#e-x)" stroke="none"/>
+      <rect x="69.5" y="126" width="6" height="126" rx="3" fill="var(--paper)"/>
+      <rect x="62.5" y="46" width="3.2" height="22" rx="1.6" fill="var(--paper)"/>
+      <rect x="50" y="11" width="21" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+      <rect x="52" y="18" width="17" height="24" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+      <rect x="44" y="152" width="32" height="40" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+      <path d="M47 166 q13 -13 26 0" fill="none" stroke="currentColor" stroke-width=".6"/>
+      <rect x="46.5" y="154.5" width="27" height="35" fill="none" stroke="currentColor" stroke-width=".55"/>
+      <path d="M51 172 h18 M53 178 h14 M55 184 h10" stroke="currentColor" stroke-width=".8"/>
+    </g>
+    <g id="pl-7">
+      <ellipse cx="60" cy="286" rx="30" ry="5" fill="url(#e-x)" stroke="none"/>
+      <path d="M52 18 L52 72 C52 94 42 100 42 120 L42 264 Q42 277 53 279 L67 279 Q78 277 78 264 L78 120 C78 100 68 94 68 72 L68 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+      <path d="M42 124 L42 264 Q42 274 50 277.5 L51 277.5 L51 118 Q45 118 42 124 Z" fill="url(#e-x)" stroke="none"/>
+      <rect x="66.5" y="114" width="5.6" height="138" rx="2.8" fill="var(--paper)"/>
+      <rect x="62" y="46" width="3.2" height="22" rx="1.6" fill="var(--paper)"/>
+      <rect x="50" y="11" width="21" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+      <rect x="52" y="18" width="17" height="24" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+      <rect x="45" y="148" width="30" height="42" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+      <rect x="47.5" y="150.5" width="25" height="37" fill="none" stroke="currentColor" stroke-width=".55"/>
+      <path d="M51 158 h18 M53 164 h14" stroke="currentColor" stroke-width=".8"/>
+      <path d="M54 172 q6 8 12 0 M54 178 q6 8 12 0" fill="none" stroke="currentColor" stroke-width=".7"/>
+    </g>
+  </defs>
+</svg>
+
+<!-- ============ masthead ============ -->
+<header class="mast">
+  <div class="mast-inner">
+    <a class="wordmark" href="index.html" aria-label="Cellar — the catalogue">CELLAR</a>
+    <nav aria-label="Catalogue contents">
+      <a href="index.html"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h16M5.5 10h13v9h-13zM9 10v9M15 10v9" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>The Collection</span></a><span class="dot" aria-hidden="true">·</span>
+      <a href="inventory.html"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19V7l7-3 7 3v12M8 9h8M8 13h8M8 17h8" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>My Cellar</span></a><span class="dot" aria-hidden="true">·</span>
+      <a href="index.html#about"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 10v6M12 7.5v.2" stroke="currentColor" stroke-width="1.8"/></svg><span>About</span></a>
+    </nav>
+    <button type="button" class="connect">Connect</button>
+  </div>
+</header>
+
+<main>
+<section class="ceremony" id="ceremony">
+  <p class="sr" id="status" aria-live="polite" role="status"></p>
+  <p class="kicker" id="kicker">· Bordeaux · Cellar ·</p>
+  <div class="pips" id="pips" aria-label="Crates in this opening"></div>
+
+  <div class="stage" id="stage">
+    <!-- ================= layer A · the sealed crate ================= -->
+    <div class="layer layer-a" aria-hidden="false">
+      <svg viewBox="0 0 560 500" role="img" id="scene-a"
+           aria-label="Etching of a sealed pine crate stencilled CELLAR, bound in twine with a deep-wine wax seal at its crossing">
+        <g class="ring">
+          <circle class="ring-line" pathLength="100" cx="280" cy="250" r="180" fill="none" stroke="currentColor" stroke-width=".8" opacity=".85"/>
+          <circle class="ring-dots tw" cx="280" cy="250" r="171" fill="none" stroke="currentColor" stroke-width=".9" stroke-dasharray="1 5" opacity=".9"/>
+        </g>
+        <ellipse class="shadow tw" cx="280" cy="442" rx="182" ry="13" fill="url(#e-x)" stroke="none"/>
+
+        <g class="crate-all tw">
+          <!-- open-top interior, hidden beneath the lid -->
+          <path class="interior" d="M150 202 L192 166 L452 166 L410 202 Z" fill="url(#e-xd)" stroke="currentColor" stroke-width="1"/>
+
+          <!-- the paper-wrapped bottle, waiting inside -->
+          <g clip-path="url(#crateMouth)">
+          <g class="wrapped tw">
+            <g transform="translate(212.4,70) scale(1.3)">
+              <path d="M44 14 q-5 -8 1 -12 q5 -3 8 2 q5 -4 9 1 q4 5 -2 9 Z" fill="url(#e-hd)" stroke="currentColor" stroke-width=".9"/>
+              <path d="M44 14 L60 14 L60 70 C60 84 74 88 74 98 L74 240 Q74 252 62 254 L42 254 Q30 252 30 240 L30 98 C30 88 44 84 44 70 Z"
+                    fill="url(#e-h)" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M30 102 L30 240 Q30 249 38 252.5 L39 252.5 L39 102 Z" fill="url(#e-x)" stroke="none"/>
+              <path d="M33 112 L71 140 M71 158 L33 186 M33 204 L71 230" fill="none" stroke="currentColor" stroke-width=".6" opacity=".9"/>
+              <path d="M46 20 L58 34 M58 20 L46 36" fill="none" stroke="currentColor" stroke-width=".6" opacity=".9"/>
+              <rect x="63" y="108" width="5" height="118" rx="2.5" fill="var(--paper)"/>
+              <path d="M42 74 H62 M42 78 H62" fill="none" stroke="currentColor" stroke-width="1"/>
+              <circle cx="52" cy="76" r="2.2" fill="none" stroke="currentColor" stroke-width=".9"/>
+              <path d="M50 79 q-4 6 -2 11 M54 79 q5 5 4 11" fill="none" stroke="currentColor" stroke-width=".8"/>
+            </g>
+          </g>
+          <!-- the three paper ribbons that will unwind -->
+          <g class="ribbons tw">
+            <path class="ribbon-1 tw" d="M250 212 Q280 224 310 212 L310 228 Q280 240 250 228 Z" fill="url(#e-h2)" stroke="currentColor" stroke-width="1"/>
+            <path class="ribbon-2 tw" d="M250 272 Q280 262 310 274 L310 290 Q280 278 250 288 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1"/>
+            <path class="ribbon-3 tw" d="M250 328 Q280 338 310 328 L310 344 Q280 354 250 344 Z" fill="url(#e-h2)" stroke="currentColor" stroke-width="1"/>
+          </g>
+          </g>
+
+          <!-- crate front -->
+          <g class="cr-front">
+            <rect x="150" y="202" width="260" height="66" fill="url(#e-o)" stroke="currentColor" stroke-width="1.1"/>
+            <rect x="150" y="268" width="260" height="66" fill="url(#e-o)" stroke="currentColor" stroke-width="1.1"/>
+            <rect x="150" y="334" width="260" height="66" fill="url(#e-o)" stroke="currentColor" stroke-width="1.1"/>
+            <path d="M410 202 L452 166 L452 366 L410 400 Z" fill="url(#e-h2)" stroke="currentColor" stroke-width="1.1"/>
+            <path d="M410 268 L452 232 M410 334 L452 300" stroke="currentColor" stroke-width=".9"/>
+            <rect x="150" y="202" width="16" height="198" fill="url(#e-v)" stroke="currentColor" stroke-width="1.1"/>
+            <rect x="394" y="202" width="16" height="198" fill="url(#e-v)" stroke="currentColor" stroke-width="1.1"/>
+            <g class="stencil">
+              <rect x="198" y="212" width="164" height="46" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+              <rect x="201" y="215" width="158" height="40" fill="none" stroke="currentColor" stroke-width=".55"/>
+              <text x="280" y="237" text-anchor="middle" font-size="20" letter-spacing="8" font-weight="600">CELLAR</text>
+              <text id="sealed-crate-label" x="280" y="250" text-anchor="middle" font-size="8.5" letter-spacing="1.6" opacity=".9">SEALED IN BOND · Nº 001</text>
+            </g>
+            <text class="stencil-2" x="280" y="372" text-anchor="middle" font-size="9.5" letter-spacing="2" opacity=".9">BONDED WAREHOUSE · SANTA ROSA</text>
+            <g class="n1"><circle class="nail tw" cx="158" cy="214" r="1.5" fill="currentColor"/><path class="tick tw" d="M158 208 v-5 M152 211 l-4.5 -3 M164 211 l4.5 -3" fill="none" stroke="currentColor" stroke-width="1"/></g>
+            <g class="n2"><circle class="nail tw" cx="402" cy="214" r="1.5" fill="currentColor"/><path class="tick tw" d="M402 208 v-5 M396 211 l-4.5 -3 M408 211 l4.5 -3" fill="none" stroke="currentColor" stroke-width="1"/></g>
+            <g class="n3"><circle class="nail tw" cx="158" cy="300" r="1.5" fill="currentColor"/><path class="tick tw" d="M158 294 v-5 M152 297 l-4.5 -3 M164 297 l4.5 -3" fill="none" stroke="currentColor" stroke-width="1"/></g>
+            <g class="n4"><circle class="nail tw" cx="402" cy="300" r="1.5" fill="currentColor"/><path class="tick tw" d="M402 294 v-5 M396 297 l-4.5 -3 M408 297 l4.5 -3" fill="none" stroke="currentColor" stroke-width="1"/></g>
+            <g class="n5"><circle class="nail tw" cx="158" cy="388" r="1.5" fill="currentColor"/><path class="tick tw" d="M158 382 v-5 M152 385 l-4.5 -3 M164 385 l4.5 -3" fill="none" stroke="currentColor" stroke-width="1"/></g>
+            <g class="n6"><circle class="nail tw" cx="402" cy="388" r="1.5" fill="currentColor"/><path class="tick tw" d="M402 382 v-5 M396 385 l-4.5 -3 M408 385 l4.5 -3" fill="none" stroke="currentColor" stroke-width="1"/></g>
+          </g>
+
+          <!-- packing straw, revealed when the lid goes -->
+          <g class="straw">
+            <path class="s1" d="M170 200 q14 -11 27 -3 M202 197 q12 -9 24 -1 M320 197 q13 -9 26 -2 M356 200 q12 -10 24 -3" fill="none" stroke="currentColor" stroke-width=".9"/>
+            <path class="s2" d="M180 192 q10 -7 20 -1 M338 191 q11 -8 21 -1 M240 194 q11 -7 22 -2" fill="none" stroke="currentColor" stroke-width=".9"/>
+            <path class="s3" d="M168 204 q-7 11 -15 14 M392 202 q8 10 16 13 M300 193 q9 -6 18 -1" fill="none" stroke="currentColor" stroke-width=".9"/>
+          </g>
+
+          <!-- the lid -->
+          <g class="lid tw">
+            <path d="M150 190 L192 152 L452 152 L410 190 Z" fill="url(#e-o)" stroke="currentColor" stroke-width="1.1"/>
+            <path d="M177.5 165 H437.5 M163.5 178 H423.5" stroke="currentColor" stroke-width=".65"/>
+            <rect x="150" y="190" width="260" height="12" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+            <circle cx="160" cy="196" r="1.3" fill="currentColor"/><circle cx="400" cy="196" r="1.3" fill="currentColor"/>
+          </g>
+
+          <!-- twine -->
+          <g class="twine twine-v tw">
+            <path d="M314 152 L272 190 M330 152 L288 190" fill="none" stroke="currentColor" stroke-width="1.4"/>
+            <path d="M272 190 V400 M288 190 V400" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          </g>
+          <g class="twine twine-h tw">
+            <path d="M150 296 H410 M150 310 H410" fill="none" stroke="currentColor" stroke-width="1.4"/>
+            <path d="M410 296 L452 260 M410 310 L452 274" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          </g>
+          <path class="twine rope-l tw" d="M270 322 q-9 10 -5 21 q-2 6 -8 8" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <path class="twine rope-r tw" d="M292 320 q10 9 7 21 q3 6 9 7" fill="none" stroke="currentColor" stroke-width="1.2"/>
+
+          <!-- the seal: crack lines, then the two halves -->
+          <g class="seal">
+            <g class="seal-l tw" clip-path="url(#crackL)"><use href="#sealArt"/></g>
+            <g class="seal-r tw" clip-path="url(#crackR)"><use href="#sealArt"/></g>
+            <path class="crack-line crack-1" pathLength="100" d="M280 268 L273 286 L283 301 L274 317 L281 338" fill="none" stroke="var(--paper)" stroke-width="1.4"/>
+            <path class="crack-line crack-2" pathLength="100" d="M275 291 L262 297 M279 312 L293 318" fill="none" stroke="var(--paper)" stroke-width="1.1"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <!-- ================= layer B · the engraved plate ================= -->
+    <div class="layer layer-b" aria-hidden="true" id="layer-b">
+      <svg viewBox="0 0 560 500" role="img" id="scene-b" aria-label="The revealed bottle, framed as an engraved catalogue plate before a hatched sunburst">
+        <g class="sunburst">
+          <g transform="rotate(0 280 235)"><path class="ray" d="M272 137 L280 61 L288 137 Z" fill="url(#e-h)" stroke="currentColor" stroke-width=".7"/></g>
+          <g transform="rotate(30 280 235)"><path class="ray" d="M272 137 L280 61 L288 137 Z" fill="url(#e-h)" stroke="currentColor" stroke-width=".7"/></g>
+          <g transform="rotate(330 280 235)"><path class="ray" d="M272 137 L280 61 L288 137 Z" fill="url(#e-h)" stroke="currentColor" stroke-width=".7"/></g>
+          <g transform="rotate(60 280 235)"><path class="ray" d="M272 137 L280 61 L288 137 Z" fill="url(#e-h)" stroke="currentColor" stroke-width=".7"/></g>
+          <g transform="rotate(300 280 235)"><path class="ray" d="M272 137 L280 61 L288 137 Z" fill="url(#e-h)" stroke="currentColor" stroke-width=".7"/></g>
+          <g transform="rotate(90 280 235)"><path class="ray" d="M272 137 L280 61 L288 137 Z" fill="url(#e-h)" stroke="currentColor" stroke-width=".7"/></g>
+          <g transform="rotate(270 280 235)"><path class="ray" d="M272 137 L280 61 L288 137 Z" fill="url(#e-h)" stroke="currentColor" stroke-width=".7"/></g>
+          <g transform="rotate(120 280 235)"><path class="ray" d="M272 137 L280 61 L288 137 Z" fill="url(#e-h)" stroke="currentColor" stroke-width=".7"/></g>
+          <g transform="rotate(240 280 235)"><path class="ray" d="M272 137 L280 61 L288 137 Z" fill="url(#e-h)" stroke="currentColor" stroke-width=".7"/></g>
+          <g transform="rotate(150 280 235)"><path class="ray" d="M272 137 L280 61 L288 137 Z" fill="url(#e-h)" stroke="currentColor" stroke-width=".7"/></g>
+          <g transform="rotate(210 280 235)"><path class="ray" d="M272 137 L280 61 L288 137 Z" fill="url(#e-h)" stroke="currentColor" stroke-width=".7"/></g>
+          <g transform="rotate(180 280 235)"><path class="ray" d="M272 137 L280 61 L288 137 Z" fill="url(#e-h)" stroke="currentColor" stroke-width=".7"/></g>
+        </g>
+        <circle class="burst-arc" cx="280" cy="235" r="186" fill="none" stroke="currentColor" stroke-width=".9" stroke-dasharray="1 6" opacity=".9"/>
+        <rect class="frame-line frame-outer" pathLength="100" x="92" y="30" width="376" height="452" fill="none" stroke="currentColor" stroke-width="1.3"/>
+        <rect class="frame-line frame-inner" pathLength="100" x="100" y="38" width="360" height="436" fill="none" stroke="currentColor" stroke-width=".7"/>
+        <g class="bottle-b tw"><g transform="translate(214,70) scale(1.1)"><use id="bottle-use" href="#pl-0"/></g></g>
+      </svg>
+      <p class="stamp" id="stamp" aria-hidden="true">Appraised — $128</p>
+    </div>
+
+    <button type="button" class="skip" id="skip">Skip</button>
+  </div>
+
+  <div class="under" id="under">
+    <div class="pre" id="pre">
+      <p class="b-meta" id="pre-line">One bottle waits inside · appraised on reveal</p>
+      <button type="button" class="btn" id="break-btn">Break the Seal</button>
+      <p class="auto-mode" id="auto-mode" hidden>Common bottles sell back automatically</p>
+    </div>
+
+    <div class="post" id="post">
+      <p class="b-meta" id="b-meta"><span class="rar" id="b-rarity">Common</span> · 2019 · Saint-Julien</p>
+      <h2 class="b-name" id="b-name"></h2>
+      <p class="b-note" id="b-note"></p>
+
+      <div class="exits" id="exits">
+        <button type="button" class="exit" data-exit="sell">
+          <span class="x-head">Sell back</span>
+          <span class="x-sub" id="sub-sell">$109 store credit</span>
+        </button>
+        <button type="button" class="exit" data-exit="keep">
+          <span class="x-head">Keep it</span>
+          <span class="x-sub">held in the cellar</span>
+        </button>
+        <button type="button" class="exit" data-exit="ship">
+          <span class="x-head">Ship it</span>
+          <span class="x-sub">CA only · 21+</span>
+        </button>
+      </div>
+      <button type="button" class="later" id="later" hidden>Decide later · open Crate II</button>
+
+      <div class="confirm" id="confirm" hidden data-live="0">
+        <div class="conf-body" id="conf-body"></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============ footer ============ -->
+<footer>
+  <div class="orn-rule" aria-hidden="true">
+    <span></span>
+    <svg width="26" height="14" viewBox="0 0 26 14"><path d="M13 1 L19 7 L13 13 L7 7 Z" fill="none" stroke="currentColor" stroke-width=".9"/><circle cx="13" cy="7" r="1.3" fill="currentColor"/></svg>
+    <span></span>
+  </div>
+  <p class="fine">21+ only. California shipping only. Cellar is the seller of record.
+    Storage free for 90&nbsp;days, then 2.5%/yr. Bottles are held in bond; prices in United
+    States dollars. Instant buyback is offered at 85% of the current appraised value.</p>
+  <p class="mark">CELLAR</p>
+  <p class="colophon">Set in EB Garamond · Engravings by the House</p>
+</footer>
+
+<!-- ============ mobile bottom navigation ============ -->
+<nav class="bottom-nav" aria-label="Primary">
+  <a href="index.html">
+    <svg viewBox="0 0 28 26" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="currentColor" stroke-width="1">
+        <path d="M4.8 3 v3.4 q0 1.6 -1.6 2.6 V22 h5.6 V9 q-1.6 -1 -1.6 -2.6 V3 Z"/>
+        <path d="M12.8 3 v3.4 q0 1.6 -1.6 2.6 V22 h5.6 V9 q-1.6 -1 -1.6 -2.6 V3 Z"/>
+        <path d="M20.8 3 v3.4 q0 1.6 -1.6 2.6 V22 h5.6 V9 q-1.6 -1 -1.6 -2.6 V3 Z"/>
+        <path d="M1.6 24 h24.8" stroke-width=".8"/>
+      </g>
+    </svg>
+    <span class="bn-label">The Collection</span>
+  </a>
+  <a href="inventory.html">
+    <svg viewBox="0 0 28 26" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="currentColor" stroke-width="1">
+        <circle cx="14" cy="7.2" r="4.2"/>
+        <circle cx="14" cy="7.2" r="1.7" stroke-width=".7"/>
+        <path d="M14 11.4 V23.5 M14 18.4 h4.4 M14 22 h3.4"/>
+      </g>
+    </svg>
+    <span class="bn-label">My Cellar</span>
+  </a>
+  <a href="index.html#about">
+    <svg viewBox="0 0 28 26" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="currentColor" stroke-width="1">
+        <path d="M14 2.5 q-1.6 3 0 6.2"/>
+        <path d="M12 5.6 q-5.4 -3.2 -8.2 .6 q2.6 3.8 7.4 1.6"/>
+        <path d="M16 5 q3.8 -2.8 5.6 -.4 q1 1.8 -1 2.4 q-1.6 .4 -1.6 -1.1"/>
+        <circle cx="11.4" cy="12.6" r="2.7"/>
+        <circle cx="16.6" cy="12.6" r="2.7"/>
+        <circle cx="9" cy="17.3" r="2.7"/>
+        <circle cx="14" cy="17.3" r="2.7"/>
+        <circle cx="19" cy="17.3" r="2.7"/>
+        <circle cx="11.6" cy="22" r="2.7"/>
+        <circle cx="16.4" cy="22" r="2.7"/>
+      </g>
+    </svg>
+    <span class="bn-label">About</span>
+  </a>
+</nav>
+
+<script src="catalogue-data.js"></script>
+<script>
+  (function () {
+    var catalogue = window.CELLAR_CATALOGUE;
+    var params = new URLSearchParams(location.search);
+    var regionKey = params.get("region") || "bordeaux";
+    var tierKey = params.get("tier") || "cellar";
+    if (!catalogue.regions[regionKey]) regionKey = "bordeaux";
+    if (!catalogue.tiers[tierKey]) tierKey = "cellar";
+    var selectedRegion = catalogue.regions[regionKey];
+    var selectedTier = catalogue.tiers[tierKey];
+    var BOTTLES = catalogue.getBottles(regionKey, tierKey);
+    var autoCommon = params.get("autoCommon") === "1";
+    var total = parseInt(params.get("qty") || "1", 10);
+    if (isNaN(total)) total = 1;
+    total = Math.max(1, Math.min(12, total));
+
+    /* deterministic rotation through the racks — one bottle per crate */
+    var ORDER = [3, 10, 5, 0, 7, 11, 2, 8, 1, 6, 9, 4];
+    var ROMAN = ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"];
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    var crateIndex = 0, bottle = null, playing = false, landedFlag = false, chosen = false;
+    var timers = [];
+
+    /* the timeline: one action, three acts, then the plate */
+    var ACTS = [
+      [0,    "a1", "The twine snaps and the wax seal cracks."],
+      [1500, "a2", "The nails pop and the lid slides away."],
+      [3700, "a3", "The paper unwinds — the bottle stands revealed."],
+      [6950, "landed", ""]
+    ];
+
+    var ceremony = document.getElementById("ceremony");
+    var statusEl = document.getElementById("status");
+    var kicker = document.getElementById("kicker");
+    var pips = document.getElementById("pips");
+    var layerB = document.getElementById("layer-b");
+    var bottleUse = document.getElementById("bottle-use");
+    var stamp = document.getElementById("stamp");
+    var breakBtn = document.getElementById("break-btn");
+    var skipBtn = document.getElementById("skip");
+    var stage = document.getElementById("stage");
+    var exits = document.getElementById("exits");
+    var later = document.getElementById("later");
+    var confirmBox = document.getElementById("confirm");
+    var confBody = document.getElementById("conf-body");
+    var autoMode = document.getElementById("auto-mode");
+    autoMode.hidden = !autoCommon;
+
+    function money(v) { return "$" + v.toLocaleString("en-US"); }
+    function setStatus(t) { statusEl.textContent = t; }
+    function pad(n) { return ("00" + n).slice(-3); }
+
+    function renderCrate() {
+      bottle = BOTTLES[ORDER[crateIndex % ORDER.length] % BOTTLES.length];
+      var crateWord = "Crate " + ROMAN[crateIndex] + (total > 1 ? " of " + ROMAN[total - 1] : "");
+      kicker.textContent = "· " + selectedRegion.name + " · " + selectedTier.name + " · " + crateWord + " ·";
+      pips.innerHTML = "";
+      for (var i = 0; i < total; i++) {
+        var pip = document.createElement("span");
+        pip.className = "pip" + (i < crateIndex ? " done" : i === crateIndex ? " current" : "");
+        pip.textContent = ROMAN[i];
+        pip.setAttribute("aria-label", "Crate " + ROMAN[i] + (i < crateIndex ? " — opened" : i === crateIndex ? " — current" : ""));
+        pips.appendChild(pip);
+      }
+      document.getElementById("sealed-crate-label").textContent =
+        (selectedRegion.name + " · " + selectedTier.name + " · Nº " + pad(crateIndex + 1)).toUpperCase();
+      bottleUse.setAttribute("href", "#pl-" + bottle.art);
+      stamp.textContent = "Appraised — " + money(bottle.price);
+      document.getElementById("b-meta").innerHTML =
+        '<span class="rar" id="b-rarity">' + bottle.rarity + "</span> · " + bottle.vintage + " · " + bottle.region;
+      var nameEl = document.getElementById("b-name");
+      nameEl.setAttribute("aria-label", bottle.name);
+      nameEl.innerHTML = "";
+      var holder = document.createElement("span");
+      holder.setAttribute("aria-hidden", "true");
+      var chars = bottle.name.split("");
+      chars.forEach(function (ch, i) {
+        var s = document.createElement("span");
+        s.textContent = ch;
+        s.style.setProperty("--d", (chars.length > 1 ? (i / (chars.length - 1)) * 0.5 : 0).toFixed(3) + "s");
+        holder.appendChild(s);
+      });
+      nameEl.appendChild(holder);
+      document.getElementById("b-note").textContent = bottle.note;
+      document.getElementById("sub-sell").textContent = money(bottle.buyback) + " store credit";
+      var more = crateIndex < total - 1;
+      later.hidden = false;
+      later.textContent = more ? "Decide later · open Crate " + ROMAN[crateIndex + 1] : "Decide later · view My Cellar";
+      exits.hidden = false;
+      confirmBox.hidden = true;
+      confirmBox.dataset.live = "0";
+      confBody.innerHTML = "";
+      chosen = false;
+    }
+
+    function land() {
+      if (landedFlag) return;
+      landedFlag = true;
+      playing = false;
+      ceremony.classList.add("landed");
+      layerB.setAttribute("aria-hidden", "false");
+      setStatus(bottle.name + ", " + bottle.vintage + " — appraised at " + money(bottle.price) + ".");
+      if (autoCommon && bottle.rarity === "Common" && !chosen) {
+        timers.push(window.setTimeout(function () { choose("sell", true); }, reduced ? 250 : 900));
+      }
+    }
+
+    function play() {
+      if (playing || landedFlag) return;
+      playing = true;
+      breakBtn.disabled = true;
+      ceremony.classList.add("playing");
+      if (reduced) { land(); return; }
+      ACTS.forEach(function (step) {
+        timers.push(window.setTimeout(function () {
+          ceremony.classList.add(step[1]);
+          if (step[2]) setStatus(step[2]);
+          if (step[1] === "landed") land();
+        }, step[0]));
+      });
+    }
+
+    function finish() {
+      if (landedFlag) return;
+      timers.forEach(window.clearTimeout);
+      timers = [];
+      playing = true;
+      breakBtn.disabled = true;
+      ceremony.classList.add("playing", "instant", "a1", "a2", "a3");
+      land();
+    }
+
+    function confRow(label, value) {
+      return '<p class="row"><span>' + label + '</span><span class="lead"></span><em>' + value + "</em></p>";
+    }
+
+    function choose(key, auto) {
+      if (!landedFlag || chosen) return;
+      chosen = true;
+      timers.forEach(window.clearTimeout);
+      timers = [];
+      exits.hidden = true;
+      later.hidden = true;
+      var head, rows, note, link;
+      var bLabel = bottle.name + ", " + bottle.vintage;
+      if (key === "sell") {
+        head = auto ? "Common · Auto-Sold" : "Sellback Requested";
+        rows = confRow(bLabel, money(bottle.price) + " appraised") + confRow("Store credit · 85%", money(bottle.buyback));
+        note = "Credit reaches your account within the hour; the bottle returns to the racks unopened.";
+        link = '<a href="inventory.html">View My Cellar</a>';
+      } else if (key === "keep") {
+        head = "Held in Bond";
+        rows = confRow(bLabel, money(bottle.price) + " appraised") + confRow("Storage", "free 90 days · 2.5%/yr");
+        note = "Custody verified · 55 °F / 70% RH · continuous telemetry from the bonded warehouse.";
+        link = '<a href="inventory.html">View it in My Cellar</a>';
+      } else {
+        head = "Shipping Arranged";
+        rows = confRow(bLabel, money(bottle.price) + " appraised") + confRow("Destination", "California · 21+ signature");
+        note = "Ground-insured and temperature-controlled. Someone 21 or older must sign on delivery.";
+        link = '<a href="inventory.html">Track it in My Cellar</a>';
+      }
+      var more = crateIndex < total - 1;
+      var action = more
+        ? '<button type="button" class="cta next-cta" id="next-crate">Open Crate ' + ROMAN[crateIndex + 1] +
+          (total > 1 ? " of " + ROMAN[total - 1] : "") + "</button>"
+        : '<a class="btn next-cta" href="index.html">Return to the Collection</a>';
+      confBody.innerHTML =
+        '<p class="conf-head">' + head + "</p>" +
+        '<div class="rcpt">' + rows + "</div>" +
+        '<p class="conf-note">' + note + "</p>" +
+        '<p class="conf-links">' + link + "</p>" +
+        '<div class="conf-actions">' + action + "</div>";
+      confirmBox.hidden = false;
+      confirmBox.dataset.live = "1";
+      setStatus(head + " — " + bLabel + ".");
+    }
+
+    function nextCrate() {
+      crateIndex += 1;
+      timers.forEach(window.clearTimeout);
+      timers = [];
+      landedFlag = false;
+      playing = false;
+      ceremony.classList.remove("playing", "a1", "a2", "a3", "landed", "instant", "enter");
+      layerB.setAttribute("aria-hidden", "true");
+      breakBtn.disabled = false;
+      renderCrate();
+      void ceremony.offsetWidth;
+      if (!reduced) ceremony.classList.add("enter");
+      setStatus("Crate " + ROMAN[crateIndex] + " is ready. Break the seal.");
+      window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+    }
+
+    breakBtn.addEventListener("click", play);
+    skipBtn.addEventListener("click", finish);
+    stage.addEventListener("click", function () { if (playing && !landedFlag) finish(); });
+    exits.addEventListener("click", function (event) {
+      var b = event.target.closest(".exit");
+      if (b) choose(b.dataset.exit, false);
+    });
+    later.addEventListener("click", function () {
+      if (!landedFlag) return;
+      if (crateIndex < total - 1) nextCrate();
+      else location.href = "inventory.html";
+    });
+    confBody.addEventListener("click", function (event) {
+      if (event.target.closest("#next-crate")) nextCrate();
+    });
+
+    renderCrate();
+    if (!reduced) ceremony.classList.add("enter");
+  })();
+</script>
+
+</body>
+</html>

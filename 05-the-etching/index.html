@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cellar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F5EFDF;
+    --paper-2:#EDE5D0;
+    --ink:#191309;
+    --ink-soft:rgba(25,19,9,.72);
+    --wine:#641021;
+    --rule:rgba(25,19,9,.50);
+    --script:"Pinyon Script",cursive;
+    --t-xs:11px;
+    --t-s:13px;
+    --t-m:16.5px;
+    --t-l:21px;
+    --t-xl:clamp(24px,3vw,30px);
+    --t-2xl:clamp(30px,4.5vw,44px);
+    --frame-orn:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='19' height='19'%3E%3Cg fill='none' stroke='%23191309' stroke-width='.9'%3E%3Ccircle cx='9.5' cy='9.5' r='2.5'/%3E%3Cpath d='M9.5 .5V5.4M9.5 13.6v4.9M.5 9.5H5.4M13.6 9.5h4.9'/%3E%3C/g%3E%3Ccircle cx='9.5' cy='9.5' r='1' fill='%23191309'/%3E%3C/svg%3E");
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  [hidden]{display:none!important}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"EB Garamond",Georgia,serif;
+    font-size:var(--t-m);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  svg{color:var(--ink);display:block}
+  svg text{font-family:"EB Garamond",Georgia,serif;fill:var(--ink)}
+  ::selection{background:var(--wine);color:var(--paper)}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+  /* ---------- small-cap headers & shared type ---------- */
+  .sc-lg{text-transform:uppercase;letter-spacing:.26em;font-weight:500;font-size:var(--t-s)}
+  .red{color:var(--wine)}
+  .note{font-style:italic;color:var(--ink-soft)}
+
+  a{color:inherit;text-decoration:none;
+    background:linear-gradient(var(--wine),var(--wine)) no-repeat left calc(100% - 1px)/0% 1px;
+    transition:background-size .3s ease,color .3s ease;padding-bottom:2px}
+  a:hover,a:focus-visible{background-size:100% 1px;color:var(--wine)}
+  a:focus-visible{outline:1px dotted var(--wine);outline-offset:4px}
+
+  /* ---------- frames: thin double rules + corner ornaments ---------- */
+  .frame{
+    position:relative;
+    border:1px solid var(--ink);
+    background-image:var(--frame-orn),var(--frame-orn),var(--frame-orn),var(--frame-orn);
+    background-repeat:no-repeat;
+    background-position:top -1px left -1px,top -1px right -1px,bottom -1px left -1px,bottom -1px right -1px;
+    background-origin:border-box;
+    transition:border-color .35s ease;
+  }
+  .frame::before{
+    content:"";position:absolute;inset:5px;border:1px solid var(--rule);
+    pointer-events:none;transition:border-color .35s ease;
+  }
+
+  /* ---------- ornamented rule ---------- */
+  .orn-rule{display:flex;align-items:center;gap:14px;margin:0 auto;max-width:420px;color:var(--ink)}
+  .orn-rule span{flex:1;height:1px;background:var(--rule)}
+
+  /* ---------- masthead ---------- */
+  header.masthead{padding:16px 0 13px;border-bottom:1px solid var(--ink);position:relative}
+  header.masthead::after{content:"";position:absolute;left:0;right:0;bottom:3px;height:1px;background:var(--rule)}
+  header.masthead .wrap{position:relative}
+  .mast-row{display:flex;align-items:center;gap:clamp(18px,3vw,46px);text-align:left}
+  .masthead h1.wordmark{
+    font-size:var(--t-xl);font-weight:600;letter-spacing:.3em;
+    text-indent:.34em; /* balances tracking */
+    line-height:1.04;margin:0;
+  }
+  nav.cat-nav{display:flex;justify-content:flex-start;align-items:center;gap:12px;margin:0;flex-wrap:wrap}
+  nav.cat-nav a{font-size:var(--t-s);letter-spacing:.26em;text-transform:uppercase;padding:8px 4px 6px}
+  nav.cat-nav .dot{color:var(--rule);font-size:var(--t-s)}
+  .connect{
+    margin-left:auto;
+    font:inherit;font-size:var(--t-s);letter-spacing:.26em;text-transform:uppercase;
+    color:var(--ink);background:transparent;border:1px solid var(--ink);
+    box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--rule);
+    padding:13px 22px 11px;cursor:pointer;
+    transition:background .2s ease,color .2s ease,border-color .2s ease,transform .14s cubic-bezier(.23,1,.32,1);
+  }
+  .connect:active{transform:scale(.97)}
+  .step:active,.cta:active,.bar-cta:active{transform:scale(.97)}
+  .connect:hover{background:var(--wine);border-color:var(--wine);color:var(--paper)}
+  .connect:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
+
+  /* ---------- hero ---------- */
+  .hero{padding:24px 0 56px}
+  .product-config{position:relative;z-index:2;margin:0 5px -1px}
+  .config-step{margin-top:0}
+  .config-label{margin-bottom:8px;color:var(--ink-soft);font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase}
+  .region-choices{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0;align-items:end;padding:0 10px;border-bottom:1px solid var(--ink)}
+  .region-choice,.tier-choice{font:inherit;color:var(--ink);background:transparent;border:1px solid var(--rule);cursor:pointer;
+    transition:border-color .18s ease,background-color .18s ease,color .18s ease,transform .14s cubic-bezier(.23,1,.32,1)}
+  .region-choice{position:relative;align-self:end;padding:9px 8px 8px;text-align:center;min-height:44px;margin-bottom:-1px;
+    border:1px solid var(--rule);border-bottom-color:var(--ink);background:var(--paper-2);color:var(--ink-soft)}
+  .region-choice + .region-choice{margin-left:-1px}
+  .region-choice strong,.region-choice span,.tier-choice strong,.tier-choice span{display:block}
+  .region-choice strong{font-size:var(--t-m);font-weight:500;line-height:1.1}
+  .region-choice span{display:none}
+  .region-choice:hover{background:var(--paper);color:var(--ink)}
+  .tier-choice:hover{border-color:var(--ink)}
+  .region-choice:active,.tier-choice:active{transform:scale(.98)}
+  .region-choice[aria-pressed="true"]{color:var(--ink);min-height:53px;padding-top:14px;z-index:1;
+    border-color:var(--ink);border-bottom-color:var(--paper);background:var(--paper)}
+  .region-choice[aria-pressed="true"] strong{font-weight:600}
+  .region-choice[aria-pressed="true"]::before{content:"";position:absolute;left:-1px;right:-1px;top:-1px;height:2px;background:var(--wine)}
+  .tier-picker{margin-top:16px}
+  .tier-picker .config-label{margin-bottom:7px}
+  .tier-choices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+  .tier-choice{position:relative;padding:11px 5px 10px;text-align:center;background:transparent}
+  .tier-choice::before{content:"";position:absolute;inset:3px;border:1px solid transparent;pointer-events:none;transition:border-color .18s ease}
+  .tier-choice::after{content:"";position:absolute;top:-1px;right:-1px;width:11px;height:11px;background:var(--wine);
+    clip-path:polygon(100% 0,0 0,100% 100%);opacity:0;transition:opacity .18s ease}
+  .tier-choice[aria-pressed="true"]{border-color:var(--ink)}
+  .tier-choice[aria-pressed="true"]::before{border-color:var(--rule)}
+  .tier-choice[aria-pressed="true"]::after{opacity:1}
+  .tier-device{display:block;height:34px;margin:0 auto 6px;color:var(--ink);transition:color .18s ease}
+  .tier-device svg{height:100%;width:auto;margin:0 auto}
+  .tier-choice[aria-pressed="true"] .tier-device{color:var(--wine)}
+  .tier-choice strong{font-size:var(--t-m);font-weight:500;line-height:1.05;letter-spacing:.04em}
+  .tier-choice .tier-price{margin-top:3px;color:var(--wine);font-size:var(--t-l);font-weight:600;line-height:1.1;font-variant-numeric:tabular-nums lining-nums}
+  .tier-choice .tier-appraise{display:block;margin-top:4px;color:var(--ink-soft);font-size:var(--t-s);line-height:1.2;font-variant-numeric:tabular-nums lining-nums;white-space:nowrap}
+  .tier-choice .tier-appraise small{display:block;font:inherit;font-size:var(--t-xs);font-style:italic;color:var(--ink-soft);margin-bottom:1px;white-space:normal}
+  .hero-frame{padding:clamp(22px,2.8vw,38px) clamp(22px,3.4vw,48px)}
+  .hero-grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);gap:clamp(26px,3.5vw,56px);align-items:center}
+  .crate-heading{display:flex;align-items:baseline;justify-content:flex-start;flex-wrap:wrap;gap:7px 14px}
+  .hero h2.crate-title{font-size:var(--t-2xl);font-weight:500;line-height:1.15;letter-spacing:.01em}
+  .region-origin{font-family:var(--script);font-size:var(--t-xl);line-height:1;color:var(--wine);white-space:nowrap}
+  .rarity-profile{margin:16px 0 0;padding:12px 0 13px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+  .rarity-head{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+  .rarity-head::after{content:"";flex:1;height:1px;background:var(--rule)}
+  .rarity-title{font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft)}
+  .comp-table{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 36px}
+  .comp-row{display:flex;align-items:baseline;gap:9px;padding:3px 0;font-size:var(--t-s);min-width:0}
+  .comp-swatch{flex:none;width:13px;height:13px;transform:translateY(2px);color:var(--ink)}
+  .comp-swatch svg{width:100%;height:100%}
+  .comp-name{line-height:1.15;white-space:nowrap}
+  .comp-lead{flex:1;min-width:16px;border-bottom:1px dotted var(--rule);transform:translateY(-4px)}
+  .comp-share{font-weight:600;font-variant-numeric:tabular-nums lining-nums;white-space:nowrap}
+
+  .order-block{display:grid;grid-template-columns:minmax(0,1fr) minmax(170px,.8fr);align-items:center;gap:24px;margin-top:17px}
+  .buyback-option{display:flex;align-items:flex-start;gap:12px;margin:14px 0 0;padding:12px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);cursor:pointer;transition:border-color .18s ease,color .18s ease}
+  .buyback-option:hover{border-color:var(--wine);color:var(--wine)}
+  .buyback-option input{position:absolute;opacity:0;pointer-events:none}
+  .buyback-box{position:relative;flex:none;width:24px;height:24px;margin-top:1px;border:1px solid var(--ink);
+    box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--rule);background:var(--paper);transition:border-color .18s ease}
+  .buyback-box::after{content:"";position:absolute;inset:5px;opacity:0;transition:opacity .15s ease;
+    background-image:repeating-linear-gradient(45deg,var(--ink) 0,var(--ink) 1px,transparent 1px,transparent 3.4px),
+      repeating-linear-gradient(-45deg,var(--ink) 0,var(--ink) 1px,transparent 1px,transparent 3.4px)}
+  .buyback-option:hover .buyback-box{border-color:var(--wine)}
+  .buyback-option input:checked + .buyback-box::after{opacity:1}
+  .buyback-option input:focus-visible + .buyback-box{outline:1px dotted var(--wine);outline-offset:3px}
+  .buyback-copy{flex:1;min-width:0;line-height:1.2}
+  .buyback-copy strong{display:block;font-size:var(--t-s);font-weight:600;letter-spacing:.05em}
+  .buyback-copy span{display:block;margin-top:3px;font-size:var(--t-s);color:var(--ink-soft);line-height:1.4;max-width:46ch}
+
+  .qty-row{display:flex;align-items:center;justify-content:flex-start;gap:16px}
+  .qty-label{font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft)}
+  .stepper{display:inline-flex;align-items:center;gap:8px}
+  .stepper .step{
+    font:inherit;font-size:var(--t-l);line-height:1;color:var(--ink);background:transparent;
+    width:40px;height:40px;padding:0;border:1px solid var(--ink);
+    box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--rule);
+    cursor:pointer;transition:background .25s ease,opacity .25s ease;
+  }
+  .stepper .step:hover:not(:disabled){background:rgba(25,19,9,.07)}
+  .stepper .step:disabled{opacity:.32;cursor:default}
+  .stepper .step:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
+  .stepper .qty-input{
+    font:inherit;font-size:var(--t-l);font-weight:500;color:var(--ink);text-align:center;
+    width:58px;height:40px;background:transparent;border:1px solid var(--rule);
+    box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--rule);
+    border-radius:0;
+  }
+  .stepper .qty-input:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
+  .total-line{font-size:var(--t-l);display:flex;align-items:baseline;gap:10px;max-width:286px}
+  .total-line .lead{flex:1;border-bottom:1px dotted var(--rule);transform:translateY(-4px)}
+  .total-line em{font-style:normal;font-weight:600;color:var(--wine);font-size:var(--t-l);white-space:nowrap}
+
+  .cta{
+    display:inline-block;margin-top:20px;
+    font:inherit;font-size:var(--t-s);letter-spacing:.26em;text-transform:uppercase;
+    color:var(--paper);background:var(--wine);border:1px solid var(--wine);
+    padding:15px 36px 13px;min-height:48px;cursor:pointer;
+    transition:background .2s ease,border-color .2s ease,transform .14s cubic-bezier(.23,1,.32,1);
+  }
+  .cta:hover,.cta:focus-visible{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+  .cta:focus-visible{outline:1px dotted var(--wine);outline-offset:4px}
+  .purchase-action{display:flex;align-items:center;gap:18px;margin-top:20px}
+  .purchase-action .cta{flex:none;margin-top:0}
+  .assurance{display:inline-flex;align-items:center;gap:9px;color:var(--ink-soft);font-size:var(--t-s);background:none;padding:0}
+  .assurance svg{width:23px;height:23px;flex:none;color:var(--wine)}
+  .assurance:hover,.assurance:focus-visible{color:var(--wine);background:none}
+
+  figure.fig{margin:0;text-align:center}
+  figure.fig svg{width:100%;height:auto}
+  figure.fig figcaption{margin-top:10px;font-style:italic;font-size:var(--t-s);color:var(--ink-soft)}
+  .hero .fig{position:relative;max-width:330px;margin:0 auto}
+  .region-medallion{position:absolute;z-index:2;right:2%;top:3%;width:72px;height:72px;color:var(--wine)}
+  .region-medallion svg{width:100%;height:100%}
+  .region-medallion [data-emblem]{display:none}
+  .region-medallion[data-motif="vine"] [data-emblem="vine"],.region-medallion[data-motif="leaf"] [data-emblem="leaf"],.region-medallion[data-motif="sun"] [data-emblem="sun"],.region-medallion[data-motif="cypress"] [data-emblem="cypress"],.region-medallion[data-motif="star"] [data-emblem="star"],.region-medallion[data-motif="monogram"] [data-emblem="monogram"]{display:block}
+
+  /* ---------- catalogue running footer (sticky bar) ---------- */
+  .bar{
+    position:fixed;left:0;right:0;bottom:0;z-index:60;
+    background:var(--paper-2);border-top:1px solid var(--ink);
+    transform:translateY(105%);visibility:hidden;
+    transition:transform .4s ease,visibility .4s ease;
+  }
+  .bar::before{content:"";position:absolute;left:0;right:0;top:3px;height:1px;background:var(--rule)}
+  .bar.on{transform:none;visibility:visible}
+  .bar-inner{max-width:1180px;margin:0 auto;padding:10px 28px;display:flex;align-items:center;gap:16px}
+  .bar-label{font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft);margin-right:auto}
+  .bar-total{font-size:var(--t-l);font-weight:600;color:var(--wine);white-space:nowrap}
+  .bar-change{font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft);white-space:nowrap}
+  .bar-cta{
+    display:inline-flex;align-items:center;justify-content:center;
+    font:inherit;font-size:var(--t-s);letter-spacing:.26em;text-transform:uppercase;
+    color:var(--ink);background:transparent;border:1px solid var(--ink);
+    box-shadow:inset 0 0 0 2px var(--paper-2),inset 0 0 0 3px var(--rule);
+    padding:0 20px;min-height:44px;cursor:pointer;white-space:nowrap;
+    transition:background .25s ease,color .25s ease,border-color .25s ease;
+  }
+  .bar-cta:hover{background:var(--wine);border-color:var(--wine);color:var(--paper)}
+  .bar-cta:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
+  body.bar-on{padding-bottom:76px}
+
+  /* ---------- mobile bottom navigation (shown ≤640px only) ---------- */
+  nav.bottom-nav{display:none}
+
+  /* ---------- section headers ---------- */
+  .sect-head{text-align:center;padding:48px 0 28px}
+  .sect-head .no{color:var(--wine);font-size:var(--t-xs);letter-spacing:.26em;text-indent:.26em;margin-bottom:12px;text-transform:uppercase}
+  .sect-head h2{font-size:var(--t-xl);font-weight:500;line-height:1.15;letter-spacing:.3em;text-indent:.3em;text-transform:uppercase;margin:14px 0 11px}
+  .sect-head .sub{font-style:italic;color:var(--ink-soft);max-width:56ch;margin:0 auto;font-size:var(--t-m)}
+
+  /* ---------- headpiece vignette ---------- */
+  figure.fig.headpiece{max-width:700px;margin:0 auto;padding:0 28px}
+  .headpiece svg{width:100%;height:auto;margin:0 auto}
+
+  /* ---------- plates ---------- */
+  .plates{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;padding-bottom:22px}
+  figure.plate{padding:16px 15px 14px;text-align:center;display:flex;flex-direction:column}
+  .plate-no{color:var(--wine);font-size:var(--t-xs);letter-spacing:.26em;text-indent:.26em;text-transform:uppercase;margin-bottom:7px}
+  .plate-art{position:relative;margin:0 auto}
+  .plate-art svg{height:142px;width:auto;margin:0 auto}
+  figure.plate figcaption{margin-top:8px;display:flex;flex-direction:column;flex:1}
+  .plate-name{font-size:var(--t-m);font-weight:500;line-height:1.2;font-style:normal}
+  .plate-meta{margin-top:4px;font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft)}
+  .plate-note{margin-top:5px;font-style:italic;color:var(--ink-soft);font-size:var(--t-s);line-height:1.35;flex:1}
+  .plate-buy{margin-top:8px;padding-top:7px;border-top:1px solid var(--rule);
+    display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+  .plate-buy .k{font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft)}
+  .plate-buy em{font-style:normal;font-weight:600;color:var(--wine);font-size:var(--t-m);font-variant-numeric:tabular-nums lining-nums}
+  /* rarity corner devices: Rare = wine-outlined diamond, Epic = wine-filled, Grail = wine-filled twice-ringed */
+  figure.plate[data-rarity="rare"] .plate-art::after,figure.plate[data-rarity="epic"] .plate-art::after,figure.plate[data-rarity="grail"] .plate-art::after{
+    content:"";position:absolute;right:-18px;top:8px;width:14px;height:14px;border:1px solid var(--wine);transform:rotate(45deg);box-shadow:0 0 0 3px var(--paper)}
+  figure.plate[data-rarity="epic"] .plate-art::after{background:var(--wine)}
+  figure.plate[data-rarity="grail"] .plate-art::after{background:var(--wine);box-shadow:0 0 0 3px var(--paper),0 0 0 4px var(--wine)}
+  /* rarity read in the artwork itself: hatched capsule collar, wax drip, double capsule band */
+  .plate-art .rx{display:none}
+  figure.plate[data-rarity="uncommon"] .rx-un{display:block}
+  figure.plate[data-rarity="rare"] .rx-rare,figure.plate[data-rarity="grail"] .rx-rare{display:block}
+  figure.plate[data-rarity="epic"] .rx-epic,figure.plate[data-rarity="grail"] .rx-epic{display:block}
+  /* every price/number column reads off one tabular grid */
+  .tier-price,.tier-appraise,.qty-input,.comp-share,.total-line em,.plate-buy em,.bar-total,.conditions .v{font-variant-numeric:tabular-nums lining-nums}
+
+  /* ---------- custody ---------- */
+  .custody{padding-bottom:60px}
+  .custody-frame{padding:clamp(22px,3vw,42px)}
+  .custody-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(26px,3.4vw,52px);align-items:center}
+  .custody .fig svg{max-width:400px;margin:0 auto}
+  .conditions{list-style:none;margin-top:20px}
+  .conditions li{display:flex;align-items:baseline;gap:12px;padding:7px 0;font-size:var(--t-m)}
+  .conditions .k{font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft);white-space:nowrap}
+  .conditions .lead{flex:1;border-bottom:1px dotted var(--rule);transform:translateY(-4px);min-width:24px}
+  .conditions .v{text-align:right;font-style:italic}
+  .custody-note{margin-top:18px;padding-top:14px;border-top:1px solid var(--rule);
+    font-style:italic;color:var(--ink-soft);font-size:var(--t-m);max-width:48ch}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--ink);position:relative;text-align:center;padding:40px 28px 46px}
+  footer::before{content:"";position:absolute;left:0;right:0;top:3px;height:1px;background:var(--rule)}
+  footer .tailpiece{margin:0 auto 20px;width:122px}
+  footer .tailpiece svg{width:100%;height:auto}
+  footer .fine{font-size:var(--t-s);color:var(--ink-soft);max-width:62ch;margin:0 auto;font-style:italic}
+  footer .mark{margin-top:24px;font-size:var(--t-l);letter-spacing:.42em;text-indent:.42em;text-transform:uppercase;font-weight:600}
+  footer .colophon{margin-top:8px;font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft)}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:980px){
+    .mast-row{gap:18px}
+    .masthead h1.wordmark{margin:0}
+    .connect{padding:10px 16px 8px;min-height:40px}
+    .region-choices{grid-template-columns:repeat(6,minmax(112px,1fr));overflow-x:auto;scrollbar-width:none}
+    .region-choices::-webkit-scrollbar{display:none}
+    .tier-choices{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .hero-grid{grid-template-columns:1fr;grid-template-areas:"heading" "art" "summary" "buy";gap:18px}
+    .hero-copy{display:contents}
+    .hero-copy .crate-heading{grid-area:heading}
+    .hero-copy .product-summary{grid-area:summary}
+    .hero-grid .fig{grid-area:art;max-width:280px;margin:0 auto}
+    .hero-copy #buy-module{grid-area:buy}
+    .custody-grid{grid-template-columns:1fr}
+  }
+  @media (max-width:640px){
+    .wrap{padding:0 18px}
+    header.masthead{padding:10px 0 8px}
+    .mast-row{gap:12px;justify-content:space-between}
+    .masthead h1.wordmark{letter-spacing:.2em;text-indent:0;margin:0}
+    nav.cat-nav{display:none}
+    .connect{margin-left:auto;letter-spacing:.12em;padding:8px 12px 7px;min-height:36px}
+    .hero{padding:6px 0 44px}
+    .product-config{margin:0 5px -1px;position:relative}
+    .product-config::after{content:"";position:absolute;top:0;right:0;bottom:1px;width:34px;pointer-events:none;
+      background:linear-gradient(90deg,rgba(245,239,223,0),var(--paper) 82%)}
+    .region-choices{display:flex;align-items:flex-end;overflow-x:auto;gap:0;padding:0 6px;scroll-snap-type:x proximity;scrollbar-width:none}
+    .region-choices::-webkit-scrollbar{display:none}
+    .region-choice{flex:0 0 124px;min-height:42px;scroll-snap-align:start}
+    .region-choice[aria-pressed="true"]{min-height:50px;padding-top:12px}
+    .hero-grid{grid-template-areas:"heading" "art" "summary" "buy";gap:8px}
+    .tier-picker{margin-top:8px}
+    .tier-picker .config-label{margin-bottom:5px}
+    .tier-choices{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+    .tier-choice{padding:6px 6px 5px}
+    .tier-choice .tier-price{margin-top:2px}
+    .tier-choice .tier-appraise{margin-top:2px}
+    .tier-device{height:20px;margin-bottom:2px}
+    .hero-frame{padding:16px 14px 18px}
+    .rarity-profile{margin:9px 0 0;padding:7px 0 8px}
+    .rarity-head{margin-bottom:5px}
+    .comp-table{grid-template-columns:1fr;gap:0}
+    .comp-row{padding:1px 0}
+    .order-block{grid-template-columns:1fr;gap:6px;margin-top:9px}
+    .buyback-option{margin-top:9px;padding:8px 0}
+    .purchase-action{margin-top:10px}
+    .qty-row,.total-line{justify-content:space-between;max-width:none}
+    .purchase-action{flex-direction:column;align-items:stretch;gap:12px}
+    .purchase-action .assurance{align-self:center;text-align:center;justify-content:center}
+    .hero .fig{max-width:228px;margin:2px auto 4px}
+    .region-medallion{width:58px;height:58px}
+    .hero .cta{display:flex;width:100%;justify-content:center;align-items:center}
+    .plates{grid-template-columns:1fr;gap:10px}
+    figure.plate{display:grid;grid-template-columns:74px minmax(0,1fr);grid-template-areas:"no no" "art caption";
+      align-items:center;text-align:left;padding:12px 14px}
+    figure.plate .plate-no{grid-area:no;margin:0 0 2px}
+    figure.plate .plate-art{grid-area:art}
+    figure.plate .plate-art svg{height:102px}
+    figure.plate figcaption{grid-area:caption;margin:0 0 0 10px}
+    .plate-note{display:none}
+    .sect-head{padding:38px 0 22px}
+    .bar-inner{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 10px;padding:8px 14px;align-items:center}
+    .bar-label{grid-column:1;grid-row:1;margin:0}
+    .bar-change{grid-column:1;grid-row:2}
+    .bar-cta{grid-column:2;grid-row:1 / span 2;padding:0 13px}
+    /* the running footer docks directly above the bottom navigation */
+    :root{--bnav-h:calc(59px + env(safe-area-inset-bottom))}
+    .bar{bottom:var(--bnav-h)}
+    body{padding-bottom:var(--bnav-h)}
+    body.bar-on{padding-bottom:calc(var(--bnav-h) + 128px)}
+    /* mobile bottom navigation */
+    nav.bottom-nav{
+      display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+      position:fixed;left:0;right:0;bottom:0;z-index:70;
+      background:var(--paper-2);border-top:1px solid var(--ink);
+      padding-bottom:env(safe-area-inset-bottom);
+    }
+    nav.bottom-nav::before{content:"";position:absolute;left:0;right:0;top:3px;height:1px;background:var(--rule)}
+    nav.bottom-nav a{
+      position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+      min-height:58px;padding:8px 4px 7px;background:none;color:var(--ink);
+    }
+    nav.bottom-nav a:hover,nav.bottom-nav a:focus-visible{background:none;color:var(--wine)}
+    nav.bottom-nav a:focus-visible{outline-offset:-4px}
+    nav.bottom-nav svg{color:inherit;width:25px;height:23px}
+    nav.bottom-nav .bn-label{font-size:var(--t-xs);letter-spacing:.14em;text-transform:uppercase;line-height:1;white-space:nowrap}
+    nav.bottom-nav a[aria-current="page"]{color:var(--wine)}
+    nav.bottom-nav a[aria-current="page"]::after{content:"";position:absolute;left:16px;right:16px;top:-1px;height:2px;background:var(--wine)}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ shared etching patterns ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- fine 45° hatch -->
+    <pattern id="e-h" width="3.2" height="3.2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="3.2" height="3.2" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="3.2" stroke="var(--ink)" stroke-width=".6"/>
+    </pattern>
+    <!-- fine 135° hatch -->
+    <pattern id="e-h2" width="3.2" height="3.2" patternUnits="userSpaceOnUse" patternTransform="rotate(135)">
+      <rect width="3.2" height="3.2" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="3.2" stroke="var(--ink)" stroke-width=".6"/>
+    </pattern>
+    <!-- dense 45° hatch -->
+    <pattern id="e-hd" width="2.1" height="2.1" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="2.1" height="2.1" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="2.1" stroke="var(--ink)" stroke-width=".65"/>
+    </pattern>
+    <!-- cross-hatch -->
+    <pattern id="e-x" width="3.4" height="3.4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="3.4" height="3.4" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="3.4" stroke="var(--ink)" stroke-width=".55"/>
+      <line x1="0" y1="0" x2="3.4" y2="0" stroke="var(--ink)" stroke-width=".55"/>
+    </pattern>
+    <!-- dense cross-hatch (deepest shadow) -->
+    <pattern id="e-xd" width="2.2" height="2.2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="2.2" height="2.2" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="2.2" stroke="var(--ink)" stroke-width=".65"/>
+      <line x1="0" y1="0" x2="2.2" y2="0" stroke="var(--ink)" stroke-width=".65"/>
+    </pattern>
+    <!-- densest cross-hatch (the rarest) -->
+    <pattern id="e-xx" width="1.6" height="1.6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="1.6" height="1.6" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="1.6" stroke="var(--ink)" stroke-width=".65"/>
+      <line x1="0" y1="0" x2="1.6" y2="0" stroke="var(--ink)" stroke-width=".65"/>
+    </pattern>
+    <!-- vertical hatch -->
+    <pattern id="e-v" width="3" height="3" patternUnits="userSpaceOnUse">
+      <rect width="3" height="3" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="0" y2="3" stroke="var(--ink)" stroke-width=".6"/>
+    </pattern>
+    <!-- horizontal hatch / wood grain -->
+    <pattern id="e-o" width="3" height="2.8" patternUnits="userSpaceOnUse">
+      <rect width="3" height="2.8" fill="var(--paper)"/>
+      <line x1="0" y1="0" x2="3" y2="0" stroke="var(--ink)" stroke-width=".55"/>
+    </pattern>
+  </defs>
+</svg>
+
+<!-- ============ masthead ============ -->
+<header class="masthead">
+  <div class="wrap mast-row">
+    <h1 class="wordmark">CELLAR</h1>
+    <nav class="cat-nav" aria-label="Catalogue contents">
+      <a href="#collection"><span>The Collection</span></a><span class="dot" aria-hidden="true">·</span>
+      <a href="inventory.html"><span>My Cellar</span></a><span class="dot" aria-hidden="true">·</span>
+      <a href="#about"><span>About</span></a>
+    </nav>
+    <button type="button" class="connect">Connect</button>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ hero ============ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="product-config" id="configure" aria-label="Configure a crate">
+      <div class="config-step">
+        <div class="region-choices" role="group" aria-label="Choose a wine region">
+          <button class="region-choice" type="button" data-region="bordeaux" aria-pressed="true"><strong>Bordeaux</strong><span>Classed growths</span></button>
+          <button class="region-choice" type="button" data-region="burgundy" aria-pressed="false"><strong>Burgundy</strong><span>Pinot &amp; Chardonnay</span></button>
+          <button class="region-choice" type="button" data-region="napa" aria-pressed="false"><strong>Napa</strong><span>Cult Cabernet</span></button>
+          <button class="region-choice" type="button" data-region="tuscany" aria-pressed="false"><strong>Tuscany</strong><span>Super-Tuscans</span></button>
+          <button class="region-choice" type="button" data-region="champagne" aria-pressed="false"><strong>Champagne</strong><span>Grower &amp; Grande Marque</span></button>
+          <button class="region-choice" type="button" data-region="mix" aria-pressed="false"><strong>Cellar Mix</strong><span>Across regions</span></button>
+        </div>
+      </div>
+    </div>
+    <div class="frame hero-frame">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="crate-heading">
+            <h2 class="crate-title" id="crate-title">Bordeaux Crate</h2>
+            <p class="region-origin" id="region-origin">France</p>
+          </div>
+          <div class="product-summary">
+            <div class="tier-picker">
+              <p class="config-label" id="tier-label">Choose a tier</p>
+              <div class="tier-choices" role="group" aria-label="Choose a crate tier">
+                <button class="tier-choice" type="button" data-tier="taster" aria-pressed="false">
+                  <span class="tier-device" aria-hidden="true">
+                    <svg viewBox="0 0 40 42" focusable="false">
+                      <path d="M12 4 h16 v6 q0 10.5 -8 12.5 q-8 -2 -8 -12.5 Z" fill="var(--paper)" stroke="currentColor" stroke-width="1"/>
+                      <path d="M13.4 12.5 h13.2 q-1 7.6 -6.6 9 q-5.6 -1.4 -6.6 -9 Z" fill="url(#e-h)" stroke="none"/>
+                      <path d="M20 22.5 v11.5" stroke="currentColor" stroke-width="1"/>
+                      <ellipse cx="20" cy="35.5" rx="7" ry="2" fill="url(#e-h)" stroke="currentColor" stroke-width=".95"/>
+                    </svg>
+                  </span>
+                  <strong>Taster</strong>
+                  <span class="tier-price">$240</span>
+                  <span class="tier-appraise"><small>Appraised · the bottle</small>$200–$300</span>
+                </button>
+                <button class="tier-choice" type="button" data-tier="cellar" aria-pressed="true">
+                  <span class="tier-device" aria-hidden="true">
+                    <svg viewBox="0 0 40 42" focusable="false">
+                      <path d="M17.4 6 v6.5 c0 2.6 -3 3.4 -3 6 v17 q0 2.6 2.8 3 h5.6 q2.8 -.4 2.8 -3 v-17 c0 -2.6 -3 -3.4 -3 -6 V6 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1"/>
+                      <rect x="16.6" y="3.4" width="6.8" height="2.6" fill="url(#e-hd)" stroke="currentColor" stroke-width=".95"/>
+                      <rect x="16" y="24" width="8" height="7.5" fill="var(--paper)" stroke="currentColor" stroke-width=".82"/>
+                      <path d="M17.6 27 h4.8 M18.4 29 h3.2" stroke="currentColor" stroke-width=".6"/>
+                    </svg>
+                  </span>
+                  <strong>Cellar</strong>
+                  <span class="tier-price">$600</span>
+                  <span class="tier-appraise"><small>Appraised · the bottle</small>$480–$760</span>
+                </button>
+                <button class="tier-choice" type="button" data-tier="reserve" aria-pressed="false">
+                  <span class="tier-device" aria-hidden="true">
+                    <svg viewBox="0 0 46 42" focusable="false">
+                      <g transform="translate(2.5,3)">
+                        <path d="M12.4 3.5 v6 c0 2.4 -2.8 3.2 -2.8 5.6 v16 q0 2.4 2.6 2.8 h5.2 q2.6 -.4 2.6 -2.8 v-16 c0 -2.4 -2.8 -3.2 -2.8 -5.6 v-6 Z" fill="url(#e-x)" stroke="currentColor" stroke-width="1"/>
+                        <rect x="11.6" y="1" width="6.4" height="2.5" fill="url(#e-hd)" stroke="currentColor" stroke-width=".95"/>
+                      </g>
+                      <g transform="translate(19,1)">
+                        <path d="M13.4 5 v6.3 c0 2.5 -2.9 3.3 -2.9 5.8 v16.7 q0 2.5 2.7 2.9 h5.4 q2.7 -.4 2.7 -2.9 V17.1 c0 -2.5 -2.9 -3.3 -2.9 -5.8 V5 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1"/>
+                        <rect x="12.6" y="2.4" width="6.6" height="2.6" fill="url(#e-hd)" stroke="currentColor" stroke-width=".95"/>
+                        <rect x="12" y="22.5" width="7.8" height="7" fill="var(--paper)" stroke="currentColor" stroke-width=".82"/>
+                        <path d="M13.6 25.3 h4.6 M14.4 27.3 h3" stroke="currentColor" stroke-width=".6"/>
+                      </g>
+                    </svg>
+                  </span>
+                  <strong>Reserve</strong>
+                  <span class="tier-price">$6,500</span>
+                  <span class="tier-appraise"><small>Appraised · the bottle</small>$5,400–$8,100</span>
+                </button>
+                <button class="tier-choice" type="button" data-tier="grand" aria-pressed="false">
+                  <span class="tier-device" aria-hidden="true">
+                    <svg viewBox="0 0 48 42" focusable="false">
+                      <path d="M11 37 V19 h26 v18 Z" fill="var(--paper)" stroke="currentColor" stroke-width="1"/>
+                      <path d="M9 19 L24 7.5 L39 19 Z" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+                      <path d="M24 4.5 v3" stroke="currentColor" stroke-width=".9"/>
+                      <path d="M21 37 v-7.5 q0 -3 3 -3 q3 0 3 3 V37 Z" fill="url(#e-xd)" stroke="currentColor" stroke-width=".95"/>
+                      <rect x="14.5" y="23" width="4" height="5.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".72"/>
+                      <rect x="29.5" y="23" width="4" height="5.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".72"/>
+                      <path d="M4 37 q2.5 -9 0 -17 q5.5 8 0 17 Z M44 37 q-2.5 -9 0 -17 q-5.5 8 0 17 Z" fill="url(#e-hd)" stroke="currentColor" stroke-width=".82"/>
+                      <path d="M2 37.5 h44" stroke="currentColor" stroke-width=".9"/>
+                    </svg>
+                  </span>
+                  <strong>Grand Cru</strong>
+                  <span class="tier-price">$12,000</span>
+                  <span class="tier-appraise"><small>Appraised · the bottle</small>$9,800–$15,200</span>
+                </button>
+              </div>
+            </div>
+            <div class="rarity-profile" aria-labelledby="rarity-title">
+              <div class="rarity-head">
+                <p class="rarity-title" id="rarity-title">Composition of the Cellar</p>
+              </div>
+              <div class="comp-table" id="comp-table"></div>
+            </div>
+          </div>
+
+          <div id="buy-module">
+            <div class="order-block">
+              <div class="qty-row">
+                <p class="qty-label" id="qty-label">Quantity</p>
+                <div class="stepper" role="group" aria-labelledby="qty-label">
+                  <button type="button" class="step" id="qty-minus" aria-label="One crate fewer" disabled>−</button>
+                  <input class="qty-input" id="qty-input" type="text" inputmode="numeric" value="1" autocomplete="off" aria-label="Number of crates">
+                  <button type="button" class="step" id="qty-plus" aria-label="One crate more">+</button>
+                </div>
+              </div>
+              <p class="total-line"><span class="k">Total</span><span class="lead" aria-hidden="true"></span><em id="total-price">$600</em></p>
+            </div>
+            <label class="buyback-option" for="auto-buyback">
+              <input id="auto-buyback" type="checkbox" aria-label="Instant Buyback — automatically sell every Common bottle when revealed, credited at 85% of appraisal">
+              <span class="buyback-box" aria-hidden="true"></span>
+              <span class="buyback-copy"><strong>Instant Buyback</strong><span>Automatically sell every Common bottle when revealed — credited at 85% of appraisal.</span></span>
+            </label>
+            <div class="purchase-action">
+              <a class="cta" id="hero-cta" href="reveal.html?qty=1&amp;region=bordeaux&amp;tier=cellar">Open a Crate</a>
+              <a class="assurance" href="#cellar">
+                <svg viewBox="0 0 40 40" aria-hidden="true" focusable="false">
+                  <circle cx="20" cy="20" r="18.5" fill="none" stroke="currentColor" stroke-width="1"/>
+                  <circle cx="20" cy="20" r="15" fill="none" stroke="currentColor" stroke-width=".82" stroke-dasharray="2 2.4"/>
+                  <circle cx="17" cy="18" r="3" fill="url(#e-h)" stroke="currentColor" stroke-width=".82"/>
+                  <circle cx="23" cy="18" r="3" fill="url(#e-h)" stroke="currentColor" stroke-width=".82"/>
+                  <circle cx="20" cy="23.5" r="3" fill="url(#e-h)" stroke="currentColor" stroke-width=".82"/>
+                  <path d="M20 15 q0 -4 2.5 -5.5" fill="none" stroke="currentColor" stroke-width=".95"/>
+                </svg>
+                <span>Individually wrapped · Authenticity &amp; custody guaranteed</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <figure class="fig">
+          <div class="region-medallion" id="region-medallion" data-motif="vine" aria-hidden="true">
+            <svg viewBox="0 0 72 72">
+              <circle cx="36" cy="36" r="31" fill="var(--paper)" stroke="currentColor" stroke-width="1"/>
+              <circle cx="36" cy="36" r="26" fill="none" stroke="currentColor" stroke-width=".72" stroke-dasharray="1 3"/>
+              <g data-emblem="vine" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M24 51c18-8 17-27 26-32M34 40c-9-2-13-7-12-13 7-1 12 3 14 10M40 32c1-8 5-13 12-14 2 7-2 12-10 16"/><circle cx="29" cy="48" r="3"/><circle cx="35" cy="46" r="3"/><circle cx="32" cy="52" r="3"/></g>
+              <g data-emblem="leaf" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M19 48c2-22 14-31 34-27-1 19-12 30-34 27Z"/><path d="M22 46 50 23M31 37l-8-2M39 30l1-8"/></g>
+              <g data-emblem="sun" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M18 48h36M23 48c5-11 21-11 26 0M36 17v7M20 24l5 5M52 24l-5 5M16 36h7M49 36h7"/><circle cx="36" cy="36" r="8"/></g>
+              <g data-emblem="cypress" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M36 16c-10 14-10 29 0 38 10-9 10-24 0-38Z"/><path d="M36 20v38M26 57h20"/></g>
+              <g data-emblem="star" fill="none" stroke="currentColor" stroke-width="1.2"><path d="m36 17 4 14 14 5-14 4-4 15-4-15-14-4 14-5Z"/><circle cx="50" cy="21" r="2"/><circle cx="22" cy="51" r="2"/></g>
+              <g data-emblem="monogram"><text x="36" y="48" text-anchor="middle" font-size="36" font-weight="500" fill="currentColor">C</text></g>
+            </svg>
+          </div>
+          <!-- ====== hero engraving: the sealed crate ====== -->
+          <svg viewBox="0 0 520 470" role="img" aria-label="Etching of a wooden wine crate stencilled CELLAR, wrapped bottles within, and a sprig of grapes at its foot">
+            <!-- engraved medallion backdrop -->
+            <circle cx="260" cy="212" r="206" fill="none" stroke="currentColor" stroke-width=".82" opacity=".85"/>
+            <circle cx="260" cy="212" r="197" fill="none" stroke="currentColor" stroke-width=".82" stroke-dasharray="1 5" opacity=".85"/>
+            <!-- ground shadow -->
+            <ellipse cx="260" cy="424" rx="176" ry="15" fill="url(#e-x)" stroke="none"/>
+            <!-- crate interior (open top) -->
+            <path d="M130 240 L170 205 L430 205 L390 240 Z" fill="url(#e-xd)" stroke="currentColor" stroke-width="1"/>
+            <rect x="131" y="240" width="258" height="174" fill="url(#e-xd)" stroke="none"/>
+            <!-- straw -->
+            <path d="M150 236 q14 -11 27 -3 M182 233 q12 -9 24 -1 M300 233 q13 -9 26 -2 M336 236 q12 -10 24 -3 M160 228 q10 -7 20 -1 M318 227 q11 -8 21 -1" fill="none" stroke="currentColor" stroke-width=".95"/>
+            <!-- bottle standing within (Bordeaux) -->
+            <g transform="translate(190,26) scale(1.32)">
+              <path d="M52 18 L52 80 C52 93 41 97 41 106 L41 266 Q41 277 52 279 L68 279 Q79 277 79 266 L79 106 C79 97 68 93 68 80 L68 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M41 112 L41 266 Q41 274 49 277.5 L50 277.5 L50 112 Z" fill="url(#e-x)" stroke="none"/>
+              <rect x="67" y="116" width="6" height="120" rx="3" fill="var(--paper)"/>
+              <rect x="62" y="50" width="3.4" height="26" rx="1.7" fill="var(--paper)"/>
+              <rect x="49" y="11" width="22" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+              <rect x="51" y="18" width="18" height="26" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+              <rect x="53" y="56" width="14" height="10" fill="var(--paper)" stroke="currentColor" stroke-width=".82"/>
+              <path d="M56 61 h8" stroke="currentColor" stroke-width=".6"/>
+              <rect x="44" y="148" width="32" height="44" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+              <rect x="46.5" y="150.5" width="27" height="39" fill="none" stroke="currentColor" stroke-width=".55"/>
+              <path d="M50 160 h20 M52 166 h16 M54 172 h12" stroke="currentColor" stroke-width=".82"/>
+            </g>
+            <!-- crate front: three slats -->
+            <rect x="130" y="240" width="260" height="53" fill="url(#e-o)" stroke="currentColor" stroke-width="1.1"/>
+            <rect x="130" y="298" width="260" height="53" fill="url(#e-o)" stroke="currentColor" stroke-width="1.1"/>
+            <rect x="130" y="356" width="260" height="59" fill="url(#e-o)" stroke="currentColor" stroke-width="1.1"/>
+            <!-- side face -->
+            <path d="M390 240 L430 205 L430 383 L390 415 Z" fill="url(#e-h2)" stroke="currentColor" stroke-width="1.1"/>
+            <path d="M390 296 L430 262 M390 354 L430 320" stroke="currentColor" stroke-width=".95"/>
+            <!-- corner battens + nails -->
+            <rect x="130" y="240" width="16" height="175" fill="url(#e-v)" stroke="currentColor" stroke-width="1.1"/>
+            <rect x="374" y="240" width="16" height="175" fill="url(#e-v)" stroke="currentColor" stroke-width="1.1"/>
+            <circle cx="138" cy="252" r="1.4" fill="currentColor"/><circle cx="138" cy="326" r="1.4" fill="currentColor"/><circle cx="138" cy="402" r="1.4" fill="currentColor"/>
+            <circle cx="382" cy="252" r="1.4" fill="currentColor"/><circle cx="382" cy="326" r="1.4" fill="currentColor"/><circle cx="382" cy="402" r="1.4" fill="currentColor"/>
+            <!-- brand roundel on top slat -->
+            <circle cx="182" cy="266" r="15" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+            <circle cx="182" cy="266" r="11.5" fill="none" stroke="currentColor" stroke-width=".6"/>
+            <circle cx="178" cy="263" r="2.6" fill="url(#e-h)" stroke="currentColor" stroke-width=".72"/>
+            <circle cx="186" cy="263" r="2.6" fill="url(#e-h)" stroke="currentColor" stroke-width=".72"/>
+            <circle cx="182" cy="269" r="2.6" fill="url(#e-h)" stroke="currentColor" stroke-width=".72"/>
+            <path d="M182 260 q0 -5 3 -7" fill="none" stroke="currentColor" stroke-width=".82"/>
+            <!-- pasted paper label on middle slat -->
+            <rect x="178" y="303" width="164" height="44" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+            <rect x="181" y="306" width="158" height="38" fill="none" stroke="currentColor" stroke-width=".55"/>
+            <text x="257" y="327" text-anchor="middle" font-size="20" letter-spacing="8" font-weight="600">CELLAR</text>
+            <text id="crate-label-no" x="259" y="340" text-anchor="middle" font-size="8.5" letter-spacing="1.6" opacity=".9">BORDEAUX · CELLAR</text>
+            <!-- bottom slat stencil -->
+            <text x="260" y="391" text-anchor="middle" font-size="9.5" letter-spacing="2" opacity=".9">BONDED WAREHOUSE · SANTA ROSA</text>
+            <!-- grape sprig, foreground -->
+            <g transform="translate(50,300)">
+              <path d="M62 6 q-3 15 0 26" fill="none" stroke="currentColor" stroke-width="1.1"/>
+              <path d="M56 16 q-24 -15 -37 2 q11 17 33 7 q6 -3 4 -9 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1"/>
+              <path d="M22 19 q15 7 30 1" fill="none" stroke="currentColor" stroke-width=".65"/>
+              <path d="M70 14 q17 -13 24 -2 q4 8 -4 10 q-6 1.5 -6 -4" fill="none" stroke="currentColor" stroke-width=".9"/>
+              <circle cx="46" cy="40" r="8.5" fill="url(#e-h)" stroke="currentColor" stroke-width="1"/>
+              <circle cx="63" cy="38" r="8.5" fill="url(#e-h)" stroke="currentColor" stroke-width="1"/>
+              <circle cx="80" cy="41" r="8.5" fill="url(#e-h)" stroke="currentColor" stroke-width="1"/>
+              <circle cx="54" cy="54" r="8.5" fill="url(#e-h)" stroke="currentColor" stroke-width="1"/>
+              <circle cx="71" cy="54" r="8.5" fill="url(#e-h)" stroke="currentColor" stroke-width="1"/>
+              <circle cx="62" cy="68" r="8.5" fill="url(#e-h)" stroke="currentColor" stroke-width="1"/>
+            </g>
+          </svg>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ the collection ============ -->
+<section id="collection" class="collection">
+  <header class="sect-head wrap">
+    <p class="no" id="collection-kicker">· Bordeaux · Cellar ·</p>
+    <div class="orn-rule" aria-hidden="true">
+      <span></span>
+      <svg width="26" height="14" viewBox="0 0 26 14"><path d="M13 1 L19 7 L13 13 L7 7 Z" fill="none" stroke="currentColor" stroke-width=".9"/><circle cx="13" cy="7" r="1.3" fill="currentColor"/></svg>
+      <span></span>
+    </div>
+    <h2 id="collection-title">Inside a Bordeaux Cellar Crate</h2>
+  </header>
+
+  <figure class="fig headpiece">
+    <!-- ====== vineyard headpiece vignette ====== -->
+    <svg viewBox="0 0 900 180" role="img" aria-label="Etched vignette of vineyard rows converging toward a farmhouse beneath a hatched sun">
+      <!-- sun -->
+      <circle cx="770" cy="48" r="17" fill="var(--paper)" stroke="currentColor" stroke-width="1"/>
+      <path d="M756 42 h28 M755 48 h30 M757 54 h26" stroke="currentColor" stroke-width=".6"/>
+      <path d="M770 22 v-9 M770 74 v9 M744 48 h-9 M796 48 h9 M752 30 l-7 -7 M788 30 l7 -7 M752 66 l-7 7 M788 66 l7 7" stroke="currentColor" stroke-width=".95"/>
+      <!-- birds -->
+      <path d="M556 54 q6 -6 12 0 q6 -6 12 0 M612 40 q5 -5 10 0 q5 -5 10 0" fill="none" stroke="currentColor" stroke-width=".9"/>
+      <!-- hills -->
+      <path d="M0 118 Q170 74 340 104 T680 92 Q800 84 900 102" fill="none" stroke="currentColor" stroke-width="1"/>
+      <path d="M56 112 q84 -19 164 -6 M98 117 q70 -13 142 -4 M690 100 q64 -7 126 2 M712 106 q52 -6 104 1" fill="none" stroke="currentColor" stroke-width=".55"/>
+      <!-- farmhouse -->
+      <rect x="396" y="86" width="34" height="22" fill="var(--paper)" stroke="currentColor" stroke-width="1"/>
+      <path d="M392 86 L413 70 L434 86 Z" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+      <rect x="408" y="94" width="9" height="14" fill="url(#e-xd)" stroke="currentColor" stroke-width=".72"/>
+      <rect x="423" y="73" width="5" height="9" fill="var(--paper)" stroke="currentColor" stroke-width=".82"/>
+      <path d="M426 70 q4 -6 -1 -10" fill="none" stroke="currentColor" stroke-width=".65"/>
+      <!-- cypresses -->
+      <path d="M470 60 q8 18 0 46 q-8 -28 0 -46 Z" fill="url(#e-hd)" stroke="currentColor" stroke-width=".9"/>
+      <path d="M470 106 v7" stroke="currentColor" stroke-width=".95"/>
+      <path d="M488 72 q6 14 0 36 q-6 -22 0 -36 Z" fill="url(#e-hd)" stroke="currentColor" stroke-width=".9"/>
+      <path d="M488 108 v6" stroke="currentColor" stroke-width=".95"/>
+      <!-- vine rows, perspective -->
+      <path d="M40 180 L420 114 M120 180 L424 114 M200 180 L428 116 M280 180 L432 116" fill="none" stroke="currentColor" stroke-width=".95"/>
+      <path d="M860 180 L470 114 M780 180 L466 114 M700 180 L462 116 M620 180 L458 116" fill="none" stroke="currentColor" stroke-width=".95"/>
+      <path d="M150 162 v-7 M232 148 v-6 M304 138 v-6 M746 160 v-7 M668 148 v-6 M600 138 v-6" stroke="currentColor" stroke-width=".82"/>
+      <!-- foreground leaf & grapes, left -->
+      <g transform="translate(14,96)">
+        <path d="M32 26 q-28 -15 -32 11 q17 17 36 2 q3 -9 -4 -13 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1"/>
+        <path d="M6 34 q15 7 28 -1" fill="none" stroke="currentColor" stroke-width=".6"/>
+        <circle cx="48" cy="42" r="6.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+        <circle cx="60" cy="40" r="6.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+        <circle cx="54" cy="53" r="6.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+        <circle cx="66" cy="52" r="6.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+        <circle cx="60" cy="64" r="6.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+      </g>
+      <!-- tendril, right -->
+      <path d="M840 168 q22 -18 34 -4 q6 9 -4 12 q-8 2 -8 -6" fill="none" stroke="currentColor" stroke-width=".9"/>
+    </svg>
+  </figure>
+
+  <div class="wrap" style="padding-top:30px">
+    <div class="plates">
+
+      <!-- PLATE I — Ridge (Bordeaux, rect label) -->
+      <figure class="plate frame">
+        <p class="plate-no">Plate I.</p>
+        <div class="plate-art">
+          <svg viewBox="0 0 120 300" role="img" aria-label="Etched Bordeaux bottle">
+            <ellipse cx="60" cy="286" rx="31" ry="5" fill="url(#e-x)" stroke="none"/>
+            <path d="M52 18 L52 80 C52 93 41 97 41 106 L41 266 Q41 277 52 279 L68 279 Q79 277 79 266 L79 106 C79 97 68 93 68 80 L68 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M41 112 L41 266 Q41 274 49 277.5 L50 277.5 L50 112 Z" fill="url(#e-x)" stroke="none"/>
+            <rect x="67" y="116" width="6" height="136" rx="3" fill="var(--paper)"/>
+            <rect x="62" y="50" width="3.4" height="26" rx="1.7" fill="var(--paper)"/>
+            <rect x="49" y="11" width="22" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+            <rect x="51" y="18" width="18" height="26" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+            <rect x="44" y="148" width="32" height="44" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+            <rect x="46.5" y="150.5" width="27" height="39" fill="none" stroke="currentColor" stroke-width=".55"/>
+            <path d="M50 160 h20 M52 166 h16 M54 172 h12" stroke="currentColor" stroke-width=".82"/>
+            <path d="M50 184 l4.5 -6 3 3.8 3.8 -5.2 5.7 7.4" fill="none" stroke="currentColor" stroke-width=".8"/>
+            <path d="M49 272 q11 -7 22 0" fill="none" stroke="currentColor" stroke-width=".7"/>
+            <rect class="rx rx-un" x="51" y="26" width="18" height="6" fill="url(#e-h)" stroke="currentColor" stroke-width=".6"/>
+            <g class="rx rx-epic"><rect x="51" y="31" width="18" height="9" fill="var(--paper)"/><path d="M51 33.5 h18 M51 38 h18" stroke="currentColor" stroke-width="1.2"/></g>
+            <path class="rx rx-rare" d="M51 44 v4.5 q0 2.6 1.7 2.6 q1.7 0 1.7 -2.6 V44 h3.4 v7.5 q0 2.6 1.7 2.6 q1.7 0 1.7 -2.6 V44 h3.4 v5.5 q0 2.6 1.7 2.6 q1.7 0 1.7 -2.6 V44 Z" fill="url(#e-xd)" stroke="currentColor" stroke-width=".7"/>
+          </svg>
+        </div>
+        <figcaption>
+          <h3 class="plate-name">Ridge Estate Cabernet Sauvignon</h3>
+          <p class="plate-meta">2019 · Santa Cruz Mountains</p>
+          <p class="plate-note">Structured, cedar and cassis.</p>
+          <p class="plate-buy"><span class="k">Value</span><em>$128</em></p>
+        </figcaption>
+      </figure>
+
+      <!-- PLATE II — Tempier (Burgundy, oval label) -->
+      <figure class="plate frame">
+        <p class="plate-no">Plate II.</p>
+        <div class="plate-art">
+          <svg viewBox="0 0 120 300" role="img" aria-label="Etched Burgundy bottle">
+            <ellipse cx="60" cy="286" rx="32" ry="5" fill="url(#e-x)" stroke="none"/>
+            <path d="M53 18 L53 70 C53 95 38 102 38 132 L38 264 Q38 276 50 279 L70 279 Q82 276 82 264 L82 132 C82 102 67 95 67 70 L67 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M38 134 L38 264 Q38 274 47 277.5 L48 277.5 L48 128 Q41 128 38 134 Z" fill="url(#e-x)" stroke="none"/>
+            <rect x="69.5" y="126" width="6" height="126" rx="3" fill="var(--paper)"/>
+            <rect x="62.5" y="46" width="3.2" height="22" rx="1.6" fill="var(--paper)"/>
+            <rect x="50" y="11" width="21" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+            <rect x="52" y="18" width="17" height="24" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+            <ellipse cx="60" cy="176" rx="17" ry="22" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+            <ellipse cx="60" cy="176" rx="14.5" ry="19" fill="none" stroke="currentColor" stroke-width=".55"/>
+            <path d="M52 168 h16 M53.5 174 h13 M55 180 h10" stroke="currentColor" stroke-width=".82"/>
+            <g fill="none" stroke="currentColor" stroke-width=".7"><path d="M60 184.5 q.2 -2.8 2.4 -4"/><circle cx="57.8" cy="187.5" r="2"/><circle cx="62.2" cy="187.5" r="2"/><circle cx="60" cy="191" r="2"/></g>
+            <rect class="rx rx-un" x="52" y="26" width="17" height="6" fill="url(#e-h)" stroke="currentColor" stroke-width=".6"/>
+            <g class="rx rx-epic"><rect x="52" y="29" width="17" height="9" fill="var(--paper)"/><path d="M52 31.5 h17 M52 36 h17" stroke="currentColor" stroke-width="1.2"/></g>
+            <path class="rx rx-rare" d="M52 42 v4.5 q0 2.6 1.6 2.6 q1.6 0 1.6 -2.6 V42 h3.2 v7.5 q0 2.6 1.6 2.6 q1.6 0 1.6 -2.6 V42 h3.2 v5.5 q0 2.6 1.6 2.6 q1.6 0 1.6 -2.6 V42 Z" fill="url(#e-xd)" stroke="currentColor" stroke-width=".7"/>
+          </svg>
+        </div>
+        <figcaption>
+          <h3 class="plate-name">Domaine Tempier Bandol Rouge</h3>
+          <p class="plate-meta">2020 · Bandol, Provence</p>
+          <p class="plate-note">Wild herbs, dark plum.</p>
+          <p class="plate-buy"><span class="k">Value</span><em>$142</em></p>
+        </figcaption>
+      </figure>
+
+      <!-- PLATE III — Produttori (Albeisa, wide label) -->
+      <figure class="plate frame">
+        <p class="plate-no">Plate III.</p>
+        <div class="plate-art">
+          <svg viewBox="0 0 120 300" role="img" aria-label="Etched Albeisa bottle">
+            <ellipse cx="60" cy="286" rx="31" ry="5" fill="url(#e-x)" stroke="none"/>
+            <path d="M53 18 L53 66 C53 90 40 98 40 124 L40 264 Q40 276 51 279 L69 279 Q80 276 80 264 L80 124 C80 98 67 90 67 66 L67 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M40 128 L40 264 Q40 274 49 277.5 L50 277.5 L50 122 Q43 122 40 128 Z" fill="url(#e-x)" stroke="none"/>
+            <rect x="68" y="118" width="5.6" height="132" rx="2.8" fill="var(--paper)"/>
+            <rect x="62.5" y="50" width="3.2" height="16" rx="1.6" fill="var(--paper)"/>
+            <rect x="50" y="11" width="21" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+            <rect x="52" y="18" width="17" height="30" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+            <rect x="42" y="150" width="36" height="34" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+            <rect x="44.5" y="152.5" width="31" height="29" fill="none" stroke="currentColor" stroke-width=".55"/>
+            <path d="M48 160 h24 M51 166 h18" stroke="currentColor" stroke-width=".82"/>
+            <path d="M55 180.5 h10 M56.5 180.5 v-5.5 h7 v5.5 M56 175 v-2 h1.8 v2 M62.2 175 v-2 h1.8 v2 M59.1 175 v-2 h1.8 v2 M59 180.5 v-3.2 h2 v3.2" fill="none" stroke="currentColor" stroke-width=".6"/>
+            <rect class="rx rx-un" x="52" y="27" width="17" height="6" fill="url(#e-h)" stroke="currentColor" stroke-width=".6"/>
+            <g class="rx rx-epic"><rect x="52" y="35" width="17" height="9" fill="var(--paper)"/><path d="M52 37.5 h17 M52 42 h17" stroke="currentColor" stroke-width="1.2"/></g>
+            <path class="rx rx-rare" d="M52 48 v4.5 q0 2.6 1.6 2.6 q1.6 0 1.6 -2.6 V48 h3.2 v7.5 q0 2.6 1.6 2.6 q1.6 0 1.6 -2.6 V48 h3.2 v5.5 q0 2.6 1.6 2.6 q1.6 0 1.6 -2.6 V48 Z" fill="url(#e-xd)" stroke="currentColor" stroke-width=".7"/>
+          </svg>
+        </div>
+        <figcaption>
+          <h3 class="plate-name">Produttori del Barbaresco</h3>
+          <p class="plate-meta">2019 · Piedmont</p>
+          <p class="plate-note">Rose petal, tar, fine tannin.</p>
+          <p class="plate-buy"><span class="k">Value</span><em>$118</em></p>
+        </figcaption>
+      </figure>
+
+      <!-- PLATE IV — Musar (Bordeaux, shield label + cedar) -->
+      <figure class="plate frame">
+        <p class="plate-no">Plate IV.</p>
+        <div class="plate-art">
+          <svg viewBox="0 0 120 300" role="img" aria-label="Etched Bordeaux bottle with shield label">
+            <ellipse cx="60" cy="286" rx="31" ry="5" fill="url(#e-x)" stroke="none"/>
+            <path d="M52 18 L52 80 C52 93 41 97 41 106 L41 266 Q41 277 52 279 L68 279 Q79 277 79 266 L79 106 C79 97 68 93 68 80 L68 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M41 112 L41 266 Q41 274 49 277.5 L50 277.5 L50 112 Z" fill="url(#e-x)" stroke="none"/>
+            <rect x="67" y="116" width="6" height="136" rx="3" fill="var(--paper)"/>
+            <rect x="62" y="50" width="3.4" height="26" rx="1.7" fill="var(--paper)"/>
+            <rect x="49" y="11" width="22" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+            <rect x="51" y="18" width="18" height="20" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+            <rect x="53" y="56" width="14" height="10" fill="var(--paper)" stroke="currentColor" stroke-width=".82"/>
+            <path d="M56 61 h8" stroke="currentColor" stroke-width=".6"/>
+            <path d="M46 150 h28 v24 q0 14 -14 18 q-14 -4 -14 -18 Z" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+            <path d="M48.5 152.5 h23 v21.5 q0 11.5 -11.5 15 q-11.5 -3.5 -11.5 -15 Z" fill="none" stroke="currentColor" stroke-width=".55"/>
+            <path d="M52 160 h16 M54 166 h12" stroke="currentColor" stroke-width=".82"/>
+            <path d="M60 171.5 l3.6 5 h-2.2 l3 4.5 h-8.8 l3 -4.5 h-2.2 Z M60 181 v3" fill="none" stroke="currentColor" stroke-width=".7"/>
+            <rect class="rx rx-un" x="51" y="24" width="18" height="6" fill="url(#e-h)" stroke="currentColor" stroke-width=".6"/>
+            <g class="rx rx-epic"><rect x="51" y="25" width="18" height="9" fill="var(--paper)"/><path d="M51 27.5 h18 M51 32 h18" stroke="currentColor" stroke-width="1.2"/></g>
+            <path class="rx rx-rare" d="M51 38 v4.5 q0 2.6 1.7 2.6 q1.7 0 1.7 -2.6 V38 h3.4 v7.5 q0 2.6 1.7 2.6 q1.7 0 1.7 -2.6 V38 h3.4 v5.5 q0 2.6 1.7 2.6 q1.7 0 1.7 -2.6 V38 Z" fill="url(#e-xd)" stroke="currentColor" stroke-width=".7"/>
+          </svg>
+        </div>
+        <figcaption>
+          <h3 class="plate-name">Château Musar Rouge</h3>
+          <p class="plate-meta">2017 · Bekaa Valley</p>
+          <p class="plate-note">Fig, leather, sweet spice.</p>
+          <p class="plate-buy"><span class="k">Value</span><em>$155</em></p>
+        </figcaption>
+      </figure>
+
+      <!-- PLATE V — Tondonia (Bordeaux, ornate double oval + neck label) -->
+      <figure class="plate frame">
+        <p class="plate-no">Plate V.</p>
+        <div class="plate-art">
+          <svg viewBox="0 0 120 300" role="img" aria-label="Etched Rioja bottle with oval label">
+            <ellipse cx="60" cy="286" rx="31" ry="5" fill="url(#e-x)" stroke="none"/>
+            <path d="M52 18 L52 80 C52 93 41 97 41 106 L41 266 Q41 277 52 279 L68 279 Q79 277 79 266 L79 106 C79 97 68 93 68 80 L68 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M41 112 L41 266 Q41 274 49 277.5 L50 277.5 L50 112 Z" fill="url(#e-x)" stroke="none"/>
+            <rect x="67" y="116" width="6" height="136" rx="3" fill="var(--paper)"/>
+            <rect x="62" y="50" width="3.4" height="26" rx="1.7" fill="var(--paper)"/>
+            <rect x="49" y="11" width="22" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+            <rect x="51" y="18" width="18" height="33" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+            <rect x="53" y="56" width="14" height="11" fill="var(--paper)" stroke="currentColor" stroke-width=".82"/>
+            <path d="M55.5 60 h9 M56.5 63.5 h7" stroke="currentColor" stroke-width=".6"/>
+            <ellipse cx="60" cy="174" rx="18" ry="24" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+            <ellipse cx="60" cy="174" rx="15" ry="20.5" fill="none" stroke="currentColor" stroke-width=".55"/>
+            <ellipse cx="60" cy="174" rx="12.5" ry="17.5" fill="none" stroke="currentColor" stroke-width=".45"/>
+            <path d="M53 168 h14 M54.5 174 h11 M56 180 h8" stroke="currentColor" stroke-width=".82"/>
+            <g fill="none" stroke="currentColor" stroke-width=".7"><circle cx="60" cy="158.8" r="2.1"/><path d="M60 160.9 V167 M60 164 h2.6 M60 166.6 h3.4"/></g>
+            <rect class="rx rx-un" x="51" y="28" width="18" height="6" fill="url(#e-h)" stroke="currentColor" stroke-width=".6"/>
+            <g class="rx rx-epic"><rect x="51" y="38" width="18" height="9" fill="var(--paper)"/><path d="M51 40.5 h18 M51 45 h18" stroke="currentColor" stroke-width="1.2"/></g>
+            <path class="rx rx-rare" d="M51 51 v3 q0 2.4 1.7 2.4 q1.7 0 1.7 -2.4 V51 h3.4 v4.6 q0 2.4 1.7 2.4 q1.7 0 1.7 -2.4 V51 h3.4 v3.6 q0 2.4 1.7 2.4 q1.7 0 1.7 -2.4 V51 Z" fill="url(#e-xd)" stroke="currentColor" stroke-width=".7"/>
+          </svg>
+        </div>
+        <figcaption>
+          <h3 class="plate-name">Viña Tondonia Reserva</h3>
+          <p class="plate-meta">2011 · Rioja</p>
+          <p class="plate-note">Dried cherry, cedar, long.</p>
+          <p class="plate-buy"><span class="k">Value</span><em>$168</em></p>
+        </figcaption>
+      </figure>
+
+      <!-- PLATE VI — Huet (flute) -->
+      <figure class="plate frame">
+        <p class="plate-no">Plate VI.</p>
+        <div class="plate-art">
+          <svg viewBox="0 0 120 300" role="img" aria-label="Etched slender Loire flute bottle">
+            <ellipse cx="60" cy="286" rx="26" ry="5" fill="url(#e-x)" stroke="none"/>
+            <path d="M54 18 L54 55 C54 95 45 130 45 175 L45 265 Q45 277 54 279 L66 279 Q75 277 75 265 L75 175 C75 130 66 95 66 55 L66 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M45 182 L45 265 Q45 274 52 277.5 L53 277.5 L53 174 Q48 174 45 182 Z" fill="url(#e-x)" stroke="none"/>
+            <rect x="65" y="150" width="4.8" height="112" rx="2.4" fill="var(--paper)"/>
+            <rect x="61.5" y="42" width="3" height="24" rx="1.5" fill="var(--paper)"/>
+            <rect x="51" y="11" width="19" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+            <rect x="53" y="18" width="15" height="22" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+            <ellipse cx="60" cy="206" rx="13" ry="17" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+            <ellipse cx="60" cy="206" rx="10.8" ry="14.5" fill="none" stroke="currentColor" stroke-width=".55"/>
+            <path d="M54 199 h12 M55.5 205 h9 M57 211 h6" stroke="currentColor" stroke-width=".82"/>
+            <path d="M60 212.5 q-1.5 2.4 0 4.4 q1.5 -2 0 -4.4 Z M57.4 214.5 q-2 .7 -1.3 2.6 q1.9 .5 2.6 -1.4 M62.6 214.5 q2 .7 1.3 2.6 q-1.9 .5 -2.6 -1.4 M58.2 218.4 h3.6" fill="none" stroke="currentColor" stroke-width=".6"/>
+            <rect class="rx rx-un" x="53" y="26" width="15" height="6" fill="url(#e-h)" stroke="currentColor" stroke-width=".6"/>
+            <g class="rx rx-epic"><rect x="53" y="27" width="15" height="9" fill="var(--paper)"/><path d="M53 29.5 h15 M53 34 h15" stroke="currentColor" stroke-width="1.2"/></g>
+            <path class="rx rx-rare" d="M53 40 v4.5 q0 2.6 1.4 2.6 q1.4 0 1.4 -2.6 V40 h2.8 v7 q0 2.6 1.4 2.6 q1.4 0 1.4 -2.6 V40 h2.8 v5 q0 2.6 1.4 2.6 q1.4 0 1.4 -2.6 V40 Z" fill="url(#e-xd)" stroke="currentColor" stroke-width=".7"/>
+          </svg>
+        </div>
+        <figcaption>
+          <h3 class="plate-name">Domaine Huet Le Mont Sec</h3>
+          <p class="plate-meta">2022 · Vouvray, Loire</p>
+          <p class="plate-note">Chenin, quince, chalk.</p>
+          <p class="plate-buy"><span class="k">Value</span><em>$112</em></p>
+        </figcaption>
+      </figure>
+
+      <!-- PLATE VII — Montelena (Burgundy, arched label) -->
+      <figure class="plate frame">
+        <p class="plate-no">Plate VII.</p>
+        <div class="plate-art">
+          <svg viewBox="0 0 120 300" role="img" aria-label="Etched Burgundy bottle with arched label">
+            <ellipse cx="60" cy="286" rx="32" ry="5" fill="url(#e-x)" stroke="none"/>
+            <path d="M53 18 L53 62 C53 88 38 96 38 124 L38 264 Q38 276 50 279 L70 279 Q82 276 82 264 L82 124 C82 96 67 88 67 62 L67 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M38 130 L38 264 Q38 274 47 277.5 L48 277.5 L48 124 Q41 124 38 130 Z" fill="url(#e-x)" stroke="none"/>
+            <rect x="69.5" y="120" width="6" height="132" rx="3" fill="var(--paper)"/>
+            <rect x="62.5" y="42" width="3.2" height="18" rx="1.6" fill="var(--paper)"/>
+            <rect x="50" y="11" width="21" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+            <rect x="52" y="18" width="17" height="24" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+            <rect x="44" y="152" width="32" height="40" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+            <path d="M47 166 q13 -13 26 0" fill="none" stroke="currentColor" stroke-width=".6"/>
+            <rect x="46.5" y="154.5" width="27" height="35" fill="none" stroke="currentColor" stroke-width=".55"/>
+            <path d="m60 155.5 1.2 2.5 2.8 .4 -2 2 .5 2.8 -2.5 -1.3 -2.5 1.3 .5 -2.8 -2 -2 2.8 -.4 Z" fill="none" stroke="currentColor" stroke-width=".6"/>
+            <path d="M51 172 h18 M53 178 h14 M55 184 h10" stroke="currentColor" stroke-width=".82"/>
+            <rect class="rx rx-un" x="52" y="26" width="17" height="6" fill="url(#e-h)" stroke="currentColor" stroke-width=".6"/>
+            <g class="rx rx-epic"><rect x="52" y="29" width="17" height="9" fill="var(--paper)"/><path d="M52 31.5 h17 M52 36 h17" stroke="currentColor" stroke-width="1.2"/></g>
+            <path class="rx rx-rare" d="M52 42 v4.5 q0 2.6 1.6 2.6 q1.6 0 1.6 -2.6 V42 h3.2 v7.5 q0 2.6 1.6 2.6 q1.6 0 1.6 -2.6 V42 h3.2 v5.5 q0 2.6 1.6 2.6 q1.6 0 1.6 -2.6 V42 Z" fill="url(#e-xd)" stroke="currentColor" stroke-width=".7"/>
+          </svg>
+        </div>
+        <figcaption>
+          <h3 class="plate-name">Chateau Montelena Chardonnay</h3>
+          <p class="plate-meta">2021 · Napa Valley</p>
+          <p class="plate-note">Stone fruit, no oak excess.</p>
+          <p class="plate-buy"><span class="k">Value</span><em>$134</em></p>
+        </figcaption>
+      </figure>
+
+      <!-- PLATE VIII — Vietti (Albeisa, art-block label) -->
+      <figure class="plate frame">
+        <p class="plate-no">Plate VIII.</p>
+        <div class="plate-art">
+          <svg viewBox="0 0 120 300" role="img" aria-label="Etched Albeisa bottle with pictorial label">
+            <ellipse cx="60" cy="286" rx="31" ry="5" fill="url(#e-x)" stroke="none"/>
+            <path d="M53 18 L53 66 C53 90 40 98 40 124 L40 264 Q40 276 51 279 L69 279 Q80 276 80 264 L80 124 C80 98 67 90 67 66 L67 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M40 128 L40 264 Q40 274 49 277.5 L50 277.5 L50 122 Q43 122 40 128 Z" fill="url(#e-x)" stroke="none"/>
+            <rect x="68" y="118" width="5.6" height="132" rx="2.8" fill="var(--paper)"/>
+            <rect x="62.5" y="50" width="3.2" height="16" rx="1.6" fill="var(--paper)"/>
+            <rect x="50" y="11" width="21" height="7" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+            <rect x="52" y="18" width="17" height="28" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+            <rect x="45" y="146" width="30" height="48" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+            <rect x="47.5" y="148.5" width="25" height="43" fill="none" stroke="currentColor" stroke-width=".55"/>
+            <rect x="50" y="151" width="20" height="22" fill="url(#e-h)" stroke="currentColor" stroke-width=".6"/>
+            <path d="M60 174.6 l1.8 1.9 -1.8 1.9 -1.8 -1.9 Z" fill="none" stroke="currentColor" stroke-width=".6"/>
+            <path d="M52 180 h16 M54 186 h12" stroke="currentColor" stroke-width=".82"/>
+            <rect class="rx rx-un" x="52" y="26" width="17" height="6" fill="url(#e-h)" stroke="currentColor" stroke-width=".6"/>
+            <g class="rx rx-epic"><rect x="52" y="33" width="17" height="9" fill="var(--paper)"/><path d="M52 35.5 h17 M52 40 h17" stroke="currentColor" stroke-width="1.2"/></g>
+            <path class="rx rx-rare" d="M52 46 v4.5 q0 2.6 1.6 2.6 q1.6 0 1.6 -2.6 V46 h3.2 v7.5 q0 2.6 1.6 2.6 q1.6 0 1.6 -2.6 V46 h3.2 v5.5 q0 2.6 1.6 2.6 q1.6 0 1.6 -2.6 V46 Z" fill="url(#e-xd)" stroke="currentColor" stroke-width=".7"/>
+          </svg>
+        </div>
+        <figcaption>
+          <h3 class="plate-name">Vietti Barolo Castiglione</h3>
+          <p class="plate-meta">2019 · Piedmont</p>
+          <p class="plate-note">Sour cherry, licorice, grip.</p>
+          <p class="plate-buy"><span class="k">Value</span><em>$176</em></p>
+        </figcaption>
+      </figure>
+
+      <!-- PLATES IX–XII — the remaining wines in the crate -->
+      <figure class="plate frame">
+        <p class="plate-no">Plate IX.</p>
+        <div class="plate-art">
+          <svg viewBox="0 0 120 300" role="img" aria-label="Etched Rhône bottle">
+            <ellipse cx="60" cy="286" rx="31" ry="5" fill="url(#e-x)"/>
+            <path d="M52 18 V76 C52 94 40 99 40 116 V264 Q40 278 52 280 H68 Q80 278 80 264 V116 C80 99 68 94 68 76 V18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+            <rect x="49" y="11" width="22" height="31" fill="url(#e-xd)" stroke="currentColor"/>
+            <path d="M44 148 H76 V194 H44 Z M48 152 H72 V190 H48 Z" fill="var(--paper)" stroke="currentColor" stroke-width=".82"/>
+            <path d="M51 162 H69 M53 168 H67 M55 174 H65" stroke="currentColor" stroke-width=".82"/>
+            <path d="M60 179 q-4 1.4 -4 4.4 q0 3 4 4 q4 -1 4 -4 q0 -3 -4 -4.4 Z M60 179 v8.4 M57.6 182 l2.4 1.8 M62.4 182 l-2.4 1.8" fill="none" stroke="currentColor" stroke-width=".6"/>
+            <rect class="rx rx-un" x="49" y="19" width="22" height="6" fill="url(#e-h)" stroke="currentColor" stroke-width=".6"/>
+            <g class="rx rx-epic"><rect x="49" y="29" width="22" height="9" fill="var(--paper)"/><path d="M49 31.5 h22 M49 36 h22" stroke="currentColor" stroke-width="1.2"/></g>
+            <path class="rx rx-rare" d="M49 42 v4.5 q0 2.6 2 2.6 q2 0 2 -2.6 V42 h4 v7.5 q0 2.6 2 2.6 q2 0 2 -2.6 V42 h4 v5.5 q0 2.6 2 2.6 q2 0 2 -2.6 V42 Z" fill="url(#e-xd)" stroke="currentColor" stroke-width=".7"/>
+          </svg>
+        </div>
+        <figcaption>
+          <h3 class="plate-name">Jean-Louis Chave Saint-Joseph</h3>
+          <p class="plate-meta">2020 · Northern Rhône</p>
+          <p class="plate-note">Black olive, violet, granite.</p>
+          <p class="plate-buy"><span class="k">Value</span><em>$149</em></p>
+        </figcaption>
+      </figure>
+
+      <figure class="plate frame">
+        <p class="plate-no">Plate X.</p>
+        <div class="plate-art">
+          <svg viewBox="0 0 120 300" role="img" aria-label="Etched Champagne bottle">
+            <ellipse cx="60" cy="286" rx="33" ry="5" fill="url(#e-x)"/>
+            <path d="M52 20 V65 C52 91 37 105 37 138 V262 Q37 278 50 281 H70 Q83 278 83 262 V138 C83 105 68 91 68 65 V20 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M48 10 H72 L69 44 H51 Z" fill="url(#e-xd)" stroke="currentColor"/>
+            <ellipse cx="60" cy="178" rx="19" ry="25" fill="var(--paper)" stroke="currentColor"/>
+            <path d="M54.5 164.5 h11 M54.5 164.5 l-.9 -5.5 3.6 2.7 2.8 -4.2 2.8 4.2 3.6 -2.7 -.9 5.5" fill="none" stroke="currentColor" stroke-width=".65"/>
+            <path d="M50 171 H70 M52 179 H68 M54 187 H66" stroke="currentColor" stroke-width=".82"/>
+            <path d="M49 274 q11 -8 22 0" fill="none" stroke="currentColor" stroke-width=".7"/>
+            <rect class="rx rx-un" x="52.5" y="17" width="15.5" height="6" fill="url(#e-h)" stroke="currentColor" stroke-width=".6"/>
+            <g class="rx rx-epic"><rect x="51.5" y="31" width="17.5" height="9" fill="var(--paper)"/><path d="M51.5 33.5 h17.5 M51.5 38 h17.5" stroke="currentColor" stroke-width="1.2"/></g>
+            <path class="rx rx-rare" d="M51 44 v4.5 q0 2.6 1.7 2.6 q1.7 0 1.7 -2.6 V44 h3.4 v7.5 q0 2.6 1.7 2.6 q1.7 0 1.7 -2.6 V44 h3.4 v5.5 q0 2.6 1.7 2.6 q1.7 0 1.7 -2.6 V44 Z" fill="url(#e-xd)" stroke="currentColor" stroke-width=".7"/>
+          </svg>
+        </div>
+        <figcaption>
+          <h3 class="plate-name">Bollinger Special Cuvée</h3>
+          <p class="plate-meta">NV · Champagne</p>
+          <p class="plate-note">Brioche, orchard fruit, chalk.</p>
+          <p class="plate-buy"><span class="k">Value</span><em>$125</em></p>
+        </figcaption>
+      </figure>
+
+      <figure class="plate frame">
+        <p class="plate-no">Plate XI.</p>
+        <div class="plate-art">
+          <svg viewBox="0 0 120 300" role="img" aria-label="Etched German flute bottle">
+            <ellipse cx="60" cy="286" rx="25" ry="5" fill="url(#e-x)"/>
+            <path d="M54 18 V58 C54 104 45 130 45 176 V266 Q45 279 55 281 H65 Q75 279 75 266 V176 C75 130 66 104 66 58 V18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+            <rect x="51" y="11" width="19" height="29" fill="url(#e-xd)" stroke="currentColor"/>
+            <rect x="48" y="184" width="24" height="37" fill="var(--paper)" stroke="currentColor"/>
+            <path d="M52 193 H68 M53 200 H67 M55 207 H65" stroke="currentColor" stroke-width=".82"/>
+            <path d="M62.3 211.5 a4 4 0 1 0 0 6.6 a3.1 3.1 0 1 1 0 -6.6 Z" fill="none" stroke="currentColor" stroke-width=".6"/>
+            <rect class="rx rx-un" x="51" y="19" width="19" height="6" fill="url(#e-h)" stroke="currentColor" stroke-width=".6"/>
+            <g class="rx rx-epic"><rect x="51" y="27" width="19" height="9" fill="var(--paper)"/><path d="M51 29.5 h19 M51 34 h19" stroke="currentColor" stroke-width="1.2"/></g>
+            <path class="rx rx-rare" d="M51 40 v4.5 q0 2.6 1.8 2.6 q1.8 0 1.8 -2.6 V40 h3.6 v7 q0 2.6 1.8 2.6 q1.8 0 1.8 -2.6 V40 h3.6 v5 q0 2.6 1.8 2.6 q1.8 0 1.8 -2.6 V40 Z" fill="url(#e-xd)" stroke="currentColor" stroke-width=".7"/>
+          </svg>
+        </div>
+        <figcaption>
+          <h3 class="plate-name">Dönnhoff Hermannshöhle Riesling</h3>
+          <p class="plate-meta">2021 · Nahe</p>
+          <p class="plate-note">Citrus oil, slate, quiet power.</p>
+          <p class="plate-buy"><span class="k">Value</span><em>$138</em></p>
+        </figcaption>
+      </figure>
+
+      <figure class="plate frame">
+        <p class="plate-no">Plate XII.</p>
+        <div class="plate-art">
+          <svg viewBox="0 0 120 300" role="img" aria-label="Etched Burgundy bottle">
+            <ellipse cx="60" cy="286" rx="32" ry="5" fill="url(#e-x)"/>
+            <path d="M53 18 V74 C53 99 38 106 38 136 V264 Q38 278 50 281 H70 Q82 278 82 264 V136 C82 106 67 99 67 74 V18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
+            <rect x="50" y="11" width="21" height="31" fill="url(#e-xd)" stroke="currentColor"/>
+            <path d="M43 153 Q60 142 77 153 V194 H43 Z" fill="var(--paper)" stroke="currentColor"/>
+            <g fill="none" stroke="currentColor" stroke-width=".6"><circle cx="60" cy="155.5" r="1.6"/><circle cx="56.9" cy="158.6" r="1.6"/><circle cx="63.1" cy="158.6" r="1.6"/><circle cx="60" cy="161.7" r="1.6"/></g>
+            <path d="M50 168 H70 M52 175 H68 M54 182 H66" stroke="currentColor" stroke-width=".82"/>
+            <path d="M48 274 q12 -8 24 0" fill="none" stroke="currentColor" stroke-width=".7"/>
+            <rect class="rx rx-un" x="50" y="19" width="21" height="6" fill="url(#e-h)" stroke="currentColor" stroke-width=".6"/>
+            <g class="rx rx-epic"><rect x="50" y="29" width="21" height="9" fill="var(--paper)"/><path d="M50 31.5 h21 M50 36 h21" stroke="currentColor" stroke-width="1.2"/></g>
+            <path class="rx rx-rare" d="M50 42 v4.5 q0 2.6 2 2.6 q2 0 2 -2.6 V42 h4 v7.5 q0 2.6 2 2.6 q2 0 2 -2.6 V42 h4 v5.5 q0 2.6 2 2.6 q2 0 2 -2.6 V42 Z" fill="url(#e-xd)" stroke="currentColor" stroke-width=".7"/>
+          </svg>
+        </div>
+        <figcaption>
+          <h3 class="plate-name">Domaine Leflaive Mâcon-Verzé</h3>
+          <p class="plate-meta">2021 · Burgundy</p>
+          <p class="plate-note">White flowers, lemon, mineral.</p>
+          <p class="plate-buy"><span class="k">Value</span><em>$121</em></p>
+        </figcaption>
+      </figure>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ custody ============ -->
+<section id="cellar" class="custody">
+  <header class="sect-head wrap">
+    <p class="no">· Conditions of Keeping ·</p>
+    <div class="orn-rule" aria-hidden="true">
+      <span></span>
+      <svg width="26" height="14" viewBox="0 0 26 14"><path d="M13 1 L19 7 L13 13 L7 7 Z" fill="none" stroke="currentColor" stroke-width=".9"/><circle cx="13" cy="7" r="1.3" fill="currentColor"/></svg>
+      <span></span>
+    </div>
+    <h2>The House Cellar</h2>
+    <p class="sub">Every bottle in this catalogue rests in one place, under one roof, on one unbroken record.</p>
+  </header>
+
+  <div class="wrap">
+    <div class="frame custody-frame">
+      <div class="custody-grid">
+
+        <figure class="fig">
+          <!-- ====== cellar arches, receding ====== -->
+          <svg viewBox="0 0 460 320" role="img" aria-label="Etching of a bonded cellar: stone arches receding into cross-hatched darkness, barrels at rest">
+            <rect x="20" y="24" width="420" height="272" fill="url(#e-h)" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M70 296 L70 140 Q70 58 230 58 Q390 58 390 140 L390 296 Z" fill="var(--paper)" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M118 274 L118 148 Q118 88 230 88 Q342 88 342 148 L342 274 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1"/>
+            <path d="M158 256 L158 154 Q158 110 230 110 Q302 110 302 154 L302 256 Z" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+            <path d="M190 242 L190 158 Q190 126 230 126 Q270 126 270 158 L270 242 Z" fill="url(#e-x)" stroke="currentColor" stroke-width=".9"/>
+            <path d="M212 232 L212 162 Q212 138 230 138 Q248 138 248 162 L248 232 Z" fill="url(#e-xd)" stroke="currentColor" stroke-width=".9"/>
+            <!-- voussoirs & keystone -->
+            <path d="M108 96 L96 84 M146 72 L139 57 M310 70 L317 55 M350 94 L362 82" stroke="currentColor" stroke-width=".95"/>
+            <path d="M222 44 h16 l-3 16 h-10 Z" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+            <!-- floor perspective -->
+            <path d="M70 296 L212 232 M390 296 L248 232" fill="none" stroke="currentColor" stroke-width=".95"/>
+            <path d="M118 274 H342 M158 256 H302 M190 242 H270" stroke="currentColor" stroke-width=".5"/>
+            <!-- barrels end-on, right bay -->
+            <circle cx="336" cy="273" r="12" fill="url(#e-o)" stroke="currentColor" stroke-width=".9"/>
+            <circle cx="362" cy="270" r="15" fill="url(#e-o)" stroke="currentColor" stroke-width="1"/>
+            <circle cx="362" cy="270" r="5" fill="none" stroke="currentColor" stroke-width=".72"/>
+            <!-- standing barrel, left bay -->
+            <path d="M86 246 C82 258 82 274 86 284 L106 284 C110 274 110 258 106 246 Q96 242.5 86 246 Z" fill="url(#e-v)" stroke="currentColor" stroke-width=".9"/>
+            <ellipse cx="96" cy="246" rx="10" ry="2.8" fill="url(#e-h)" stroke="currentColor" stroke-width=".82"/>
+            <path d="M85 256 Q96 259 107 256 M85 274 Q96 277 107 274" fill="none" stroke="currentColor" stroke-width=".72"/>
+          </svg>
+          <figcaption>Fig.&nbsp;2 — The bonded cellar; each bay under continuous custody.</figcaption>
+        </figure>
+
+        <div>
+          <h3 class="sc-lg">Storage Attestation</h3>
+          <ul class="conditions">
+            <li><span class="k">Warehouse</span><span class="lead" aria-hidden="true"></span><span class="v">Bonded, Santa Rosa, Calif.</span></li>
+            <li><span class="k">Temperature</span><span class="lead" aria-hidden="true"></span><span class="v">55&nbsp;°F, held constant</span></li>
+            <li><span class="k">Humidity</span><span class="lead" aria-hidden="true"></span><span class="v">70%&nbsp;relative</span></li>
+            <li><span class="k">Telemetry</span><span class="lead" aria-hidden="true"></span><span class="v">Recorded hour by hour</span></li>
+            <li><span class="k">Authentication</span><span class="lead" aria-hidden="true"></span><span class="v">Provenance &amp; fill verified on intake</span></li>
+            <li><span class="k">Custody</span><span class="lead" aria-hidden="true"></span><span class="v">Continuous, attested</span></li>
+          </ul>
+          <p class="custody-note">Ownership is a right of redemption against a numbered bottle — not a promise, and never a pooled one. The record is kept scrupulously; you will never be asked to mind it.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ footer ============ -->
+<footer id="about">
+  <div class="tailpiece" aria-hidden="true">
+    <svg viewBox="0 0 160 120">
+      <path d="M80 8 q-3 14 0 24" fill="none" stroke="currentColor" stroke-width="1"/>
+      <path d="M74 18 q-22 -13 -33 2 q10 15 29 6 q6 -3 4 -8 Z" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+      <path d="M44 21 q13 6 26 1" fill="none" stroke="currentColor" stroke-width=".6"/>
+      <path d="M86 16 q15 -11 21 -2 q3 7 -4 9 q-5 1 -5 -3.5" fill="none" stroke="currentColor" stroke-width=".95"/>
+      <circle cx="66" cy="42" r="7.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+      <circle cx="81" cy="40" r="7.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+      <circle cx="96" cy="43" r="7.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+      <circle cx="73" cy="54" r="7.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+      <circle cx="88" cy="54" r="7.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+      <circle cx="80" cy="67" r="7.5" fill="url(#e-h)" stroke="currentColor" stroke-width=".9"/>
+      <path d="M20 96 H62 M98 96 H140" stroke="currentColor" stroke-width=".95"/>
+      <path d="M80 90 l5 6 -5 6 -5 -6 Z" fill="none" stroke="currentColor" stroke-width=".9"/>
+    </svg>
+  </div>
+  <p class="fine">21+ only. California shipping only. Cellar is the seller of record.
+    Storage free for 90&nbsp;days, then 2.5%/yr. Bottles are held in bond; prices in United
+    States dollars. Instant buyback is offered at 85% of the current appraised value.</p>
+  <p class="mark">CELLAR</p>
+  <p class="colophon">Set in EB Garamond · One script flourish in Pinyon · Engravings by the House</p>
+</footer>
+
+<!-- ============ catalogue running footer (sticky) ============ -->
+<div class="bar" id="cat-bar">
+  <div class="bar-inner">
+    <p class="bar-label">Bordeaux · Cellar</p>
+    <a class="bar-change" href="#configure">Change selection</a>
+    <p class="bar-total" id="bar-total">Total $600</p>
+    <a class="bar-cta" id="bar-cta" href="reveal.html?qty=1&amp;region=bordeaux&amp;tier=cellar">Open a Crate</a>
+  </div>
+</div>
+
+<!-- ============ mobile bottom navigation ============ -->
+<nav class="bottom-nav" aria-label="Primary">
+  <a href="index.html" aria-current="page">
+    <svg viewBox="0 0 28 26" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="currentColor" stroke-width="1">
+        <path d="M4.8 3 v3.4 q0 1.6 -1.6 2.6 V22 h5.6 V9 q-1.6 -1 -1.6 -2.6 V3 Z"/>
+        <path d="M12.8 3 v3.4 q0 1.6 -1.6 2.6 V22 h5.6 V9 q-1.6 -1 -1.6 -2.6 V3 Z"/>
+        <path d="M20.8 3 v3.4 q0 1.6 -1.6 2.6 V22 h5.6 V9 q-1.6 -1 -1.6 -2.6 V3 Z"/>
+        <path d="M1.6 24 h24.8" stroke-width=".8"/>
+      </g>
+    </svg>
+    <span class="bn-label">The Collection</span>
+  </a>
+  <a href="inventory.html">
+    <svg viewBox="0 0 28 26" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="currentColor" stroke-width="1">
+        <circle cx="14" cy="7.2" r="4.2"/>
+        <circle cx="14" cy="7.2" r="1.7" stroke-width=".7"/>
+        <path d="M14 11.4 V23.5 M14 18.4 h4.4 M14 22 h3.4"/>
+      </g>
+    </svg>
+    <span class="bn-label">My Cellar</span>
+  </a>
+  <a href="#about">
+    <svg viewBox="0 0 28 26" aria-hidden="true" focusable="false">
+      <g fill="none" stroke="currentColor" stroke-width="1">
+        <path d="M14 2.5 q-1.6 3 0 6.2"/>
+        <path d="M12 5.6 q-5.4 -3.2 -8.2 .6 q2.6 3.8 7.4 1.6"/>
+        <path d="M16 5 q3.8 -2.8 5.6 -.4 q1 1.8 -1 2.4 q-1.6 .4 -1.6 -1.1"/>
+        <circle cx="11.4" cy="12.6" r="2.7"/>
+        <circle cx="16.6" cy="12.6" r="2.7"/>
+        <circle cx="9" cy="17.3" r="2.7"/>
+        <circle cx="14" cy="17.3" r="2.7"/>
+        <circle cx="19" cy="17.3" r="2.7"/>
+        <circle cx="11.6" cy="22" r="2.7"/>
+        <circle cx="16.4" cy="22" r="2.7"/>
+      </g>
+    </svg>
+    <span class="bn-label">About</span>
+  </a>
+</nav>
+
+<script src="catalogue-data.js"></script>
+<script>
+  (function () {
+    var catalogue = window.CELLAR_CATALOGUE;
+    var selectedRegion = "bordeaux", selectedTier = "cellar", MIN = 1, MAX = 12, qty = 1;
+    var input = document.getElementById("qty-input");
+    var minus = document.getElementById("qty-minus");
+    var plus = document.getElementById("qty-plus");
+    var total = document.getElementById("total-price");
+    var barTotal = document.getElementById("bar-total");
+    var heroCta = document.getElementById("hero-cta");
+    var barCta = document.getElementById("bar-cta");
+    var regionButtons = document.querySelectorAll("[data-region]");
+    var tierButtons = document.querySelectorAll("[data-tier]");
+    var plates = document.querySelectorAll("figure.plate");
+    var autoBuyback = document.getElementById("auto-buyback");
+
+    function formatMoney(value) {
+      return "$" + value.toLocaleString("en-US");
+    }
+
+    function renderSamples(region, tier) {
+      var bottles = catalogue.getBottles(selectedRegion, selectedTier);
+      Array.prototype.forEach.call(plates, function (plate, index) {
+        var bottle = bottles[index];
+        plate.hidden = !bottle;
+        if (!bottle) return;
+        plate.dataset.rarity = bottle.rarity.toLowerCase();
+        plate.querySelector(".plate-no").textContent = bottle.rarity + " · " + (index + 1);
+        plate.querySelector(".plate-name").textContent = bottle.name;
+        plate.querySelector(".plate-meta").textContent = bottle.vintage + " · " + bottle.region;
+        plate.querySelector(".plate-note").textContent = bottle.note;
+        plate.querySelector(".plate-buy .k").textContent = "Value";
+        plate.querySelector(".plate-buy em").textContent = formatMoney(bottle.price);
+      });
+      document.getElementById("collection-kicker").textContent = "· " + region.name + " · " + tier.name + " ·";
+      document.getElementById("collection-title").textContent = "Inside a " + region.name + " " + tier.name + " Crate";
+    }
+
+    /* hatch density rises with rarity: fine hatch → densest cross-hatch */
+    var RARITY_HATCH = { common:"e-h", uncommon:"e-hd", rare:"e-x", epic:"e-xd", grail:"e-xx" };
+
+    function renderRarity(tier) {
+      var container = document.getElementById("comp-table");
+      container.innerHTML = "";
+      tier.distribution.forEach(function (entry) {
+        var key = entry.name.toLowerCase();
+        var row = document.createElement("div");
+        row.className = "comp-row";
+        row.dataset.rarity = key;
+        row.innerHTML =
+          '<span class="comp-swatch" aria-hidden="true"><svg viewBox="0 0 13 13" focusable="false">' +
+          '<rect x="1" y="1" width="11" height="11" fill="url(#' + (RARITY_HATCH[key] || "e-h") + ')" stroke="currentColor" stroke-width="1"/></svg></span>' +
+          '<span class="comp-name">' + entry.name + '</span>' +
+          '<span class="comp-lead" aria-hidden="true"></span>' +
+          '<span class="comp-share">' + entry.percent + '%</span>';
+        container.appendChild(row);
+      });
+    }
+
+    function render() {
+      var region = catalogue.regions[selectedRegion];
+      var tier = catalogue.tiers[selectedTier];
+      input.value = String(qty);
+      minus.disabled = qty <= MIN;
+      plus.disabled = qty >= MAX;
+      var t = formatMoney(tier.price * qty);
+      total.textContent = t;
+      barTotal.textContent = "Total " + t;
+      document.getElementById("crate-title").textContent = region.name + " Crate";
+      document.getElementById("region-origin").textContent = region.country === "Many regions" ? "Multiple regions" : region.country;
+      document.querySelector(".hero-frame").style.setProperty("--region-accent", region.accent);
+      document.getElementById("region-medallion").dataset.motif = region.motif;
+      document.querySelector(".bar-label").textContent = region.name + " · " + tier.name;
+      document.getElementById("crate-label-no").textContent = (region.name + " · " + tier.name).toUpperCase();
+      Array.prototype.forEach.call(regionButtons, function (button) {
+        button.setAttribute("aria-pressed", String(button.getAttribute("data-region") === selectedRegion));
+      });
+      Array.prototype.forEach.call(tierButtons, function (button) {
+        button.setAttribute("aria-pressed", String(button.getAttribute("data-tier") === selectedTier));
+      });
+      var c = qty === 1 ? "Open a Crate" : "Open " + qty + " Crates";
+      heroCta.textContent = c;
+      barCta.textContent = c;
+      var href = "reveal.html?qty=" + qty + "&region=" + selectedRegion + "&tier=" + selectedTier + (autoBuyback.checked ? "&autoCommon=1" : "");
+      heroCta.setAttribute("href", href);
+      barCta.setAttribute("href", href);
+      renderRarity(tier);
+      renderSamples(region, tier);
+    }
+    function set(n) { qty = Math.max(MIN, Math.min(MAX, n)); render(); }
+
+    minus.addEventListener("click", function () { set(qty - 1); });
+    plus.addEventListener("click", function () { set(qty + 1); });
+    Array.prototype.forEach.call(regionButtons, function (button) {
+      button.addEventListener("click", function () {
+        selectedRegion = button.getAttribute("data-region");
+        render();
+      });
+    });
+    Array.prototype.forEach.call(tierButtons, function (button) {
+      button.addEventListener("click", function () {
+        selectedTier = button.getAttribute("data-tier");
+        render();
+      });
+    });
+    autoBuyback.addEventListener("change", render);
+
+    function commit() {
+      var digits = (input.value || "").replace(/[^0-9]/g, "");
+      if (!digits) { render(); return; }   /* empty or no digits: revert */
+      var n = parseInt(digits, 10);
+      if (isNaN(n)) { render(); return; }
+      set(n < MIN ? MIN : n);
+    }
+    input.addEventListener("blur", commit);
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { commit(); input.blur(); }
+    });
+
+    render();
+
+    /* running footer mirrors the hero CTA: shown whenever the CTA is off screen,
+       including at load when the CTA begins below the fold */
+    var bar = document.getElementById("cat-bar");
+    function setBar(on) {
+      bar.classList.toggle("on", on);
+      document.body.classList.toggle("bar-on", on);
+    }
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        setBar(!entries[entries.length - 1].isIntersecting);
+      }, { threshold: 0 }).observe(heroCta);
+    } else {
+      var barFrame = 0;
+      var updateBar = function () {
+        barFrame = 0;
+        var rect = heroCta.getBoundingClientRect();
+        setBar(rect.bottom <= 0 || rect.top >= window.innerHeight);
+      };
+      var requestBarUpdate = function () {
+        if (!barFrame) barFrame = window.requestAnimationFrame(updateBar);
+      };
+      window.addEventListener("scroll", requestBarUpdate, { passive:true });
+      window.addEventListener("resize", requestBarUpdate);
+      updateBar();
+    }
+  })();
+</script>
+
+</body>
+</html>
