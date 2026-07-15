@@ -102,11 +102,11 @@
   .connect:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
 
   /* ---------- introductory frontispiece ---------- */
-  .frontispiece{padding:var(--space-7) 0 var(--space-5)}
-  .frontispiece-panel{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(300px,.88fr);border:1px solid rgba(25,19,9,.58)}
-  .frontispiece-copy{padding:clamp(var(--space-6),4.5vw,var(--space-8));display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
+  .frontispiece{padding:var(--space-8) 0 var(--space-6)}
+  .frontispiece-panel{display:grid;grid-template-columns:minmax(0,.94fr) minmax(360px,1.06fr);column-gap:clamp(var(--space-6),5vw,var(--space-9));align-items:center}
+  .frontispiece-copy{padding:clamp(var(--space-5),3vw,var(--space-7)) 0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;position:relative;z-index:1}
   .frontispiece-kicker{font-size:var(--t-xs);letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--wine)}
-  .frontispiece-title{max-width:12ch;margin-top:var(--space-3);font-size:clamp(42px,5.4vw,68px);font-weight:500;line-height:.98;letter-spacing:-.015em}
+  .frontispiece-title{max-width:10.5ch;margin-top:var(--space-3);font-size:clamp(42px,5.4vw,68px);font-weight:500;line-height:.98;letter-spacing:-.015em}
   .frontispiece-lede{max-width:54ch;margin-top:var(--space-5);font-size:var(--t-l);line-height:1.42;color:var(--ink-soft)}
   .frontispiece-lede strong{color:var(--ink);font-weight:600}
   .frontispiece-actions{display:flex;align-items:center;gap:var(--space-5);margin-top:var(--space-6)}
@@ -117,12 +117,12 @@
   .frontispiece-primary:active{transform:scale(.97)}
   .frontispiece-primary:focus-visible{outline:1px dotted var(--wine);outline-offset:4px}
   .frontispiece-secondary{font-size:var(--t-s);letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--ink-soft);white-space:nowrap}
-  .frontispiece-art{display:grid;place-items:center;min-width:0;padding:clamp(var(--space-5),3.5vw,var(--space-7));border-left:1px solid var(--rule);background:var(--paper-2)}
-  .frontispiece-art svg{width:min(100%,390px);height:auto}
-  .frontispiece-art figcaption{margin-top:var(--space-3);text-align:center;color:var(--ink-soft);font-size:var(--t-s);font-style:italic}
-  .frontispiece-facts{grid-column:1 / -1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--rule)}
-  .frontispiece-fact{display:grid;grid-template-columns:28px minmax(0,1fr);gap:var(--space-3);padding:var(--space-4) var(--space-5)}
-  .frontispiece-fact + .frontispiece-fact{border-left:1px solid var(--rule)}
+  .frontispiece-art{display:block;min-width:0;margin:0;position:relative}
+  .frontispiece-art > svg{display:none}
+  .frontispiece-photo{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;object-position:center;border-radius:48% 48% 10px 10px / 18% 18% 10px 10px;filter:contrast(1.02) saturate(.9)}
+  .frontispiece-art figcaption{max-width:40ch;margin:var(--space-3) 0 0 var(--space-4);text-align:left;color:var(--ink-soft);font-size:var(--t-s);font-style:italic}
+  .frontispiece-facts{grid-column:1 / -1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(var(--space-5),4vw,var(--space-8));margin-top:var(--space-6);padding-top:var(--space-5);border-top:1px solid var(--rule)}
+  .frontispiece-fact{display:grid;grid-template-columns:28px minmax(0,1fr);gap:var(--space-3);padding:0}
   .frontispiece-fact b{color:var(--wine);font-weight:600;font-variant-numeric:tabular-nums lining-nums}
   .frontispiece-fact strong{display:block;font-size:var(--t-xs);font-weight:600;letter-spacing:var(--tracking-label);text-transform:uppercase}
   .frontispiece-fact span{display:block;margin-top:2px;color:var(--ink-soft);font-size:var(--t-s);line-height:1.38}
@@ -405,11 +405,10 @@
     .mast-row{gap:var(--space-4)}
     .masthead h1.wordmark{margin:0}
     .connect{padding:var(--space-2) var(--space-4);min-height:40px}
-    .frontispiece-panel{grid-template-columns:minmax(0,1fr) minmax(270px,.72fr)}
-    .frontispiece-copy{padding:var(--space-7) var(--space-6)}
+    .frontispiece-panel{grid-template-columns:minmax(0,1fr) minmax(320px,.9fr);column-gap:var(--space-6)}
+    .frontispiece-copy{padding:var(--space-7) 0}
     .frontispiece-title{font-size:clamp(38px,6vw,56px)}
     .frontispiece-lede{font-size:var(--t-m)}
-    .frontispiece-fact{padding:var(--space-4)}
     .region-choices{grid-template-columns:repeat(6,minmax(112px,1fr));overflow-x:auto;scrollbar-width:none}
     .region-choices::-webkit-scrollbar{display:none}
     .tier-choices{grid-template-columns:repeat(4,minmax(0,1fr))}
@@ -423,10 +422,9 @@
   }
   @media (max-width:760px){
     .frontispiece-panel{grid-template-columns:1fr}
-    .frontispiece-art{border-left:0;border-top:1px solid var(--rule)}
-    .frontispiece-art svg{width:min(100%,360px)}
+    .frontispiece-art{margin-top:var(--space-2)}
+    .frontispiece-photo{aspect-ratio:4/3;border-radius:44% 44% 8px 8px / 16% 16% 8px 8px}
     .frontispiece-facts{grid-template-columns:1fr}
-    .frontispiece-fact + .frontispiece-fact{border-left:0;border-top:1px solid var(--rule)}
   }
   @media (max-width:640px){
     .wrap{padding:0 var(--space-4)}
@@ -436,15 +434,14 @@
     nav.cat-nav{display:none}
     .connect{margin-left:auto;letter-spacing:.12em;padding:var(--space-2) var(--space-3);min-height:36px}
     .frontispiece{padding:var(--space-5) 0 var(--space-3)}
-    .frontispiece-copy{padding:var(--space-6) var(--space-5)}
+    .frontispiece-copy{padding:var(--space-6) 0 var(--space-5)}
     .frontispiece-title{max-width:11ch;font-size:clamp(38px,12vw,48px)}
     .frontispiece-lede{margin-top:var(--space-4);font-size:var(--t-m)}
     .frontispiece-actions{width:100%;flex-direction:column;align-items:stretch;gap:var(--space-3);margin-top:var(--space-5)}
     .frontispiece-primary{width:100%}
     .frontispiece-secondary{align-self:center;text-align:center;white-space:normal}
-    .frontispiece-art{padding:var(--space-5)}
-    .frontispiece-art svg{width:min(100%,300px)}
-    .frontispiece-fact{padding:var(--space-3) var(--space-4)}
+    .frontispiece-art figcaption{margin-left:0}
+    .frontispiece-facts{gap:var(--space-4);margin-top:var(--space-5);padding-top:var(--space-4)}
     .hero{padding:var(--space-5) 0 var(--space-7)}
     .product-config{margin:0 var(--space-1) -1px;position:relative}
     .product-config::after{content:"";position:absolute;top:0;right:0;bottom:1px;width:34px;pointer-events:none;
@@ -615,6 +612,7 @@
       </div>
 
       <figure class="frontispiece-art">
+        <img class="frontispiece-photo" src="assets/wine-crate.jpg" alt="An open wooden wine crate holding a bottle" width="1200" height="800">
         <svg viewBox="0 0 420 330" role="img" aria-labelledby="frontispiece-art-title frontispiece-art-desc">
           <title id="frontispiece-art-title">A numbered wine bottle held in a bonded cellar</title>
           <desc id="frontispiece-art-desc">Catalogue engraving of an authenticated bottle beneath a stone cellar arch, with a custody seal and storage record.</desc>
@@ -661,7 +659,7 @@
             <path d="M0 8 H79 M0 17 H63 M0 26 H72" stroke="currentColor" stroke-width=".45" stroke-dasharray="1 2"/>
           </g>
         </svg>
-        <figcaption>Numbered ownership · authenticated on intake · continuous custody</figcaption>
+        <figcaption>A bottle in its presentation crate · authenticated on intake · continuous custody</figcaption>
       </figure>
 
       <div class="frontispiece-facts" aria-label="How Cellar works">
