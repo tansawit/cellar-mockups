@@ -154,7 +154,7 @@
   .b-name span{white-space:pre}
   .b-note{margin-top:2px;font-size:var(--text-base);font-style:italic;color:var(--ink-soft)}
 
-  .exits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;max-width:680px;margin:14px auto 0}
+  .exits{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:480px;margin:14px auto 0}
   .exit{
     font:inherit;text-align:center;cursor:pointer;min-height:64px;padding:9px 10px 7px;
     color:var(--ink);background:transparent;border:1px solid var(--ink);
@@ -169,14 +169,9 @@
   .exit:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
   .exit[data-exit="sell"]{border-color:var(--wine);color:var(--wine);box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px rgba(100,16,33,.35)}
   .exit[data-exit="sell"]:hover{color:var(--paper)}
-  .later{
-    display:inline-flex;align-items:center;justify-content:center;min-height:44px;margin-top:6px;padding:8px 12px;
-    font:inherit;font-size:var(--text-xs);letter-spacing:.26em;text-indent:.26em;text-transform:uppercase;
-    color:var(--ink-soft);background:none;border:0;border-bottom:1px dotted var(--rule);cursor:pointer;
-    transition:color .2s ease,border-color .2s ease;
-  }
-  .later:hover{color:var(--wine);border-color:var(--wine)}
-  .later:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
+  .conf-next{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;color:var(--wine);
+    font-size:var(--text-xs);letter-spacing:.26em;text-indent:.26em;text-transform:uppercase}
+  .conf-next::before{content:"";width:6px;height:6px;background:var(--wine);transform:rotate(45deg)}
 
   /* ---------- confirmation ---------- */
   .confirm{max-width:520px;margin:6px auto 0}
@@ -234,7 +229,7 @@
     .landed .pre{animation:none}
     @keyframes fade-off{from{opacity:1}to{opacity:0}}
 
-    /* --- Act I · the seal (t = 0s) --- */
+    /* --- Act 1 · the seal (t = 0s) --- */
     .a1 .crate-all{animation:tense .32s cubic-bezier(.36,.07,.19,.97) both}
     @keyframes tense{0%{transform:none}30%{transform:translateX(-1.5px)}55%{transform:translateX(1.5px)}75%{transform:translateX(-.8px)}100%{transform:none}}
     .a1 .twine-v{animation:snap-v .5s cubic-bezier(.55,-.2,.55,1) .22s both}
@@ -253,7 +248,7 @@
     .a1 .seal-r{animation:seal-fall-r .62s cubic-bezier(.5,.02,.85,.4) .93s both}
     @keyframes seal-fall-r{0%{transform:none;opacity:1}80%{opacity:1}100%{transform:translate(30px,128px) rotate(19deg);opacity:0}}
 
-    /* --- Act II · the crate (t = 1.5s) --- */
+    /* --- Act 2 · the crate (t = 1.5s) --- */
     .a2 .nail{animation:nail-pop .3s cubic-bezier(.36,.07,.19,.97) both}
     .a2 .tick{animation:tick-burst .4s cubic-bezier(.23,1,.32,1) both}
     .a2 .n1 .nail,.a2 .n1 .tick{animation-delay:.05s}
@@ -275,7 +270,7 @@
     .a2 .wrapped,.a2 .ribbons{animation:bottle-rise 1.3s cubic-bezier(.18,.9,.26,1.02) 1.12s both}
     @keyframes bottle-rise{0%{transform:translateY(150px)}72%{transform:translateY(-6px)}100%{transform:translateY(0)}}
 
-    /* --- Act III · the revelation (t = 3.7s) --- */
+    /* --- Act 3 · the revelation (t = 3.7s) --- */
     .a3 .cr-front,.a3 .shadow,.a3 .straw,.a3 .interior,.a3 .ring{animation:fade-off .7s ease .32s both}
     .a3 .wrapped{animation:wrap-off .5s ease .4s both}
     @keyframes wrap-off{from{opacity:1;transform:none}to{opacity:0;transform:none}}
@@ -309,8 +304,6 @@
     @keyframes stamp-press{0%{opacity:0;transform:scale(1.55) rotate(-10deg)}55%{opacity:1;transform:scale(.94) rotate(-2.6deg)}100%{opacity:1;transform:scale(1) rotate(-4deg)}}
     .a3 .exit:nth-child(1){animation:soft-rise .45s cubic-bezier(.23,1,.32,1) 2.3s both}
     .a3 .exit:nth-child(2){animation:soft-rise .45s cubic-bezier(.23,1,.32,1) 2.42s both}
-    .a3 .exit:nth-child(3){animation:soft-rise .45s cubic-bezier(.23,1,.32,1) 2.54s both}
-    .a3 .later{animation:ink-steps .45s ease 2.75s both}
     .landed .post,.landed .post *{animation:none}
     .landed .exits,.landed .confirm .conf-body > *{animation:none}
     .landed .confirm[data-live="1"] .conf-body{animation:soft-rise .4s cubic-bezier(.23,1,.32,1) both}
@@ -431,7 +424,7 @@
     <!-- the crate keeps its secrets: nothing shows beneath the floor line -->
     <clipPath id="crateMouth"><rect x="0" y="0" width="560" height="399"/></clipPath>
 
-    <!-- Plates I–VIII: the house bottles, 120 × 300 -->
+    <!-- Plates 1–8: the house bottles, 120 × 300 -->
     <g id="pl-0">
       <ellipse cx="60" cy="286" rx="31" ry="5" fill="url(#e-x)" stroke="none"/>
       <path d="M52 18 L52 80 C52 93 41 97 41 106 L41 266 Q41 277 52 279 L68 279 Q79 277 79 266 L79 106 C79 97 68 93 68 80 L68 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
@@ -710,12 +703,7 @@
           <span class="x-head">Keep it</span>
           <span class="x-sub">held in the cellar</span>
         </button>
-        <button type="button" class="exit" data-exit="ship">
-          <span class="x-head">Ship it</span>
-          <span class="x-sub">CA only · 21+</span>
-        </button>
       </div>
-      <button type="button" class="later" id="later" hidden>Decide later · open Crate II</button>
 
       <div class="confirm" id="confirm" hidden data-live="0">
         <div class="conf-body" id="conf-body"></div>
@@ -800,7 +788,6 @@
 
     /* deterministic rotation through the racks — one bottle per crate */
     var ORDER = [3, 10, 5, 0, 7, 11, 2, 8, 1, 6, 9, 4];
-    var ROMAN = ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII"];
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     var crateIndex = 0, bottle = null, playing = false, landedFlag = false, chosen = false;
@@ -824,8 +811,8 @@
     var breakBtn = document.getElementById("break-btn");
     var skipBtn = document.getElementById("skip");
     var stage = document.getElementById("stage");
+    var pre = document.getElementById("pre");
     var exits = document.getElementById("exits");
-    var later = document.getElementById("later");
     var confirmBox = document.getElementById("confirm");
     var confBody = document.getElementById("conf-body");
     var autoMode = document.getElementById("auto-mode");
@@ -837,14 +824,14 @@
 
     function renderCrate() {
       bottle = BOTTLES[ORDER[crateIndex % ORDER.length] % BOTTLES.length];
-      var crateWord = "Crate " + ROMAN[crateIndex] + (total > 1 ? " of " + ROMAN[total - 1] : "");
+      var crateWord = "Crate " + (crateIndex + 1) + (total > 1 ? " of " + total : "");
       kicker.textContent = "· " + selectedRegion.name + " · " + selectedTier.name + " · " + crateWord + " ·";
       pips.innerHTML = "";
       for (var i = 0; i < total; i++) {
         var pip = document.createElement("span");
         pip.className = "pip" + (i < crateIndex ? " done" : i === crateIndex ? " current" : "");
-        pip.textContent = ROMAN[i];
-        pip.setAttribute("aria-label", "Crate " + ROMAN[i] + (i < crateIndex ? " — opened" : i === crateIndex ? " — current" : ""));
+        pip.textContent = i + 1;
+        pip.setAttribute("aria-label", "Crate " + (i + 1) + (i < crateIndex ? " — opened" : i === crateIndex ? " — current" : ""));
         pips.appendChild(pip);
       }
       document.getElementById("sealed-crate-label").textContent =
@@ -868,9 +855,6 @@
       nameEl.appendChild(holder);
       document.getElementById("b-note").textContent = bottle.note;
       document.getElementById("sub-sell").textContent = money(bottle.buyback) + " store credit";
-      var more = crateIndex < total - 1;
-      later.hidden = false;
-      later.textContent = more ? "Decide later · open Crate " + ROMAN[crateIndex + 1] : "Decide later · view My Cellar";
       exits.hidden = false;
       confirmBox.hidden = true;
       confirmBox.dataset.live = "0";
@@ -925,7 +909,6 @@
       timers.forEach(window.clearTimeout);
       timers = [];
       exits.hidden = true;
-      later.hidden = true;
       var head, rows, note, link;
       var bLabel = bottle.name + ", " + bottle.vintage;
       if (key === "sell") {
@@ -933,31 +916,26 @@
         rows = confRow(bLabel, money(bottle.price) + " appraised") + confRow("Store credit · 85%", money(bottle.buyback));
         note = "Credit reaches your account within the hour; the bottle returns to the racks unopened.";
         link = '<a href="inventory.html">View My Cellar</a>';
-      } else if (key === "keep") {
+      } else {
         head = "Held in Bond";
         rows = confRow(bLabel, money(bottle.price) + " appraised") + confRow("Storage", "free 90 days · 2.5%/yr");
         note = "Custody verified · 55 °F / 70% RH · continuous telemetry from the bonded warehouse.";
         link = '<a href="inventory.html">View it in My Cellar</a>';
-      } else {
-        head = "Shipping Arranged";
-        rows = confRow(bLabel, money(bottle.price) + " appraised") + confRow("Destination", "California · 21+ signature");
-        note = "Ground-insured and temperature-controlled. Someone 21 or older must sign on delivery.";
-        link = '<a href="inventory.html">Track it in My Cellar</a>';
       }
       var more = crateIndex < total - 1;
-      var action = more
-        ? '<button type="button" class="cta next-cta" id="next-crate">Open Crate ' + ROMAN[crateIndex + 1] +
-          (total > 1 ? " of " + ROMAN[total - 1] : "") + "</button>"
-        : '<a class="btn next-cta" href="index.html">Return to the Collection</a>';
+      var tail = more
+        ? '<p class="conf-next">Crate ' + (crateIndex + 2) + " of " + total + " follows</p>"
+        : '<p class="conf-links">' + link + "</p>" +
+          '<div class="conf-actions"><a class="btn next-cta" href="index.html">Return to the Collection</a></div>';
       confBody.innerHTML =
         '<p class="conf-head">' + head + "</p>" +
         '<div class="rcpt">' + rows + "</div>" +
         '<p class="conf-note">' + note + "</p>" +
-        '<p class="conf-links">' + link + "</p>" +
-        '<div class="conf-actions">' + action + "</div>";
+        tail;
       confirmBox.hidden = false;
       confirmBox.dataset.live = "1";
-      setStatus(head + " — " + bLabel + ".");
+      setStatus(head + " — " + bLabel + "." + (more ? " Crate " + (crateIndex + 2) + " follows." : ""));
+      if (more) timers.push(window.setTimeout(nextCrate, reduced ? 900 : 1500));
     }
 
     function nextCrate() {
@@ -968,12 +946,13 @@
       playing = false;
       ceremony.classList.remove("playing", "a1", "a2", "a3", "landed", "instant", "enter");
       layerB.setAttribute("aria-hidden", "true");
-      breakBtn.disabled = false;
+      pre.hidden = true; /* the seal breaks on its own from here on */
       renderCrate();
       void ceremony.offsetWidth;
       if (!reduced) ceremony.classList.add("enter");
-      setStatus("Crate " + ROMAN[crateIndex] + " is ready. Break the seal.");
+      setStatus("Crate " + (crateIndex + 1) + " arrives — the seal breaks on its own.");
       window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+      timers.push(window.setTimeout(play, reduced ? 400 : 1600));
     }
 
     breakBtn.addEventListener("click", play);
@@ -982,14 +961,6 @@
     exits.addEventListener("click", function (event) {
       var b = event.target.closest(".exit");
       if (b) choose(b.dataset.exit, false);
-    });
-    later.addEventListener("click", function () {
-      if (!landedFlag) return;
-      if (crateIndex < total - 1) nextCrate();
-      else location.href = "inventory.html";
-    });
-    confBody.addEventListener("click", function (event) {
-      if (event.target.closest("#next-crate")) nextCrate();
     });
 
     renderCrate();
