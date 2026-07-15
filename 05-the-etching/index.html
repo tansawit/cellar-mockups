@@ -120,7 +120,6 @@
   .frontispiece-art{display:block;width:min(100%,460px);min-width:0;margin:0;position:relative;justify-self:end}
   .frontispiece-art > svg{display:none}
   .frontispiece-photo{display:block;width:100%;height:clamp(300px,31vw,420px);object-fit:cover;object-position:center;border-radius:48% 48% 8px 8px / 22% 22% 8px 8px;filter:contrast(1.02) saturate(.86)}
-  .frontispiece-art figcaption{max-width:40ch;margin:var(--space-3) 0 0 var(--space-4);text-align:left;color:var(--ink-soft);font-size:var(--t-s);font-style:italic}
   .frontispiece-facts{grid-column:1 / -1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(var(--space-5),4vw,var(--space-8));margin-top:var(--space-6);padding-top:var(--space-5);border-top:1px solid var(--rule)}
   .frontispiece-fact{display:grid;grid-template-columns:28px minmax(0,1fr);gap:var(--space-3);padding:0}
   .frontispiece-fact b{color:var(--wine);font-weight:600;font-variant-numeric:tabular-nums lining-nums}
@@ -245,7 +244,7 @@
   /* ---------- catalogue running footer (sticky bar) ---------- */
   .bar{
     position:fixed;left:0;right:0;bottom:0;z-index:60;
-    background:var(--paper-2);border-top:1px solid var(--rule);
+    background:rgba(255,255,255,.97);border-top:1px solid var(--rule);backdrop-filter:blur(12px);
     transform:translateY(105%);visibility:hidden;
     pointer-events:none;
     transition:transform .24s var(--ease-out),visibility 0s linear .24s;
@@ -355,7 +354,7 @@
   .appraisal-head span{font-size:var(--t-xs);letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--ink-soft)}
   .appraisal-head strong{font-size:var(--t-l);font-weight:600;color:var(--wine)}
   .appraisal-box p{margin-top:var(--space-2);font-size:var(--t-s);color:var(--ink-soft)}
-  .appraisal-method{padding-bottom:var(--space-8);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:var(--paper-2)}
+  .appraisal-method{padding-bottom:var(--space-8);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:#fff}
   .method-panel{max-width:900px}
   .method-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:0;list-style:none;border-top:1px solid var(--rule);border-left:1px solid var(--rule)}
   .method-list li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:var(--space-3);padding:var(--space-4);border-right:1px solid var(--rule);border-bottom:1px solid var(--rule)}
@@ -440,7 +439,6 @@
     .frontispiece-actions{width:100%;flex-direction:column;align-items:stretch;gap:var(--space-3);margin-top:var(--space-5)}
     .frontispiece-primary{width:100%}
     .frontispiece-secondary{align-self:center;text-align:center;white-space:normal}
-    .frontispiece-art figcaption{margin-left:0}
     .frontispiece-facts{gap:var(--space-4);margin-top:var(--space-5);padding-top:var(--space-4)}
     .hero{padding:var(--space-5) 0 var(--space-7)}
     .product-config{margin:0 var(--space-1) -1px;position:relative}
@@ -659,7 +657,6 @@
             <path d="M0 8 H79 M0 17 H63 M0 26 H72" stroke="currentColor" stroke-width=".45" stroke-dasharray="1 2"/>
           </g>
         </svg>
-        <figcaption>From vineyard to bonded cellar · authenticated on intake · continuous custody</figcaption>
       </figure>
 
       <div class="frontispiece-facts" aria-label="How Cellar works">
