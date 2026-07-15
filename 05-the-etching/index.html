@@ -101,6 +101,32 @@
   .connect:hover{background:var(--wine);border-color:var(--wine);color:var(--paper)}
   .connect:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
 
+  /* ---------- introductory frontispiece ---------- */
+  .frontispiece{padding:var(--space-7) 0 var(--space-5)}
+  .frontispiece-panel{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(300px,.88fr);border:1px solid rgba(25,19,9,.58)}
+  .frontispiece-copy{padding:clamp(var(--space-6),4.5vw,var(--space-8));display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
+  .frontispiece-kicker{font-size:var(--t-xs);letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--wine)}
+  .frontispiece-title{max-width:12ch;margin-top:var(--space-3);font-size:clamp(42px,5.4vw,68px);font-weight:500;line-height:.98;letter-spacing:-.015em}
+  .frontispiece-lede{max-width:54ch;margin-top:var(--space-5);font-size:var(--t-l);line-height:1.42;color:var(--ink-soft)}
+  .frontispiece-lede strong{color:var(--ink);font-weight:600}
+  .frontispiece-actions{display:flex;align-items:center;gap:var(--space-5);margin-top:var(--space-6)}
+  .frontispiece-primary{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:var(--space-3) var(--space-6);
+    color:var(--paper);background:var(--wine);border:1px solid var(--wine);font-size:var(--t-s);letter-spacing:var(--tracking-label);text-transform:uppercase;
+    transition:background-color .2s ease,border-color .2s ease,color .2s ease,transform .14s var(--ease-out)}
+  .frontispiece-primary:hover,.frontispiece-primary:focus-visible{color:var(--paper);background:var(--ink);border-color:var(--ink);background-size:0 0}
+  .frontispiece-primary:active{transform:scale(.97)}
+  .frontispiece-primary:focus-visible{outline:1px dotted var(--wine);outline-offset:4px}
+  .frontispiece-secondary{font-size:var(--t-s);letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--ink-soft);white-space:nowrap}
+  .frontispiece-art{display:grid;place-items:center;min-width:0;padding:clamp(var(--space-5),3.5vw,var(--space-7));border-left:1px solid var(--rule);background:var(--paper-2)}
+  .frontispiece-art svg{width:min(100%,390px);height:auto}
+  .frontispiece-art figcaption{margin-top:var(--space-3);text-align:center;color:var(--ink-soft);font-size:var(--t-s);font-style:italic}
+  .frontispiece-facts{grid-column:1 / -1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--rule)}
+  .frontispiece-fact{display:grid;grid-template-columns:28px minmax(0,1fr);gap:var(--space-3);padding:var(--space-4) var(--space-5)}
+  .frontispiece-fact + .frontispiece-fact{border-left:1px solid var(--rule)}
+  .frontispiece-fact b{color:var(--wine);font-weight:600;font-variant-numeric:tabular-nums lining-nums}
+  .frontispiece-fact strong{display:block;font-size:var(--t-xs);font-weight:600;letter-spacing:var(--tracking-label);text-transform:uppercase}
+  .frontispiece-fact span{display:block;margin-top:2px;color:var(--ink-soft);font-size:var(--t-s);line-height:1.38}
+
   /* ---------- hero ---------- */
   .hero{padding:var(--space-6) 0 var(--space-8)}
   .product-config{position:relative;z-index:2;margin:0 var(--space-1) -1px}
@@ -379,6 +405,11 @@
     .mast-row{gap:var(--space-4)}
     .masthead h1.wordmark{margin:0}
     .connect{padding:var(--space-2) var(--space-4);min-height:40px}
+    .frontispiece-panel{grid-template-columns:minmax(0,1fr) minmax(270px,.72fr)}
+    .frontispiece-copy{padding:var(--space-7) var(--space-6)}
+    .frontispiece-title{font-size:clamp(38px,6vw,56px)}
+    .frontispiece-lede{font-size:var(--t-m)}
+    .frontispiece-fact{padding:var(--space-4)}
     .region-choices{grid-template-columns:repeat(6,minmax(112px,1fr));overflow-x:auto;scrollbar-width:none}
     .region-choices::-webkit-scrollbar{display:none}
     .tier-choices{grid-template-columns:repeat(4,minmax(0,1fr))}
@@ -390,6 +421,13 @@
     .hero-copy #buy-module{grid-area:buy}
     .custody-grid{grid-template-columns:1fr}
   }
+  @media (max-width:760px){
+    .frontispiece-panel{grid-template-columns:1fr}
+    .frontispiece-art{border-left:0;border-top:1px solid var(--rule)}
+    .frontispiece-art svg{width:min(100%,360px)}
+    .frontispiece-facts{grid-template-columns:1fr}
+    .frontispiece-fact + .frontispiece-fact{border-left:0;border-top:1px solid var(--rule)}
+  }
   @media (max-width:640px){
     .wrap{padding:0 var(--space-4)}
     header.masthead{padding:var(--space-3) 0}
@@ -397,6 +435,16 @@
     .masthead h1.wordmark{letter-spacing:.2em;text-indent:0;margin:0}
     nav.cat-nav{display:none}
     .connect{margin-left:auto;letter-spacing:.12em;padding:var(--space-2) var(--space-3);min-height:36px}
+    .frontispiece{padding:var(--space-5) 0 var(--space-3)}
+    .frontispiece-copy{padding:var(--space-6) var(--space-5)}
+    .frontispiece-title{max-width:11ch;font-size:clamp(38px,12vw,48px)}
+    .frontispiece-lede{margin-top:var(--space-4);font-size:var(--t-m)}
+    .frontispiece-actions{width:100%;flex-direction:column;align-items:stretch;gap:var(--space-3);margin-top:var(--space-5)}
+    .frontispiece-primary{width:100%}
+    .frontispiece-secondary{align-self:center;text-align:center;white-space:normal}
+    .frontispiece-art{padding:var(--space-5)}
+    .frontispiece-art svg{width:min(100%,300px)}
+    .frontispiece-fact{padding:var(--space-3) var(--space-4)}
     .hero{padding:var(--space-5) 0 var(--space-7)}
     .product-config{margin:0 var(--space-1) -1px;position:relative}
     .product-config::after{content:"";position:absolute;top:0;right:0;bottom:1px;width:34px;pointer-events:none;
@@ -551,6 +599,88 @@
 </header>
 
 <main>
+
+<!-- ============ introductory frontispiece ============ -->
+<section class="frontispiece" aria-labelledby="frontispiece-title">
+  <div class="wrap">
+    <div class="frontispiece-panel">
+      <div class="frontispiece-copy">
+        <p class="frontispiece-kicker">Investment-grade wine · Authenticated · Held in bond</p>
+        <h2 class="frontispiece-title" id="frontispiece-title">Open a crate. Keep what you find.</h2>
+        <p class="frontispiece-lede">Choose a region and tier, then reveal twelve <strong>investment-grade bottles</strong>. Every bottle is authenticated before entry, professionally kept and stored in our bonded cellar, and yours to hold, sell back, or have delivered in California.</p>
+        <div class="frontispiece-actions">
+          <a class="frontispiece-primary" href="#configure">Choose a Crate</a>
+          <a class="frontispiece-secondary" href="#appraisals">How Appraisals Work</a>
+        </div>
+      </div>
+
+      <figure class="frontispiece-art">
+        <svg viewBox="0 0 420 330" role="img" aria-labelledby="frontispiece-art-title frontispiece-art-desc">
+          <title id="frontispiece-art-title">A numbered wine bottle held in a bonded cellar</title>
+          <desc id="frontispiece-art-desc">Catalogue engraving of an authenticated bottle beneath a stone cellar arch, with a custody seal and storage record.</desc>
+          <rect x="12" y="12" width="396" height="292" fill="var(--paper)" stroke="currentColor" stroke-width="1"/>
+          <rect x="18" y="18" width="384" height="280" fill="none" stroke="currentColor" stroke-width=".55"/>
+
+          <!-- cellar arch and receding bays -->
+          <path d="M58 282 V145 Q58 42 210 42 Q362 42 362 145 V282 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.1"/>
+          <path d="M82 282 V149 Q82 64 210 64 Q338 64 338 149 V282 Z" fill="var(--paper)" stroke="currentColor" stroke-width=".9"/>
+          <path d="M112 282 V154 Q112 88 210 88 Q308 88 308 154 V282 Z" fill="url(#e-hd)" stroke="currentColor" stroke-width=".8"/>
+          <path d="M140 282 V160 Q140 112 210 112 Q280 112 280 160 V282 Z" fill="url(#e-x)" stroke="currentColor" stroke-width=".7"/>
+          <path d="M62 282 L159 248 M358 282 L261 248 M84 264 H336 M111 250 H309" fill="none" stroke="currentColor" stroke-width=".55"/>
+          <path d="M76 91 66 81 M111 66 105 52 M315 67 322 53 M348 91 358 81" fill="none" stroke="currentColor" stroke-width=".75"/>
+          <path d="M202 29 h16 l-3 17 h-10 Z" fill="var(--paper)" stroke="currentColor" stroke-width=".8"/>
+
+          <!-- numbered bottle -->
+          <g>
+            <ellipse cx="210" cy="276" rx="43" ry="6" fill="url(#e-x)" stroke="none"/>
+            <path d="M196 72 H224 V123 C224 139 242 145 242 163 V260 Q242 272 230 275 H190 Q178 272 178 260 V163 C178 145 196 139 196 123 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.25"/>
+            <path d="M178 167 V260 Q178 269 188 273 H191 V158 Q182 159 178 167 Z" fill="url(#e-x)" stroke="none"/>
+            <rect x="193" y="64" width="34" height="9" rx="2" fill="url(#e-hd)" stroke="currentColor" stroke-width="1"/>
+            <rect x="198" y="73" width="24" height="31" fill="url(#e-xd)" stroke="currentColor" stroke-width=".8"/>
+            <rect x="185" y="184" width="50" height="55" fill="var(--paper)" stroke="currentColor" stroke-width=".85"/>
+            <rect x="189" y="188" width="42" height="47" fill="none" stroke="currentColor" stroke-width=".45"/>
+            <text x="210" y="204" text-anchor="middle" font-size="8" letter-spacing="2.2">CELLAR</text>
+            <text x="210" y="217" text-anchor="middle" font-size="6.5" letter-spacing="1.2">LOT 0447</text>
+            <path d="M197 225 H223" stroke="currentColor" stroke-width=".55"/>
+            <text x="210" y="232" text-anchor="middle" font-size="5.5" letter-spacing=".7">IN BOND</text>
+            <rect x="229" y="162" width="5" height="90" rx="2.5" fill="var(--paper)"/>
+          </g>
+
+          <!-- authentication seal -->
+          <g transform="translate(329 78)" style="color:var(--wine)">
+            <circle r="40" fill="var(--paper)" stroke="currentColor" stroke-width="1.2"/>
+            <circle r="34" fill="none" stroke="currentColor" stroke-width=".7" stroke-dasharray="1.5 3"/>
+            <path d="M0 -18 15 -11 V1 C15 12 8 20 0 24-8 20-15 12-15 1 V-11 Z" fill="none" stroke="currentColor" stroke-width="1"/>
+            <path d="m-7 1 5 5 10-12" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <text x="0" y="31" text-anchor="middle" font-size="5.5" letter-spacing="1">AUTHENTICATED</text>
+          </g>
+
+          <!-- custody notation -->
+          <g transform="translate(42 222)">
+            <text x="0" y="0" font-size="7" letter-spacing="1.4">CUSTODY</text>
+            <path d="M0 8 H79 M0 17 H63 M0 26 H72" stroke="currentColor" stroke-width=".45" stroke-dasharray="1 2"/>
+          </g>
+        </svg>
+        <figcaption>Numbered ownership · authenticated on intake · continuous custody</figcaption>
+      </figure>
+
+      <div class="frontispiece-facts" aria-label="How Cellar works">
+        <div class="frontispiece-fact">
+          <b>1</b>
+          <div><strong>Appraisal</strong><span>Comparable offers, auction and bonded-market results, condition, provenance, and custody inform each value.</span></div>
+        </div>
+        <div class="frontispiece-fact">
+          <b>2</b>
+          <div><strong>Pricing</strong><span>The crate price is fixed upfront. Each revealed bottle carries a current house appraisal; instant buyback returns 85%.</span></div>
+        </div>
+        <div class="frontispiece-fact">
+          <b>3</b>
+          <div><strong>Storage</strong><span>Held in Santa Rosa at 55&nbsp;°F and 70% relative humidity. Free for 90 days, then 2.5% per year.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ============ hero ============ -->
 <section class="hero">
