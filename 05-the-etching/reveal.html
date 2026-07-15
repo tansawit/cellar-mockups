@@ -9,13 +9,13 @@
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F5EFDF;
-    --paper-2:#EDE5D0;
+    --paper:#FBFAF6;
+    --paper-2:#F4F0E7;
     --ink:#191309;
-    --ink-soft:rgba(25,19,9,.72);
+    --ink-soft:rgba(25,19,9,.68);
     --wine:#641021;
     --wine-deep:#470A17;
-    --rule:rgba(25,19,9,.50);
+    --rule:rgba(25,19,9,.28);
     --text-xs:11px;
     --text-sm:13px;
     --text-base:16.5px;
@@ -49,8 +49,7 @@
   /* ---------- buttons ---------- */
   .btn{
     font:inherit;font-size:var(--text-xs);letter-spacing:.22em;text-transform:uppercase;
-    color:var(--ink);background:transparent;border:1px solid var(--ink);
-    box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--rule);
+    color:var(--ink);background:transparent;border:1px solid var(--rule);
     padding:13px 30px 11px;min-height:48px;cursor:pointer;
     transition:background .2s ease,color .2s ease,border-color .2s ease,transform .14s cubic-bezier(.23,1,.32,1);
   }
@@ -68,7 +67,7 @@
 
   /* ---------- masthead ---------- */
   header.mast{border-bottom:1px solid var(--rule);position:relative}
-  header.mast::after{content:"";position:absolute;left:0;right:0;bottom:3px;height:1px;background:var(--rule)}
+  header.mast::after{content:none}
   .mast-inner{max-width:1180px;margin:0 auto;padding:10px 28px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
   .mast .wordmark{font-size:var(--text-lg);font-weight:600;letter-spacing:.34em;background:none;padding-bottom:0;
     display:inline-flex;align-items:center;min-height:44px}
@@ -80,8 +79,7 @@
   .mast .connect{
     margin-left:auto;
     font:inherit;font-size:var(--text-xs);letter-spacing:.26em;text-transform:uppercase;
-    color:var(--ink);background:transparent;border:1px solid var(--ink);
-    box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--rule);
+    color:var(--ink);background:transparent;border:1px solid var(--rule);
     padding:0 18px;min-height:44px;cursor:pointer;
     transition:background .25s ease,color .25s ease,border-color .25s ease;
   }
@@ -107,10 +105,14 @@
   /* ---------- the stage ---------- */
   .stage{
     position:relative;margin:4px auto 0;
-    height:clamp(250px,44vh,410px);aspect-ratio:56/50;max-width:100%;
+    width:min(100%,420px);height:auto;aspect-ratio:1;max-width:100%;
   }
   .layer{position:absolute;inset:0}
   .layer svg{width:100%;height:100%;overflow:visible;pointer-events:none}
+  .layer > svg{display:none}
+  .reveal-photo{display:block;width:100%;height:100%;border:1px solid var(--rule);object-position:center;background:var(--paper-2)}
+  .crate-photo{object-fit:cover}
+  .bottle-photo{object-fit:contain;padding:16px}
   .layer-b{opacity:0;visibility:hidden}
   .a3 .layer-b,.landed .layer-b{opacity:1;visibility:visible}
   .landed .layer-a{opacity:0;visibility:hidden}
@@ -129,9 +131,9 @@
   .stamp{
     position:absolute;right:2%;bottom:9%;z-index:5;
     color:var(--wine);font-size:var(--text-sm);font-weight:600;letter-spacing:.18em;text-transform:uppercase;
-    border:1.5px solid var(--wine);box-shadow:inset 0 0 0 3px var(--paper),inset 0 0 0 4px rgba(100,16,33,.55);
+    border:1px solid var(--wine);box-shadow:none;
     padding:9px 14px 7px;background:var(--paper);
-    transform:rotate(-4deg);opacity:0;
+    transform:none;opacity:0;
   }
   .a3 .stamp,.landed .stamp{opacity:1}
 
@@ -158,21 +160,12 @@
   .intel:last-child{border-right:0}
   .intel span{display:block;font-size:var(--text-xs);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft)}
   .intel strong{display:block;margin-top:1px;font-size:var(--text-sm);font-weight:500;line-height:1.25}
-  .reveal-why{max-width:56ch;margin:9px auto 0;font-size:var(--text-sm);color:var(--ink-soft)}
-  .reveal-why b{color:var(--ink);font-weight:600}
-  details.reveal-proof{max-width:620px;margin:7px auto 0;font-size:var(--text-xs);color:var(--ink-soft)}
-  details.reveal-proof summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;min-height:32px;
-    border-bottom:1px dotted var(--rule);letter-spacing:.12em;text-transform:uppercase}
-  details.reveal-proof summary::-webkit-details-marker{display:none}
-  details.reveal-proof summary:hover{color:var(--wine);border-color:var(--wine)}
-  details.reveal-proof summary:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
-  .proof-copy{margin:5px auto 0;max-width:56ch;font-style:italic}
+  .appraisal-global{display:inline-flex;margin-top:10px;min-height:32px;align-items:center;font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase}
 
   .exits{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:480px;margin:14px auto 0}
   .exit{
     font:inherit;text-align:center;cursor:pointer;min-height:64px;padding:9px 10px 7px;
-    color:var(--ink);background:transparent;border:1px solid var(--ink);
-    box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--rule);
+    color:var(--ink);background:transparent;border:1px solid var(--rule);
     transition:background .2s ease,color .2s ease,border-color .2s ease,transform .14s cubic-bezier(.23,1,.32,1);
   }
   .exit:active{transform:scale(.98)}
@@ -181,7 +174,7 @@
   .exit:hover{background:var(--wine);border-color:var(--wine);color:var(--paper)}
   .exit:hover .x-sub{color:var(--paper)}
   .exit:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
-  .exit[data-exit="sell"]{border-color:var(--wine);color:var(--wine);box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px rgba(100,16,33,.35)}
+  .exit[data-exit="sell"]{border-color:var(--wine);color:var(--wine)}
   .exit[data-exit="sell"]:hover{color:var(--paper)}
   .conf-next{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;color:var(--wine);
     font-size:var(--text-xs);letter-spacing:.26em;text-indent:.26em;text-transform:uppercase}
@@ -322,6 +315,14 @@
     .landed .exits,.landed .confirm .conf-body > *{animation:none}
     .landed .confirm[data-live="1"] .conf-body{animation:soft-rise .4s cubic-bezier(.23,1,.32,1) both}
   }
+  @media (prefers-reduced-motion: no-preference){
+    .layer{transition:opacity .22s ease,visibility .22s ease}
+    .enter .crate-photo,.enter .kicker,.enter .pips,.enter .pre{animation:soft-rise .22s ease both}
+    .playing .pre{animation:none!important;opacity:0;visibility:hidden}
+    .a3 .post{animation:soft-rise .22s ease both}
+    .a3 .b-meta,.a3 .b-name span,.a3 .b-note,.a3 .exit{animation:none!important}
+  }
+  .stamp{display:none}
   /* skip / mid-sequence click → everything lands instantly */
   .instant *,.instant .layer,.instant{animation-duration:0s!important;animation-delay:0s!important;transition:none!important}
 
@@ -332,7 +333,7 @@
 
   /* ---------- footer ---------- */
   footer{border-top:1px solid var(--rule);position:relative;text-align:center;padding:30px 28px 36px}
-  footer::before{content:"";position:absolute;left:0;right:0;top:3px;height:1px;background:var(--rule)}
+  footer::before{content:none}
   .orn-rule{display:flex;align-items:center;gap:14px;margin:0 auto 16px;max-width:220px;color:var(--ink)}
   .orn-rule span{flex:1;height:1px;background:var(--rule)}
   footer .fine{font-size:var(--text-sm);color:var(--ink-soft);max-width:62ch;margin:0 auto;font-style:italic}
@@ -351,10 +352,10 @@
     nav.bottom-nav{
       display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
       position:fixed;left:0;right:0;bottom:0;z-index:70;
-      background:var(--paper-2);border-top:1px solid var(--ink);
+      background:var(--paper-2);border-top:1px solid var(--rule);
       padding-bottom:env(safe-area-inset-bottom);
     }
-    nav.bottom-nav::before{content:"";position:absolute;left:0;right:0;top:3px;height:1px;background:var(--rule)}
+    nav.bottom-nav::before{content:none}
     nav.bottom-nav a{
       position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
       min-height:58px;padding:8px 4px 7px;background:none;color:var(--ink);
@@ -367,7 +368,7 @@
     nav.bottom-nav a[aria-current="page"]::after{content:"";position:absolute;left:16px;right:16px;top:-1px;height:2px;background:var(--wine)}
     .ceremony{padding:10px 14px 20px}
     .kicker{letter-spacing:.26em;text-indent:.26em}
-    .stage{height:clamp(220px,34vh,300px)}
+    .stage{width:min(100%,300px)}
     .under{min-height:250px;margin-top:8px}
     .b-name{font-size:var(--text-lg)}
     .b-note{font-size:var(--text-sm)}
@@ -375,8 +376,6 @@
     .intel{display:flex;justify-content:space-between;gap:12px;padding:5px 8px;border-right:0;border-bottom:1px solid var(--rule);text-align:left}
     .intel:last-child{border-bottom:0}
     .intel strong{text-align:right}
-    .reveal-why{font-size:var(--text-xs);margin-top:7px}
-    details.reveal-proof{margin-top:3px}
     .exits{grid-template-columns:1fr;gap:8px;max-width:340px}
     .exit{min-height:52px;display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:8px 14px;text-align:left}
     .exit .x-head{font-size:var(--text-xs)}
@@ -576,6 +575,7 @@
   <div class="stage" id="stage">
     <!-- ================= layer A · the sealed crate ================= -->
     <div class="layer layer-a" aria-hidden="false">
+      <img class="reveal-photo crate-photo" src="assets/wine-crate.jpg" alt="An open wooden wine crate holding a bottle" width="1200" height="800">
       <svg viewBox="0 0 560 500" role="img" id="scene-a"
            aria-label="Etching of a sealed pine crate stencilled CELLAR, bound in twine with a deep-wine wax seal at its crossing">
         <g class="ring">
@@ -676,6 +676,7 @@
 
     <!-- ================= layer B · the engraved plate ================= -->
     <div class="layer layer-b" aria-hidden="true" id="layer-b">
+      <img class="reveal-photo bottle-photo" src="assets/wine-bottle.jpg" alt="The revealed bottle" width="480" height="720">
       <svg viewBox="0 0 560 500" role="img" id="scene-b" aria-label="The revealed bottle, framed as an engraved catalogue plate before a hatched sunburst">
         <g class="sunburst">
           <g transform="rotate(0 280 235)"><path class="ray" d="M272 137 L280 61 L288 137 Z" fill="url(#e-h)" stroke="currentColor" stroke-width=".7"/></g>
@@ -719,11 +720,7 @@
         <p class="intel"><span>Drink</span><strong id="b-window"></strong></p>
         <p class="intel"><span>Market range</span><strong id="b-range"></strong></p>
       </div>
-      <p class="reveal-why" id="b-why"></p>
-      <details class="reveal-proof">
-        <summary>How this bottle was appraised</summary>
-        <p class="proof-copy" id="b-proof"></p>
-      </details>
+      <a class="appraisal-global" href="index.html?appraisal=1">How appraisals and buyback work</a>
 
       <div class="exits" id="exits">
         <button type="button" class="exit" data-exit="sell">
@@ -755,7 +752,7 @@
     Storage free for 90&nbsp;days, then 2.5%/yr. Bottles are held in bond; prices in United
     States dollars. Instant buyback is offered at 85% of the current appraised value.</p>
   <p class="mark">CELLAR</p>
-  <p class="colophon">Set in EB Garamond · Engravings by the House</p>
+  <p class="colophon">Set in EB Garamond · Photography and catalogue design by the House</p>
 </footer>
 
 <!-- ============ mobile bottom navigation ============ -->
@@ -826,10 +823,10 @@
 
     /* the timeline: one action, three acts, then the plate */
     var ACTS = [
-      [0,    "a1", "The twine snaps and the wax seal cracks."],
-      [1500, "a2", "The nails pop and the lid slides away."],
-      [3700, "a3", "The paper unwinds — the bottle stands revealed."],
-      [6950, "landed", ""]
+      [0,    "a1", "The crate is opened."],
+      [700,  "a2", "The bottle is lifted from its case."],
+      [1500, "a3", "The bottle stands revealed."],
+      [2600, "landed", ""]
     ];
 
     var ceremony = document.getElementById("ceremony");
@@ -888,13 +885,6 @@
       document.getElementById("b-wine").textContent = bottle.style + " · " + bottle.grape;
       document.getElementById("b-window").textContent = bottle.drinkingWindow;
       document.getElementById("b-range").textContent = money(bottle.appraisalLow) + "–" + money(bottle.appraisalHigh);
-      var why = document.getElementById("b-why");
-      why.textContent = "";
-      var whyHead = document.createElement("b");
-      whyHead.textContent = "Why it matters — ";
-      why.appendChild(whyHead);
-      why.appendChild(document.createTextNode(bottle.why));
-      document.getElementById("b-proof").textContent = bottle.appraisalBasis + ". Updated " + bottle.appraisalUpdated + "; the " + money(bottle.buyback) + " buyback is fixed for this reveal decision.";
       document.getElementById("sub-sell").textContent = money(bottle.buyback) + " store credit";
       exits.hidden = false;
       confirmBox.hidden = true;

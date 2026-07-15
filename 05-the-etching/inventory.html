@@ -9,19 +9,18 @@
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F5EFDF;
-    --paper-2:#EDE5D0;
+    --paper:#FBFAF6;
+    --paper-2:#F4F0E7;
     --ink:#191309;
-    --ink-soft:rgba(25,19,9,.72);
+    --ink-soft:rgba(25,19,9,.68);
     --wine:#641021;
-    --rule:rgba(25,19,9,.50);
+    --rule:rgba(25,19,9,.28);
     --t-xs:11px;
     --t-s:13px;
     --t-m:16.5px;
     --t-l:21px;
     --t-xl:clamp(24px,3vw,30px);
     --t-2xl:clamp(30px,4.5vw,44px);
-    --frame-orn:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='19' height='19'%3E%3Cg fill='none' stroke='%23191309' stroke-width='1.05'%3E%3Ccircle cx='9.5' cy='9.5' r='2.5'/%3E%3Cpath d='M9.5 .5V5.4M9.5 13.6v4.9M.5 9.5H5.4M13.6 9.5h4.9'/%3E%3C/g%3E%3Ccircle cx='9.5' cy='9.5' r='1' fill='%23191309'/%3E%3C/svg%3E");
   }
   *{margin:0;padding:0;box-sizing:border-box}
   [hidden]{display:none!important}
@@ -52,28 +51,21 @@
   a:hover,a:focus-visible{background-size:100% 1px;color:var(--wine)}
   a:focus-visible{outline:1px dotted var(--wine);outline-offset:4px}
 
-  /* ---------- frames: thin double rules + corner ornaments ---------- */
+  /* ---------- simple catalogue frames ---------- */
   .frame{
     position:relative;
-    border:1px solid var(--ink);
-    background-image:var(--frame-orn),var(--frame-orn),var(--frame-orn),var(--frame-orn);
-    background-repeat:no-repeat;
-    background-position:top -1px left -1px,top -1px right -1px,bottom -1px left -1px,bottom -1px right -1px;
-    background-origin:border-box;
+    border:1px solid var(--rule);
     transition:border-color .35s ease;
   }
-  .frame::before{
-    content:"";position:absolute;inset:5px;border:1px solid var(--rule);
-    pointer-events:none;transition:border-color .35s ease;
-  }
+  .frame::before{content:none}
 
   /* ---------- ornamented rule ---------- */
   .orn-rule{display:flex;align-items:center;gap:14px;margin:0 auto;max-width:420px;color:var(--ink)}
   .orn-rule span{flex:1;height:1px;background:var(--rule)}
 
   /* ---------- masthead ---------- */
-  header.masthead{padding:16px 0 13px;border-bottom:1px solid var(--ink);position:relative}
-  header.masthead::after{content:"";position:absolute;left:0;right:0;bottom:3px;height:1px;background:var(--rule)}
+  header.masthead{padding:16px 0 13px;border-bottom:1px solid var(--rule);position:relative}
+  header.masthead::after{content:none}
   header.masthead .wrap{position:relative;display:flex;align-items:center;gap:clamp(18px,3vw,46px);text-align:left}
   .masthead h1.wordmark{
     font-size:var(--t-xl);font-weight:600;letter-spacing:.3em;
@@ -90,8 +82,7 @@
   .connect{
     margin-left:auto;
     font:inherit;font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;
-    color:var(--ink);background:transparent;border:1px solid var(--ink);
-    box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--rule);
+    color:var(--ink);background:transparent;border:1px solid var(--rule);
     padding:0 22px;min-height:46px;display:inline-flex;align-items:center;gap:9px;
     cursor:default;white-space:nowrap;
   }
@@ -139,11 +130,14 @@
   .status-filter[aria-pressed="true"]{color:var(--paper);background:var(--wine);border-color:var(--wine)}
   .status-filter:focus-visible{outline:1px dotted var(--wine);outline-offset:3px}
   .holding-count{font-size:var(--t-s);font-style:italic;color:var(--ink-soft);white-space:nowrap}
+  .holding-summary{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+  .appraisal-global{font-size:var(--t-xs);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
   .holding{padding:clamp(18px,2.4vw,28px) clamp(18px,2.8vw,34px);margin-bottom:20px}
   .holding:hover::before{border-color:var(--ink)}
   .holding-grid{display:grid;grid-template-columns:120px minmax(0,1fr);gap:clamp(18px,2.6vw,38px);align-items:start}
-  .holding-art svg{height:212px;width:auto;margin:0 auto;transition:opacity .45s ease}
-  .holding.sold .holding-art svg{opacity:.4}
+  .holding-art > svg{display:none}
+  .holding-photo{display:block;width:100%;height:212px;object-fit:contain;margin:0 auto;transition:opacity .2s ease}
+  .holding.sold .holding-photo{opacity:.4}
   .plate-no{color:var(--wine);font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;margin-bottom:8px}
   .plate-name{font-size:var(--t-l);font-weight:500;line-height:1.15}
   .plate-meta{margin-top:4px;font-size:var(--t-xs);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft)}
@@ -166,8 +160,7 @@
   .actions{margin-top:16px;display:flex;gap:12px;flex-wrap:wrap}
   .act{
     font:inherit;font-size:var(--t-s);letter-spacing:.26em;text-transform:uppercase;
-    color:var(--ink);background:transparent;border:1px solid var(--ink);
-    box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 3px var(--rule);
+    color:var(--ink);background:transparent;border:1px solid var(--rule);
     padding:0 18px;min-height:46px;display:inline-flex;align-items:center;justify-content:center;
     cursor:pointer;white-space:nowrap;
     transition:background .25s ease,color .25s ease,border-color .25s ease;
@@ -236,8 +229,8 @@
   a.act{background-image:none}
 
   /* ---------- footer ---------- */
-  footer{border-top:1px solid var(--ink);position:relative;text-align:center;padding:38px 28px 44px}
-  footer::before{content:"";position:absolute;left:0;right:0;top:3px;height:1px;background:var(--rule)}
+  footer{border-top:1px solid var(--rule);position:relative;text-align:center;padding:38px 28px 44px}
+  footer::before{content:none}
   footer .tailpiece{margin:0 auto 18px;width:122px}
   footer .tailpiece svg{width:100%;height:auto}
   footer .fine{font-size:var(--t-s);color:var(--ink-soft);max-width:62ch;margin:0 auto;font-style:italic}
@@ -270,7 +263,7 @@
     .status-filter:first-child{grid-column:1 / -1}
     .holding-count{align-self:flex-end}
     .holding-grid{grid-template-columns:74px minmax(0,1fr);gap:14px}
-    .holding-art svg{height:158px}
+    .holding-photo{height:158px}
     .appr-line{gap:6px}
     .appr-line .lead{min-width:0}
     .actions{margin-top:14px}
@@ -295,10 +288,10 @@
     nav.bottom-nav{
       display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
       position:fixed;left:0;right:0;bottom:0;z-index:70;
-      background:var(--paper-2);border-top:1px solid var(--ink);
+      background:var(--paper-2);border-top:1px solid var(--rule);
       padding-bottom:env(safe-area-inset-bottom);
     }
-    nav.bottom-nav::before{content:"";position:absolute;left:0;right:0;top:3px;height:1px;background:var(--rule)}
+    nav.bottom-nav::before{content:none}
     nav.bottom-nav a{
       position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
       min-height:58px;padding:8px 4px 7px;background:none;color:var(--ink);
@@ -424,13 +417,17 @@
         <button class="status-filter" type="button" data-status-filter="shipping" aria-pressed="false">Dispatch</button>
         <button class="status-filter" type="button" data-status-filter="sold" aria-pressed="false">Sold</button>
       </div>
-      <p class="holding-count" id="holding-count">3 bottles shown</p>
+      <div class="holding-summary">
+        <p class="holding-count" id="holding-count">3 bottles shown</p>
+        <a class="appraisal-global" href="index.html?appraisal=1">How appraisals and buyback work</a>
+      </div>
     </div>
 
     <!-- LOT I — Vietti (after Plate VIII) -->
     <article class="holding frame" id="lot-1" data-status="hold" data-price="176" data-buyback="150" data-name="Vietti Barolo Castiglione 2019">
       <div class="holding-grid">
         <div class="holding-art">
+          <img class="holding-photo" src="assets/wine-bottle.jpg" alt="Vietti Barolo Castiglione 2019 bottle" width="480" height="720" loading="lazy">
           <svg viewBox="0 0 120 300" role="img" aria-label="Etched Albeisa bottle with pictorial label">
             <ellipse cx="60" cy="286" rx="31" ry="5" fill="url(#e-x)" stroke="none"/>
             <path d="M53 18 L53 66 C53 90 40 98 40 124 L40 264 Q40 276 51 279 L69 279 Q80 276 80 264 L80 124 C80 98 67 90 67 66 L67 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
@@ -491,6 +488,7 @@
     <article class="holding frame" id="lot-2" data-status="ready" data-price="142" data-buyback="121" data-name="Domaine Tempier Bandol Rouge 2020">
       <div class="holding-grid">
         <div class="holding-art">
+          <img class="holding-photo" src="assets/wine-bottle.jpg" alt="Domaine Tempier Bandol Rouge 2020 bottle" width="480" height="720" loading="lazy">
           <svg viewBox="0 0 120 300" role="img" aria-label="Etched Burgundy bottle with oval label">
             <ellipse cx="60" cy="286" rx="32" ry="5" fill="url(#e-x)" stroke="none"/>
             <path d="M53 18 L53 70 C53 95 38 102 38 132 L38 264 Q38 276 50 279 L70 279 Q82 276 82 264 L82 132 C82 102 67 95 67 70 L67 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
@@ -551,6 +549,7 @@
     <article class="holding frame" id="lot-3" data-status="ready" data-price="112" data-buyback="95" data-name="Domaine Huet Le Mont Sec 2022">
       <div class="holding-grid">
         <div class="holding-art">
+          <img class="holding-photo" src="assets/wine-bottle.jpg" alt="Domaine Huet Le Mont Sec 2022 bottle" width="480" height="720" loading="lazy">
           <svg viewBox="0 0 120 300" role="img" aria-label="Etched slender Loire flute bottle">
             <ellipse cx="60" cy="286" rx="26" ry="5" fill="url(#e-x)" stroke="none"/>
             <path d="M54 18 L54 55 C54 95 45 130 45 175 L45 265 Q45 277 54 279 L66 279 Q75 277 75 265 L75 175 C75 130 66 95 66 55 L66 18 Z" fill="url(#e-h)" stroke="currentColor" stroke-width="1.3"/>
@@ -734,7 +733,7 @@
     Storage free for 90&nbsp;days, then 2.5%/yr. Bottles are held in bond; prices in United
     States dollars. Instant buyback is offered at 85% of the current appraised value.</p>
   <p class="mark">CELLAR</p>
-  <p class="colophon">Set in EB Garamond · Engravings by the House</p>
+  <p class="colophon">Set in EB Garamond · Photography and catalogue design by the House</p>
 </footer>
 
 <!-- ============ mobile bottom navigation ============ -->

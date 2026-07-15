@@ -1290,7 +1290,7 @@
     Storage free for 90&nbsp;days, then 2.5%/yr. Bottles are held in bond; prices in United
     States dollars. Instant buyback is offered at 85% of the current appraised value.</p>
   <p class="mark">CELLAR</p>
-  <p class="colophon">Set in EB Garamond · One script flourish in Pinyon · Engravings by the House</p>
+  <p class="colophon">Set in EB Garamond · One script flourish in Pinyon · Photography and catalogue design by the House</p>
 </footer>
 
 <dialog class="dossier" id="bottle-dossier" aria-labelledby="dossier-title">
@@ -1316,7 +1316,6 @@
       <div class="appraisal-box">
         <div class="appraisal-head"><span>House appraisal</span><strong id="dossier-value"></strong></div>
         <p id="dossier-range"></p>
-        <p id="dossier-basis"></p>
       </div>
     </div>
   </div>
@@ -1526,7 +1525,6 @@
       document.getElementById("dossier-label").textContent = initials(bottle.name) + " · " + bottle.vintage;
       document.getElementById("dossier-value").textContent = formatMoney(bottle.price);
       document.getElementById("dossier-range").textContent = "Observed market range " + formatMoney(bottle.appraisalLow) + "–" + formatMoney(bottle.appraisalHigh) + ". Buyback at reveal: " + formatMoney(bottle.buyback) + ".";
-      document.getElementById("dossier-basis").textContent = bottle.appraisalBasis + " · updated " + bottle.appraisalUpdated + ".";
       document.getElementById("dossier-taste").innerHTML =
         tasteRow("Light", "Bold", bottle.structure.body) +
         tasteRow("Smooth", "Tannic", bottle.structure.tannin) +
@@ -1621,6 +1619,9 @@
       if (button) openDossier(parseInt(button.dataset.index, 10));
     });
     document.getElementById("appraisal-info").addEventListener("click", function () { appraisalDialog.showModal(); });
+    if (new URLSearchParams(location.search).get("appraisal") === "1") {
+      requestAnimationFrame(function () { appraisalDialog.showModal(); });
+    }
     [dossier, appraisalDialog].forEach(function (dialog) {
       dialog.querySelector(".dialog-close").addEventListener("click", function () { dialog.close(); });
       dialog.addEventListener("click", function (event) {
